@@ -1267,13 +1267,14 @@ function goOnboard(){
   obTmp={pn:'',fn:'',em:'',pw:''};
   obKids=[{n:'',dob:'',pin:'',col:ACOLS[0]}];
   obPData={};obKi=0;obQi=0;
-  document.getElementById('sc-login').classList.remove('on');
-  document.getElementById('sc-onboard').classList.add('on');
+  document.getElementById('sc-login').style.display='none';
+  document.getElementById('sc-onboard').style.display='block';
   document.getElementById('ob1').style.display='block';
   document.getElementById('ob2').style.display='none';
   document.getElementById('ob3').style.display='none';
   setObStep(1);
   renderObKids();
+  window.scrollTo(0,0);
 }
 
 function setObStep(n){
@@ -1419,8 +1420,9 @@ function obSkipQ(){
 function finishOnboard(){
   Object.keys(obPData).forEach(cid=>{S.profiles[cid]=obPData[cid];});
   save();
-  document.getElementById('sc-onboard').classList.remove('on');
-  document.getElementById('sc-app').classList.add('on');
+  document.getElementById('sc-onboard').style.display='none';
+  document.getElementById('sc-login').style.display='none';
+  document.getElementById('sc-app').style.display='block';
   initApp();nav('home');
 }
 
@@ -1435,14 +1437,16 @@ function doLogin(){
   if(S.family.email!==em){err.textContent='Email not recognised.';err.style.display='block';return;}
   if(S.family.pw!==pw){err.textContent='Incorrect password. Try again.';err.style.display='block';return;}
   err.style.display='none';S.auth=true;S.user={email:em,name:S.family.pname};save();
-  document.getElementById('sc-login').classList.remove('on');
-  document.getElementById('sc-app').classList.add('on');
+  document.getElementById('sc-login').style.display='none';
+  document.getElementById('sc-onboard').style.display='none';
+  document.getElementById('sc-app').style.display='block';
   initApp();nav('home');
 }
 function doLogout(){
   S.auth=false;save();
-  document.getElementById('sc-app').classList.remove('on');
-  document.getElementById('sc-login').classList.add('on');
+  document.getElementById('sc-app').style.display='none';
+  document.getElementById('sc-onboard').style.display='none';
+  document.getElementById('sc-login').style.display='block';
   document.getElementById('li-em').value='';
   document.getElementById('li-pw').value='';
   document.getElementById('li-err').style.display='none';
@@ -1497,20 +1501,23 @@ function initApp(){
 
 function boot(){
   load();
-  // Remove hardcoded 'on' from home view — nav() will add it back properly
+  // Hide all screens first
+  document.getElementById('sc-login').style.display='none';
+  document.getElementById('sc-onboard').style.display='none';
+  document.getElementById('sc-app').style.display='none';
+  // Remove hardcoded on class from home view
   const homeEl=document.getElementById('v-home');
   if(homeEl)homeEl.classList.remove('on');
   if(S.auth&&S.family){
-    document.getElementById('sc-app').classList.add('on');
+    document.getElementById('sc-app').style.display='block';
     initApp();nav('home');
   }else if(S.family){
-    document.getElementById('sc-login').classList.add('on');
+    document.getElementById('sc-login').style.display='block';
   }else{
-    // Fresh user — go to onboarding
     obTmp={pn:'',fn:'',em:'',pw:''};
     obKids=[{n:'',dob:'',pin:'',col:ACOLS[0]}];
     obPData={};obKi=0;obQi=0;
-    document.getElementById('sc-onboard').classList.add('on');
+    document.getElementById('sc-onboard').style.display='block';
     setObStep(1);
     document.getElementById('ob1').style.display='block';
     document.getElementById('ob2').style.display='none';

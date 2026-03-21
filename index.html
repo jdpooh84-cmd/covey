@@ -2,441 +2,450 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Covey — Homeschool Guardian</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --cream:#FDF8F2;--cream-d:#F5EDE0;--cream-b:#E8D9C5;
-  --sage:#7BA685;--sage-l:#A8C5AF;--sage-d:#4E7A57;
-  --terra:#C4714A;--terra-l:#E8956E;--terra-p:#F5DDD1;
-  --sky:#5B9EC9;--sky-p:#D8EDF7;
-  --sun:#E8B84B;--sun-p:#FEF4D6;
-  --ink:#2C2416;--ink-m:#5C4E3A;--ink-l:#8C7B65;--ink-f:#BFB09A;
-  --fd:'Fraunces',Georgia,serif;--fb:'DM Sans',system-ui,sans-serif;
+  --cream:#FDF8F2;--cd:#F5EDE0;--cb:#E8D9C5;
+  --sage:#7BA685;--sl:#A8C5AF;--sd:#4E7A57;
+  --terra:#C4714A;--tp:#F5DDD1;
+  --sky:#5B9EC9;--skyp:#D8EDF7;
+  --sun:#E8B84B;--sunp:#FEF4D6;
+  --ink:#2C2416;--im:#5C4E3A;--il:#8C7B65;--if:#BFB09A;
+  --fd:'Fraunces',Georgia,serif;
+  --fb:'DM Sans',system-ui,sans-serif;
   --r:12px;--rl:18px;--rp:999px;
   --sh:0 2px 12px rgba(44,36,22,.1),0 0 0 1px rgba(44,36,22,.06);
-  --shl:0 8px 32px rgba(44,36,22,.16)
+  --shl:0 8px 32px rgba(44,36,22,.18)
 }
+html{scroll-behavior:smooth}
 body{font-family:var(--fb);background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:16px;line-height:1.6}
 h1,h2,h3{font-family:var(--fd);font-weight:500;line-height:1.2}
 button{cursor:pointer;font-family:var(--fb);border:none;background:none}
-input,textarea,select{font-family:var(--fb)}
+input,textarea,select{font-family:var(--fb);font-size:16px}/* 16px prevents iOS zoom */
+a{color:var(--sd);text-decoration:none}
 
-/* Screens */
-.screen{display:none;min-height:100vh}
-.screen.on{display:block}
+/* ── SCREENS ── */
+.scr{display:none;min-height:100vh}
+.scr.on{display:block}
 
-/* Centered auth wrap */
-.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--cream)}
-.auth-card{background:white;border-radius:var(--rl);box-shadow:var(--shl);padding:32px 28px;width:100%;max-width:460px;animation:fi .4s ease}
+/* ── AUTH WRAP ── */
+.aw{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:20px;background:var(--cream);overflow-y:auto}
+.ac{background:white;border-radius:var(--rl);box-shadow:var(--shl);padding:28px 24px;width:100%;max-width:460px;margin:auto;animation:fi .4s ease}
+@media(max-width:480px){.ac{padding:22px 18px;border-radius:var(--r)}}
 
-/* App layout */
-.app-layout{display:flex;min-height:100vh}
-.sidebar{width:210px;background:white;border-right:1px solid var(--cream-b);padding:0 0 20px;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:40;box-shadow:2px 0 8px rgba(44,36,22,.04)}
-.s-logo{padding:22px 20px 18px;border-bottom:1px solid var(--cream-b);margin-bottom:10px}
-.s-logo-row{display:flex;align-items:center;gap:8px;margin-bottom:2px}
-.s-logo-icon{width:36px;height:36px;border-radius:10px;background:var(--sage);display:flex;align-items:center;justify-content:center;font-size:18px}
-.s-logo h1{font-size:1.5rem;color:var(--ink)}
-.s-logo p{font-size:.72rem;color:var(--ink-l);padding-left:44px}
-.s-nav{flex:1;padding:0 10px;display:flex;flex-direction:column;gap:2px}
-.s-btn{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r);color:var(--ink-m);font-size:.875rem;font-weight:400;transition:all .15s;text-align:left;width:100%;cursor:pointer}
-.s-btn.on{background:var(--cream-d);color:var(--sage-d);font-weight:600}
-.s-btn:hover:not(.on){background:var(--cream)}
-.s-user{padding:12px 16px;border-top:1px solid var(--cream-b);margin-top:auto}
-.s-user-name{font-size:.8rem;color:var(--ink-m);font-weight:600;margin-bottom:4px}
-.s-user-email{font-size:.72rem;color:var(--ink-l);margin-bottom:10px}
+/* ── APP LAYOUT ── */
+.app-wrap{display:flex;min-height:100vh}
+.sidebar{width:210px;background:white;border-right:1px solid var(--cb);padding:0 0 20px;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:40;box-shadow:2px 0 8px rgba(44,36,22,.04)}
+.sl-logo{padding:20px 18px 16px;border-bottom:1px solid var(--cb);margin-bottom:8px}
+.sl-row{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.sl-icon{width:34px;height:34px;border-radius:9px;background:var(--sage);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.sl-logo h1{font-size:1.4rem;color:var(--ink)}
+.sl-logo p{font-size:.7rem;color:var(--il);padding-left:42px}
+.sl-nav{flex:1;padding:0 8px;display:flex;flex-direction:column;gap:1px}
+.snb{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:var(--r);color:var(--im);font-size:.85rem;font-weight:400;transition:all .15s;text-align:left;width:100%}
+.snb.on{background:var(--cd);color:var(--sd);font-weight:600}
+.snb:hover:not(.on){background:var(--cream)}
+.sl-user{padding:11px 14px;border-top:1px solid var(--cb);margin-top:auto}
+.sl-uname{font-size:.78rem;color:var(--im);font-weight:600;margin-bottom:3px}
+.sl-email{font-size:.68rem;color:var(--il);margin-bottom:8px;word-break:break-all}
+
 .main{margin-left:210px;flex:1;min-height:100vh}
-.view{display:none;padding:32px 36px;max-width:880px}
-.view.on{display:block;animation:fi .3s ease}
-.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--cream-b);justify-content:space-around;padding:6px 0;z-index:50}
-.m-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 10px;color:var(--ink-l);font-size:.65rem;font-weight:500}
-.m-btn.on{color:var(--sage-d)}
-.m-btn .mi{font-size:1.25rem}
+.view{display:none;padding:28px 32px;max-width:860px}
+.view.on{display:block;animation:fi .25s ease}
+
+/* ── MOBILE NAV ── */
+.mnav{display:none;position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--cb);justify-content:space-around;padding:5px 0 max(env(safe-area-inset-bottom),5px);z-index:50}
+.mnb{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;color:var(--il);font-size:.62rem;font-weight:500;min-width:52px}
+.mnb.on{color:var(--sd)}
+.mnb .mi{font-size:1.2rem;line-height:1}
 
 @media(max-width:768px){
   .sidebar{display:none}
   .main{margin-left:0}
-  .mobile-nav{display:flex}
-  .view{padding:20px 16px;padding-bottom:80px}
+  .mnav{display:flex}
+  .view{padding:16px 14px;padding-bottom:76px}
 }
 
-/* Cards */
-.card{background:white;border-radius:var(--rl);box-shadow:var(--sh);padding:20px;margin-bottom:12px}
-.card-flat{background:var(--cream-d);border-radius:var(--r);padding:14px;margin-bottom:8px}
+/* ── CARDS ── */
+.card{background:white;border-radius:var(--rl);box-shadow:var(--sh);padding:18px;margin-bottom:10px}
 
-/* Buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:var(--r);font-weight:500;font-size:.875rem;transition:all .15s;cursor:pointer;border:none;font-family:var(--fb)}
-.btn-p{background:var(--sage);color:white}.btn-p:hover{background:var(--sage-d)}
-.btn-s{background:var(--cream-d);color:var(--ink)}.btn-s:hover{background:var(--cream-b)}
-.btn-t{background:transparent;border:2px solid var(--sage);color:var(--sage-d)}
-.btn-d{background:var(--terra);color:white}
-.btn-sm{padding:7px 14px;font-size:.8rem}
-.btn-lg{padding:13px 26px;font-size:1rem}
-.btn-w{width:100%}
-.btn:disabled{opacity:.45;cursor:not-allowed}
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:var(--r);font-weight:500;font-size:.875rem;transition:all .15s;cursor:pointer;border:none;font-family:var(--fb);line-height:1.2;-webkit-tap-highlight-color:transparent}
+.bp{background:var(--sage);color:white}.bp:hover{background:var(--sd)}
+.bs{background:var(--cd);color:var(--ink)}.bs:hover{background:var(--cb)}
+.bt{background:transparent;border:2px solid var(--sage);color:var(--sd)}
+.bsm{padding:7px 13px;font-size:.8rem}
+.blg{padding:13px 24px;font-size:1rem}
+.bw{width:100%}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:active:not(:disabled){transform:scale(.97)}
 
-/* Forms */
-.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-.fl{font-size:.875rem;font-weight:500;color:var(--ink-m)}
-.fi{padding:10px 13px;border:2px solid var(--cream-b);border-radius:var(--r);font-size:.9375rem;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s;width:100%}
-.fi:focus{border-color:var(--sage)}
-.fh{font-size:.76rem;color:var(--ink-l)}
-.fe{font-size:.76rem;color:var(--terra)}
-textarea.fi{resize:vertical;min-height:72px}
-select.fi{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238C7B65' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:34px}
+/* ── FORMS ── */
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+.fl{font-size:.85rem;font-weight:500;color:var(--im)}
+.fi{padding:11px 13px;border:2px solid var(--cb);border-radius:var(--r);font-size:16px;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s;width:100%;-webkit-appearance:none}
+.fi:focus{border-color:var(--sage);background:white}
+.fh{font-size:.75rem;color:var(--il)}
+textarea.fi{resize:vertical;min-height:70px;line-height:1.5}
+select.fi{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238C7B65' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:32px}
 
-/* Badges */
-.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:var(--rp);font-size:.72rem;font-weight:500}
-.b-g{background:#D6F0DC;color:#2A6038}.b-t{background:var(--terra-p);color:#7A3520}
-.b-y{background:var(--sun-p);color:#8B6914}.b-b{background:var(--sky-p);color:#2A5F80}
-.b-n{background:#F0EDE8;color:#5C4E3A}
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--rp);font-size:.7rem;font-weight:600}
+.bg{background:#D6F0DC;color:#2A6038}.bt2{background:var(--tp);color:#7A3520}
+.by{background:var(--sunp);color:#8B6914}.bb{background:var(--skyp);color:#2A5F80}
+.bn{background:#F0EDE8;color:#5C4E3A}
 
-/* Avatar */
-.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:white;flex-shrink:0;user-select:none;font-family:var(--fb)}
+/* ── AVATAR ── */
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:white;flex-shrink:0;user-select:none}
 
-/* Progress */
-.pb{height:8px;background:var(--cream-b);border-radius:4px;overflow:hidden}
-.pf{height:100%;border-radius:4px;transition:width .5s ease}
+/* ── PROGRESS BAR ── */
+.pb{height:8px;background:var(--cb);border-radius:4px;overflow:hidden}
+.pf{height:100%;border-radius:4px;transition:width .6s ease}
 
-/* Modal */
-.ov{position:fixed;inset:0;background:rgba(44,36,22,.4);backdrop-filter:blur(2px);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}
+/* ── MODAL ── */
+.ov{position:fixed;inset:0;background:rgba(44,36,22,.45);backdrop-filter:blur(3px);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:0}
 .ov.h{display:none}
-.mo{background:white;border-radius:var(--rl);box-shadow:var(--shl);width:100%;max-width:500px;max-height:90vh;overflow-y:auto;animation:si .2s ease}
-.mo-h{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 0;border-bottom:1px solid var(--cream-b);padding-bottom:13px}
-.mo-h h3{font-family:var(--fd);font-size:1.15rem}
-.mo-x{width:30px;height:30px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--ink-l);cursor:pointer}
-.mo-b{padding:18px 22px 22px}
+.mo{background:white;border-radius:var(--rl) var(--rl) 0 0;box-shadow:var(--shl);width:100%;max-width:560px;max-height:92vh;overflow-y:auto;animation:su .3s ease}
+@media(min-width:600px){.ov{align-items:center;padding:16px}.mo{border-radius:var(--rl);animation:si .2s ease}}
+.moh{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--cb)}
+.moh h3{font-family:var(--fd);font-size:1.1rem}
+.mox{width:28px;height:28px;border-radius:50%;background:var(--cd);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--il);cursor:pointer;flex-shrink:0}
+.mob{padding:16px 20px 24px}
 
-/* Alerts */
-.al{padding:11px 15px;border-radius:var(--r);font-size:.875rem;margin-bottom:12px}
-.al-g{background:#EEF7EF;border:1.5px solid var(--sage);color:var(--sage-d)}
-.al-r{background:var(--terra-p);border:1.5px solid var(--terra);color:#7A3520}
-.al-y{background:var(--sun-p);border:1.5px solid var(--sun);color:#8B6914}
-.al-b{background:var(--sky-p);border:1.5px solid var(--sky);color:#2A5F80}
+/* ── ALERTS ── */
+.al{padding:11px 14px;border-radius:var(--r);font-size:.875rem;margin-bottom:12px;line-height:1.5}
+.alg{background:#EEF7EF;border:1.5px solid var(--sage);color:var(--sd)}
+.alr{background:var(--tp);border:1.5px solid var(--terra);color:#7A3520}
+.aly{background:var(--sunp);border:1.5px solid var(--sun);color:#8B6914}
+.alb{background:var(--skyp);border:1.5px solid var(--sky);color:#2A5F80}
 
-/* Task items */
-.ti{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:var(--r);border:1.5px solid var(--cream-b);background:white;margin-bottom:6px;cursor:pointer;transition:all .15s}
-.ti:hover{border-color:var(--sage-l);background:var(--cream)}
+/* ── TASK ITEMS ── */
+.ti{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:var(--r);border:1.5px solid var(--cb);background:white;margin-bottom:6px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.ti:hover{border-color:var(--sl);background:var(--cream)}
+.ti:active{background:var(--cd)}
 .ti.done{opacity:.55;background:var(--cream)}
-.ti.blocked{border-color:var(--terra);background:var(--terra-p)}
-.ti.retry{border-color:var(--sun);background:var(--sun-p)}
+.ti.blocked{border-color:var(--terra);background:var(--tp)}
+.ti.retry{border-color:var(--sun);background:var(--sunp)}
 .td{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.ti-info{flex:1;min-width:0}
-.ti-title{font-size:.875rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ti-meta{font-size:.72rem;color:var(--ink-l)}
+.tii{flex:1;min-width:0}
+.ttl{font-size:.875rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tmt{font-size:.72rem;color:var(--il)}
 
-/* Subject colors */
-.sc-math{background:#FEF4D6;color:#8B6914}
-.sc-read{background:#D8EDF7;color:#2A5F80}
-.sc-sci{background:#D6F0DC;color:#2A6038}
-.sc-writ{background:#F0E4F0;color:#5A2D5A}
-.sc-hist{background:#F5DDD1;color:#7A3520}
-.sc-life{background:#E8EFF5;color:#2A3F5A}
-.sc-art{background:#FDE8EF;color:#7A2040}
-.sc-mus{background:#E8F4F0;color:#1A5040}
-.sc-def{background:#F0EDE8;color:#5C4E3A}
+/* ── SUBJECT COLORS ── */
+.sm{background:#FEF4D6;color:#8B6914}.sr{background:#D8EDF7;color:#2A5F80}
+.ss{background:#D6F0DC;color:#2A6038}.sw{background:#F0E4F0;color:#5A2D5A}
+.sh{background:#F5DDD1;color:#7A3520}.sl2{background:#E8EFF5;color:#2A3F5A}
+.sa{background:#FDE8EF;color:#7A2040}.smu{background:#E8F4F0;color:#1A5040}
+.sdf{background:#F0EDE8;color:#5C4E3A}
 
-/* Step dots */
-.steps{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:22px}
-.sdot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700}
-.sdot.done{background:var(--sage);color:white}
-.sdot.cur{background:var(--ink);color:white}
-.sdot.fut{background:var(--cream-b);color:var(--ink-l)}
-.sline{width:20px;height:2px;border-radius:1px}
-.sline.done{background:var(--sage)}
-.sline.fut{background:var(--cream-b)}
+/* ── STEP DOTS ── */
+.steps{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:20px}
+.sd{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.sd.dn{background:var(--sage);color:white}.sd.cu{background:var(--ink);color:white}.sd.ft{background:var(--cb);color:var(--il)}
+.sln{width:18px;height:2px;border-radius:1px;flex-shrink:0}
+.sln.dn{background:var(--sage)}.sln.ft{background:var(--cb)}
 
-/* Toggle */
-.tog{position:relative;width:42px;height:22px;flex-shrink:0}
+/* ── TOGGLE ── */
+.tog{position:relative;width:42px;height:22px;flex-shrink:0;cursor:pointer}
 .tog input{opacity:0;width:0;height:0;position:absolute}
-.tog-sl{position:absolute;cursor:pointer;inset:0;background:var(--cream-b);border-radius:11px;transition:.2s}
-.tog-sl:before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-input:checked+.tog-sl{background:var(--sage)}
-input:checked+.tog-sl:before{transform:translateX(20px)}
+.tsl{position:absolute;cursor:pointer;inset:0;background:var(--cb);border-radius:11px;transition:.2s}
+.tsl:before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+input:checked+.tsl{background:var(--sage)}
+input:checked+.tsl:before{transform:translateX(20px)}
 
-/* Color swatches */
+/* ── TABS ── */
+.tabs{display:flex;gap:3px;background:var(--cd);border-radius:var(--rl);padding:4px;margin-bottom:14px;overflow-x:auto}
+.tab{flex:0 0 auto;padding:8px 14px;border-radius:var(--r);border:none;cursor:pointer;font-family:var(--fb);font-size:.85rem;font-weight:400;color:var(--il);background:transparent;transition:all .15s;white-space:nowrap}
+.tab.on{background:white;color:var(--ink);font-weight:600;box-shadow:0 1px 4px rgba(44,36,22,.1)}
+
+/* ── COLOR SWATCHES ── */
 .cs{width:26px;height:26px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:border-color .15s;flex-shrink:0}
 .cs.sel{border-color:var(--ink)}
 
-/* PIN pad */
-.pin-dots{display:flex;gap:12px;justify-content:center;margin:16px 0}
-.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--sage);background:transparent;transition:background .15s}
-.pin-dot.f{background:var(--sage)}
-.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:220px;margin:0 auto}
-.pk{padding:14px;border-radius:var(--r);background:white;border:1.5px solid var(--cream-b);font-size:1.15rem;font-weight:600;cursor:pointer;transition:all .15s;font-family:var(--fb)}
-.pk:hover{background:var(--cream-d);border-color:var(--sage)}
+/* ── PIN PAD ── */
+.pdots{display:flex;gap:12px;justify-content:center;margin:16px 0}
+.pdot{width:16px;height:16px;border-radius:50%;border:2px solid var(--sage);background:transparent;transition:background .15s}
+.pdot.f{background:var(--sage)}
+.ppad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:220px;margin:0 auto}
+.pk{padding:15px;border-radius:var(--r);background:white;border:1.5px solid var(--cb);font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .15s;font-family:var(--fb);-webkit-tap-highlight-color:transparent}
+.pk:hover{background:var(--cd);border-color:var(--sage)}
+.pk:active{background:var(--cb)}
 
-/* Tabs */
-.tabs{display:flex;gap:3px;background:var(--cream-d);border-radius:var(--rl);padding:4px;margin-bottom:16px}
-.tab{flex:1;padding:8px 10px;border-radius:var(--r);border:none;cursor:pointer;font-family:var(--fb);font-size:.875rem;font-weight:400;color:var(--ink-l);background:transparent;transition:all .15s}
-.tab.on{background:white;color:var(--ink);font-weight:600;box-shadow:0 1px 4px rgba(44,36,22,.1)}
+/* ── ACTION CARD ── */
+.acard{border-radius:var(--rl);padding:14px 15px;display:flex;gap:10px;align-items:flex-start;margin-bottom:14px;animation:fi .3s ease}
+.ac-bl{background:var(--tp);border:1.5px solid var(--terra)}
+.ac-ov{background:var(--sunp);border:1.5px solid var(--sun)}
+.ac-tp{background:#EEF7EF;border:1.5px solid var(--sage)}
+.ac-ic{font-size:1.2rem;flex-shrink:0;margin-top:1px}
+.ac-bd{flex:1}
+.ac-ti{font-weight:600;font-size:.9rem;margin-bottom:2px}
+.ac-ds{font-size:.8rem;color:var(--im)}
+.ac-x{background:none;border:none;cursor:pointer;color:var(--if);font-size:1rem;padding:3px;line-height:1}
 
-/* Action card */
-.ac{border-radius:var(--rl);padding:14px 16px;display:flex;gap:11px;align-items:flex-start;margin-bottom:16px}
-.ac-block{background:var(--terra-p);border:1.5px solid var(--terra)}
-.ac-over{background:var(--sun-p);border:1.5px solid var(--sun)}
-.ac-tip{background:#EEF7EF;border:1.5px solid var(--sage)}
-.ac-icon{font-size:1.3rem;flex-shrink:0;margin-top:1px}
-.ac-body{flex:1}
-.ac-title{font-weight:600;font-size:.9375rem;margin-bottom:2px}
-.ac-desc{font-size:.8125rem;color:var(--ink-m)}
-.ac-x{background:none;border:none;cursor:pointer;color:var(--ink-f);font-size:1.1rem;padding:2px;line-height:1}
-
-/* MVD button */
-.mvd{width:100%;padding:13px 16px;border:2px solid var(--cream-b);border-radius:var(--rl);background:white;cursor:pointer;text-align:left;display:flex;align-items:center;gap:11px;margin-bottom:18px;transition:border-color .15s;font-family:var(--fb)}
+/* ── MVD BUTTON ── */
+.mvd{width:100%;padding:13px 15px;border:2px solid var(--cb);border-radius:var(--rl);background:white;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;margin-bottom:16px;transition:border-color .15s;font-family:var(--fb);-webkit-tap-highlight-color:transparent}
 .mvd:hover{border-color:var(--sage)}
+.mvd:active{background:var(--cream)}
 
-/* Week grid */
-.wg{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:10px}
-.wd{min-height:90px}
-.wdh{text-align:center;padding:5px 3px;border-radius:var(--r);margin-bottom:3px}
+/* ── WEEK GRID ── */
+.wg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+.wd{min-height:80px}
+.wdh{text-align:center;padding:5px 2px;border-radius:var(--r);margin-bottom:3px}
 .wdh.tod{background:var(--sage);color:white}
-.wt{padding:3px 4px;border-radius:4px;font-size:.6rem;font-weight:500;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;border-left:3px solid transparent}
+.wt{padding:2px 4px;border-radius:4px;font-size:.58rem;font-weight:500;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;border-left:3px solid transparent;line-height:1.4}
 
-/* Stats */
-.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
-.sc{background:white;border-radius:var(--r);box-shadow:var(--sh);padding:13px;text-align:center}
-.sv{font-family:var(--fd);font-size:1.5rem;font-weight:700;margin-bottom:2px}
-.sl{font-size:.72rem;color:var(--ink-l)}
+/* ── STATS ── */
+.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+.sc{background:white;border-radius:var(--r);box-shadow:var(--sh);padding:12px;text-align:center}
+.sv{font-family:var(--fd);font-size:1.4rem;font-weight:700;margin-bottom:2px}
+.slab{font-size:.7rem;color:var(--il)}
 
-/* Assessment */
-.qcard{background:white;border-radius:var(--rl);box-shadow:var(--sh);padding:22px;margin-bottom:14px}
-.opt{width:100%;text-align:left;padding:11px 14px;border:2px solid var(--cream-b);border-radius:var(--r);background:white;cursor:pointer;font-family:var(--fb);font-size:.9375rem;color:var(--ink);transition:all .15s;margin-bottom:7px;display:flex;align-items:center;gap:9px}
-.opt:hover:not(:disabled){border-color:var(--sage-l);background:var(--cream)}
-.opt.sel{border-color:var(--sage);background:var(--cream-d);font-weight:500}
-.opt:disabled{cursor:default}
-.oc{width:20px;height:20px;border-radius:50%;border:2px solid var(--cream-b);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:.7rem}
+/* ── ASSESSMENT ── */
+.qcard{background:white;border-radius:var(--rl);box-shadow:var(--sh);padding:20px;margin-bottom:12px}
+.opt{width:100%;text-align:left;padding:11px 13px;border:2px solid var(--cb);border-radius:var(--r);background:white;cursor:pointer;font-family:var(--fb);font-size:.9375rem;color:var(--ink);transition:all .15s;margin-bottom:7px;display:flex;align-items:center;gap:9px;-webkit-tap-highlight-color:transparent}
+.opt:hover:not(:disabled){border-color:var(--sl);background:var(--cream)}
+.opt:active:not(:disabled){background:var(--cd)}
+.opt.sel{border-color:var(--sage);background:var(--cd);font-weight:500}
+.opt:disabled{cursor:default;opacity:.6}
+.oc{width:20px;height:20px;border-radius:50%;border:2px solid var(--cb);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:.68rem;min-width:20px}
 .opt.sel .oc{background:var(--sage);border-color:var(--sage);color:white}
-.wa{width:100%;padding:11px;border:2px solid var(--cream-b);border-radius:var(--r);font-family:var(--fb);font-size:.9375rem;color:var(--ink);resize:none;outline:none;background:white;transition:border-color .2s}
+.wa{width:100%;padding:11px;border:2px solid var(--cb);border-radius:var(--r);font-family:var(--fb);font-size:16px;color:var(--ink);resize:none;outline:none;background:white;transition:border-color .2s;line-height:1.5}
 .wa:focus{border-color:var(--sage)}
-.wa:disabled{background:var(--cream);color:var(--ink-m)}
-.locked{opacity:.35;pointer-events:none}
+.wa:disabled{background:var(--cream);color:var(--im)}
+.locked{opacity:.3;pointer-events:none}
 
-/* Result */
-.ri{font-size:3.5rem;text-align:center;margin-bottom:10px}
-.rs{font-family:var(--fd);font-size:2.8rem;font-weight:700;text-align:center;margin-bottom:4px}
-.pass{color:var(--sage-d)}.fail{color:var(--terra)}
+/* ── RESULTS ── */
+.ri{font-size:3.2rem;text-align:center;margin-bottom:8px}
+.rs{font-family:var(--fd);font-size:2.6rem;font-weight:700;text-align:center;margin-bottom:4px}
+.pass{color:var(--sd)}.fail{color:var(--terra)}
 
-/* Animations */
-@keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:32px 16px;color:var(--im)}
+.empty .ei{font-size:2.2rem;margin-bottom:10px}
+.empty h4{font-size:.95rem;font-weight:600;margin-bottom:4px;color:var(--ink)}
+.empty p{font-size:.85rem;color:var(--il);margin-bottom:14px;max-width:240px;margin-left:auto;margin-right:auto}
+
+/* ── CHILD SECTION ON HOME ── */
+.kidcard{background:white;border-radius:var(--rl);box-shadow:var(--sh);padding:16px;margin-bottom:10px}
+
+/* ── ANIMATIONS ── */
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes si{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
-@keyframes cel{0%{transform:scale(.8) rotate(-4deg);opacity:0}60%{transform:scale(1.1) rotate(2deg)}100%{transform:scale(1) rotate(0);opacity:1}}
-@keyframes sp{to{transform:rotate(360deg)}}
-.fi{animation:fi .3s ease}
-.cel{animation:cel .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes su{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cel{0%{transform:scale(.7) rotate(-5deg);opacity:0}60%{transform:scale(1.15) rotate(2deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* Empty state */
-.empty{text-align:center;padding:36px 20px;color:var(--ink-m)}
-.empty-icon{font-size:2.4rem;margin-bottom:10px}
-.empty h4{font-size:1rem;font-weight:600;margin-bottom:5px;color:var(--ink)}
-.empty p{font-size:.875rem;color:var(--ink-l);margin-bottom:14px;max-width:260px;margin-left:auto;margin-right:auto}
-
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-thumb{background:var(--cream-b);border-radius:3px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--cb);border-radius:2px}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="sc-login" class="screen auth-wrap">
-  <div class="auth-card">
-    <div style="text-align:center;margin-bottom:22px">
+<!-- ═══════ LOGIN ═══════ -->
+<div id="sc-login" class="scr aw">
+  <div class="ac">
+    <div style="text-align:center;margin-bottom:20px">
       <div style="display:inline-flex;align-items:center;gap:9px;margin-bottom:6px">
-        <div style="width:42px;height:42px;border-radius:11px;background:var(--sage);display:flex;align-items:center;justify-content:center;font-size:20px">🌿</div>
-        <span style="font-family:var(--fd);font-size:1.75rem;color:var(--ink)">Covey</span>
+        <div style="width:40px;height:40px;border-radius:10px;background:var(--sage);display:flex;align-items:center;justify-content:center;font-size:19px">🌿</div>
+        <span style="font-family:var(--fd);font-size:1.7rem;color:var(--ink)">Covey</span>
       </div>
-      <p style="color:var(--ink-l);font-size:.875rem">The beautifully simple homeschool guardian</p>
+      <p style="color:var(--il);font-size:.85rem">The beautifully simple homeschool guardian</p>
     </div>
-    <div id="login-features" style="margin-bottom:20px">
-      <div style="display:flex;flex-direction:column;gap:7px">
-        <div style="display:flex;align-items:center;gap:8px;font-size:.875rem;color:var(--ink-m)"><span>🤖</span> AI grades written answers instantly</div>
-        <div style="display:flex;align-items:center;gap:8px;font-size:.875rem;color:var(--ink-m)"><span>📅</span> Auto-builds your schedule from goals</div>
-        <div style="display:flex;align-items:center;gap:8px;font-size:.875rem;color:var(--ink-m)"><span>🧘</span> One button to lighten an overwhelming day</div>
-        <div style="display:flex;align-items:center;gap:8px;font-size:.875rem;color:var(--ink-m)"><span>📄</span> Reports for state compliance</div>
-      </div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--im)"><span>🤖</span> AI grades written answers instantly</div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--im)"><span>📅</span> Builds your schedule from goals automatically</div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--im)"><span>🧘</span> One button to lighten an overwhelming day</div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--im)"><span>📄</span> Printable reports for state compliance</div>
     </div>
-    <div id="login-err" class="al al-r" style="display:none"></div>
-    <div id="login-form-wrap">
-      <div class="fg"><label class="fl">Email</label><input class="fi" id="li-email" type="email" placeholder="sarah@email.com"></div>
-      <div class="fg"><label class="fl">Password</label><input class="fi" id="li-pw" type="password" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()"></div>
-      <button class="btn btn-p btn-w btn-lg" style="margin-bottom:10px" onclick="doLogin()">Sign in →</button>
-      <p style="text-align:center;font-size:.8rem;color:var(--ink-l)">New here? <a href="#" onclick="showOnboard()" style="color:var(--sage-d);font-weight:500">Create your account →</a></p>
-    </div>
+    <div id="li-err" class="al alr" style="display:none"></div>
+    <div class="fg"><label class="fl">Email</label><input class="fi" id="li-em" type="email" inputmode="email" autocomplete="email" placeholder="sarah@email.com"></div>
+    <div class="fg"><label class="fl">Password</label><input class="fi" id="li-pw" type="password" autocomplete="current-password" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn bp bw blg" style="margin-bottom:10px" onclick="doLogin()">Sign in →</button>
+    <p style="text-align:center;font-size:.8rem;color:var(--il)">New here? <button onclick="goOnboard()" style="background:none;border:none;cursor:pointer;color:var(--sd);font-weight:600;font-size:.8rem;font-family:var(--fb);padding:0;text-decoration:underline">Create your account →</button></p>
   </div>
 </div>
 
-<!-- ONBOARD -->
-<div id="sc-onboard" class="screen auth-wrap">
-  <div class="auth-card">
-    <div style="text-align:center;margin-bottom:6px">
+<!-- ═══════ ONBOARD ═══════ -->
+<div id="sc-onboard" class="scr aw">
+  <div class="ac" id="ob-card">
+    <div style="text-align:center;margin-bottom:4px">
       <div style="display:inline-flex;align-items:center;gap:9px">
-        <div style="width:38px;height:38px;border-radius:10px;background:var(--sage);display:flex;align-items:center;justify-content:center;font-size:18px">🌿</div>
-        <span style="font-family:var(--fd);font-size:1.6rem;color:var(--ink)">Covey</span>
+        <div style="width:36px;height:36px;border-radius:9px;background:var(--sage);display:flex;align-items:center;justify-content:center;font-size:17px">🌿</div>
+        <span style="font-family:var(--fd);font-size:1.55rem;color:var(--ink)">Covey</span>
       </div>
     </div>
     <div class="steps" id="ob-steps">
-      <div class="sdot cur" id="sd1">1</div><div class="sline fut" id="sl1"></div>
-      <div class="sdot fut" id="sd2">2</div><div class="sline fut" id="sl2"></div>
-      <div class="sdot fut" id="sd3">3</div>
+      <div class="sd cu" id="sd1">1</div><div class="sln ft" id="sl1"></div>
+      <div class="sd ft" id="sd2">2</div><div class="sln ft" id="sl2"></div>
+      <div class="sd ft" id="sd3">3</div>
     </div>
+    <!-- Step 1 -->
     <div id="ob1">
-      <h2 style="font-family:var(--fd);font-size:1.35rem;margin-bottom:3px">Welcome to Covey</h2>
-      <p style="color:var(--ink-l);font-size:.875rem;margin-bottom:18px">Set up your family in about 3 minutes.</p>
-      <div id="ob1-err" class="al al-r" style="display:none"></div>
-      <div class="fg"><label class="fl">Your name</label><input class="fi" id="ob-pn" placeholder="Sarah"></div>
-      <div class="fg"><label class="fl">Family name</label><input class="fi" id="ob-fn" placeholder="The Johnson Family"></div>
-      <div class="fg"><label class="fl">Email</label><input class="fi" id="ob-em" type="email" placeholder="sarah@email.com"></div>
-      <div class="fg"><label class="fl">Password</label><input class="fi" id="ob-pw" type="password" placeholder="At least 6 characters"><span class="fh">Stored securely on your device</span></div>
-      <button class="btn btn-p btn-w btn-lg" onclick="ob1()">Continue →</button>
+      <h2 style="font-family:var(--fd);font-size:1.3rem;margin-bottom:3px">Welcome to Covey</h2>
+      <p style="color:var(--il);font-size:.85rem;margin-bottom:16px">Let's set up your family — takes about 3 minutes.</p>
+      <div id="ob1-err" class="al alr" style="display:none"></div>
+      <div class="fg"><label class="fl">Your name</label><input class="fi" id="ob-pn" autocomplete="given-name" placeholder="Sarah"></div>
+      <div class="fg"><label class="fl">Family name</label><input class="fi" id="ob-fn" autocomplete="family-name" placeholder="The Johnson Family"></div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" id="ob-em" type="email" inputmode="email" autocomplete="email" placeholder="sarah@email.com"></div>
+      <div class="fg">
+        <label class="fl">Password</label>
+        <input class="fi" id="ob-pw" type="password" autocomplete="new-password" placeholder="At least 6 characters">
+        <span class="fh">Stored only on this device</span>
+      </div>
+      <button class="btn bp bw blg" onclick="ob1Next()">Continue →</button>
     </div>
+    <!-- Step 2 -->
     <div id="ob2" style="display:none">
-      <h2 style="font-family:var(--fd);font-size:1.35rem;margin-bottom:3px">Add your children</h2>
-      <p style="color:var(--ink-l);font-size:.875rem;margin-bottom:14px">Up to 5 children. You can add more later.</p>
-      <div id="ob-kids"></div>
-      <button class="btn btn-t btn-w" style="margin-bottom:12px" onclick="obAddKid()">+ Add another child</button>
-      <button class="btn btn-p btn-w btn-lg" onclick="ob2()">Continue →</button>
+      <h2 style="font-family:var(--fd);font-size:1.3rem;margin-bottom:3px">Add your children</h2>
+      <p style="color:var(--il);font-size:.85rem;margin-bottom:14px">Up to 5. You can always add more later.</p>
+      <div id="ob-kl"></div>
+      <button class="btn bt bw" style="margin-bottom:12px" onclick="obAddKid()" id="ob-addkid-btn">+ Add another child</button>
+      <button class="btn bp bw blg" onclick="ob2Next()">Continue →</button>
     </div>
+    <!-- Step 3 -->
     <div id="ob3" style="display:none">
-      <div id="ob3-content"></div>
+      <div id="ob3-wrap"></div>
     </div>
   </div>
 </div>
 
-<!-- APP -->
-<div id="sc-app" class="screen">
-  <div class="app-layout">
+<!-- ═══════ APP ═══════ -->
+<div id="sc-app" class="scr">
+  <div class="app-wrap">
+    <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="s-logo">
-        <div class="s-logo-row">
-          <div class="s-logo-icon">🌿</div>
+      <div class="sl-logo">
+        <div class="sl-row">
+          <div class="sl-icon">🌿</div>
           <h1>Covey</h1>
         </div>
-        <p id="s-family"></p>
+        <p id="sl-fname"></p>
       </div>
-      <nav class="s-nav">
-        <button class="s-btn on" id="sn-home" onclick="nav('home')"><span>🏡</span> Home</button>
-        <button class="s-btn" id="sn-sched" onclick="nav('sched')"><span>📅</span> Schedule</button>
-        <button class="s-btn" id="sn-goals" onclick="nav('goals')"><span>🎯</span> Goals</button>
-        <button class="s-btn" id="sn-kids" onclick="nav('kids')"><span>👧</span> Children</button>
-        <button class="s-btn" id="sn-reports" onclick="nav('reports')"><span>📄</span> Reports</button>
-        <button class="s-btn" id="sn-settings" onclick="nav('settings')"><span>⚙️</span> Settings</button>
+      <nav class="sl-nav">
+        <button class="snb on" id="sn-home" onclick="nav('home')"><span>🏡</span> Home</button>
+        <button class="snb" id="sn-sched" onclick="nav('sched')"><span>📅</span> Schedule</button>
+        <button class="snb" id="sn-goals" onclick="nav('goals')"><span>🎯</span> Goals</button>
+        <button class="snb" id="sn-kids" onclick="nav('kids')"><span>👧</span> Children</button>
+        <button class="snb" id="sn-reports" onclick="nav('reports')"><span>📄</span> Reports</button>
+        <button class="snb" id="sn-settings" onclick="nav('settings')"><span>⚙️</span> Settings</button>
       </nav>
-      <div class="s-user">
-        <div class="s-user-name" id="s-uname"></div>
-        <div class="s-user-email" id="s-uemail"></div>
-        <button class="btn btn-s btn-w btn-sm" onclick="logout()">Sign out</button>
+      <div class="sl-user">
+        <div class="sl-uname" id="sl-uname"></div>
+        <div class="sl-email" id="sl-email"></div>
+        <button class="btn bs bw bsm" onclick="doLogout()">Sign out</button>
       </div>
     </aside>
 
     <div class="main">
       <!-- HOME -->
-      <div class="view on" id="v-home">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px">
+      <div class="view" id="v-home">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px">
           <div>
-            <h1 style="font-size:1.55rem;color:var(--ink)" id="h-greet"></h1>
-            <p style="color:var(--ink-l);font-size:.875rem" id="h-date"></p>
+            <h1 style="font-size:1.45rem;color:var(--ink)" id="h-gr"></h1>
+            <p style="color:var(--il);font-size:.85rem" id="h-dt"></p>
           </div>
-          <button style="font-size:1.3rem;padding:4px;background:none;border:none;cursor:pointer;position:relative" onclick="nav('notifs')" title="Notifications">🔔<span id="nb" style="position:absolute;top:-2px;right:-2px;background:var(--terra);color:white;border-radius:99px;font-size:.65rem;font-weight:700;padding:1px 5px;display:none"></span></button>
+          <button style="font-size:1.25rem;padding:5px;background:none;border:none;cursor:pointer;position:relative;-webkit-tap-highlight-color:transparent" onclick="nav('notifs')">🔔<span id="nb" style="position:absolute;top:-2px;right:-2px;background:var(--terra);color:white;border-radius:99px;font-size:.62rem;font-weight:700;padding:1px 5px;display:none"></span></button>
         </div>
         <div id="h-ac"></div>
-        <button class="mvd" onclick="showMVD()">
-          <span style="font-size:1.3rem">🧘</span>
+        <button class="mvd" onclick="oMo('mo-mvd')">
+          <span style="font-size:1.25rem">🧘</span>
           <div style="flex:1">
-            <strong style="display:block;font-size:.9375rem;color:var(--ink)">Today feels like too much</strong>
-            <span style="font-size:.78rem;color:var(--ink-l)">Show only essential tasks and reschedule the rest</span>
+            <strong style="display:block;font-size:.9rem;color:var(--ink)">Today feels like too much</strong>
+            <span style="font-size:.76rem;color:var(--il)">Show only essential tasks, reschedule the rest</span>
           </div>
-          <span style="color:var(--ink-f)">→</span>
+          <span style="color:var(--if)">→</span>
         </button>
         <div id="h-kids"></div>
       </div>
 
       <!-- SCHEDULE -->
       <div class="view" id="v-sched">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
-          <h1 style="font-size:1.55rem">Schedule</h1>
-          <select class="fi" style="width:auto;padding:7px 30px 7px 10px;font-size:.8rem" id="sf-child" onchange="renderSched()">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+          <h1 style="font-size:1.45rem">Schedule</h1>
+          <select class="fi" style="width:auto;padding:7px 28px 7px 10px;font-size:.82rem" id="sf-ch" onchange="renderSched()">
             <option value="all">All children</option>
           </select>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-          <button class="btn btn-s btn-sm" onclick="schedOff(-1)">← Prev</button>
-          <div style="flex:1;text-align:center;font-weight:600;font-size:.9375rem" id="s-wlabel"></div>
-          <button class="btn btn-p btn-sm" onclick="schedOff(0,true)">Today</button>
-          <button class="btn btn-s btn-sm" onclick="schedOff(1)">Next →</button>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+          <button class="btn bs bsm" onclick="schedOff(-1)">← Prev</button>
+          <div style="flex:1;text-align:center;font-weight:600;font-size:.9rem;min-width:120px" id="s-wl"></div>
+          <button class="btn bp bsm" onclick="schedOff(0,true)">Today</button>
+          <button class="btn bs bsm" onclick="schedOff(1)">Next →</button>
         </div>
-        <div id="s-blocked"></div>
+        <div id="s-bl"></div>
         <div class="wg" id="s-grid"></div>
       </div>
 
       <!-- GOALS -->
       <div class="view" id="v-goals">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
-          <h1 style="font-size:1.55rem">Learning Goals</h1>
-          <button class="btn btn-p btn-sm" onclick="openGoalMo()">+ Add goal</button>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <h1 style="font-size:1.45rem">Learning Goals</h1>
+          <button class="btn bp bsm" onclick="oGoalMo()">+ Add goal</button>
         </div>
-        <div id="g-notice" class="al al-g" style="display:none"></div>
+        <div id="g-notice" class="al alg" style="display:none"></div>
         <div id="g-tabs" class="tabs" style="display:none"></div>
         <div id="g-list"></div>
       </div>
 
       <!-- KIDS -->
       <div class="view" id="v-kids">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
-          <h1 style="font-size:1.55rem">Your Children</h1>
-          <button class="btn btn-p btn-sm" onclick="openAddKidMo()">+ Add child</button>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <h1 style="font-size:1.45rem">Your Children</h1>
+          <button class="btn bp bsm" onclick="oKidMo()">+ Add child</button>
         </div>
         <div id="k-list"></div>
       </div>
 
       <!-- REPORTS -->
       <div class="view" id="v-reports">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
-          <h1 style="font-size:1.55rem">Progress Reports</h1>
-          <button class="btn btn-p btn-sm" onclick="expPDF()">📄 Export report</button>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+          <h1 style="font-size:1.45rem">Progress Reports</h1>
+          <button class="btn bp bsm" onclick="expPDF()">📄 Export report</button>
         </div>
-        <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
-          <select class="fi" style="width:auto;padding:8px 30px 8px 11px;font-size:.875rem" id="r-child" onchange="renderReports()"></select>
-          <select class="fi" style="width:auto;padding:8px 30px 8px 11px;font-size:.875rem" id="r-range" onchange="renderReports()">
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+          <select class="fi" style="width:auto;padding:8px 28px 8px 10px;font-size:.85rem" id="r-ch" onchange="renderRep()"></select>
+          <select class="fi" style="width:auto;padding:8px 28px 8px 10px;font-size:.85rem" id="r-rng" onchange="renderRep()">
             <option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option>
             <option value="90">Last 90 days</option><option value="365">Last year</option>
           </select>
         </div>
-        <div id="r-content"></div>
+        <div id="r-con"></div>
       </div>
 
       <!-- SETTINGS -->
       <div class="view" id="v-settings">
-        <h1 style="font-size:1.55rem;margin-bottom:22px">Settings</h1>
-        <div id="set-ok" class="al al-g" style="display:none">✅ Saved!</div>
-        <div class="card" style="margin-bottom:12px">
-          <h3 style="font-family:var(--fd);font-size:1.05rem;margin-bottom:8px">AI Grading (Optional)</h3>
-          <p style="font-size:.8125rem;color:var(--ink-l);margin-bottom:12px;line-height:1.6">Add your Anthropic API key for smarter written-answer grading. Leave blank to use keyword matching — works great either way. <a href="https://console.anthropic.com" target="_blank" style="color:var(--sage-d)">Get a free key →</a></p>
+        <h1 style="font-size:1.45rem;margin-bottom:20px">Settings</h1>
+        <div id="set-ok" class="al alg" style="display:none">✅ Saved!</div>
+        <div class="card" style="margin-bottom:10px">
+          <h3 style="font-family:var(--fd);font-size:1rem;margin-bottom:7px">AI Grading (Optional)</h3>
+          <p style="font-size:.8rem;color:var(--il);margin-bottom:11px;line-height:1.6">Add your Anthropic API key for smarter written-answer grading. Leave blank to use keyword matching — the app works great either way. <a href="https://console.anthropic.com" target="_blank">Get a free key →</a></p>
           <div class="fg"><label class="fl">API Key</label><input class="fi" id="set-key" type="password" placeholder="sk-ant-..."></div>
-          <button class="btn btn-p btn-sm" onclick="saveKey()">Save key</button>
-          <p id="key-ok" style="font-size:.78rem;color:var(--sage-d);margin-top:6px;display:none">✅ Key saved — AI grading active</p>
+          <button class="btn bp bsm" onclick="saveKey()">Save key</button>
+          <p id="key-ok" style="font-size:.78rem;color:var(--sd);margin-top:6px;display:none">✅ API key saved — AI grading is active</p>
         </div>
-        <div class="card" style="margin-bottom:12px">
-          <h3 style="font-family:var(--fd);font-size:1.05rem;margin-bottom:6px">Passing Score</h3>
-          <p style="font-size:.8125rem;color:var(--ink-l);margin-bottom:12px">Minimum score to pass an assessment (default 75%).</p>
+        <div class="card" style="margin-bottom:10px">
+          <h3 style="font-family:var(--fd);font-size:1rem;margin-bottom:5px">Passing Score</h3>
+          <p style="font-size:.8rem;color:var(--il);margin-bottom:11px">Minimum score to pass an assessment (default 75%).</p>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
             <label class="fl" style="margin:0">Global passing score</label>
-            <span id="ps-show" style="font-family:var(--fd);font-size:1.15rem;font-weight:700;color:var(--sage-d)">75%</span>
+            <span id="ps-val" style="font-family:var(--fd);font-size:1.1rem;font-weight:700;color:var(--sd)">75%</span>
           </div>
-          <input type="range" min="50" max="100" step="5" id="ps-range" value="75" oninput="document.getElementById('ps-show').textContent=this.value+'%'" style="width:100%;accent-color:var(--sage);margin-bottom:12px">
-          <button class="btn btn-p btn-sm" onclick="savePS()">Save score</button>
+          <input type="range" min="50" max="100" step="5" id="ps-rng" value="75" oninput="document.getElementById('ps-val').textContent=this.value+'%'" style="width:100%;accent-color:var(--sage);margin-bottom:11px">
+          <button class="btn bp bsm" onclick="savePS()">Save score</button>
         </div>
-        <div class="card" style="margin-bottom:12px">
-          <h3 style="font-family:var(--fd);font-size:1.05rem;margin-bottom:10px">Your Data</h3>
+        <div class="card" style="margin-bottom:10px">
+          <h3 style="font-family:var(--fd);font-size:1rem;margin-bottom:10px">Your Data</h3>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn-s btn-sm" onclick="expData()">⬇️ Backup data</button>
-            <label class="btn btn-s btn-sm" style="cursor:pointer">⬆️ Restore backup<input type="file" accept=".json" style="display:none" onchange="impData(event)"></label>
+            <button class="btn bs bsm" onclick="expData()">⬇️ Backup data</button>
+            <label class="btn bs bsm" style="cursor:pointer">⬆️ Restore backup<input type="file" accept=".json" style="display:none" onchange="impData(event)"></label>
           </div>
         </div>
         <div class="card">
-          <h3 style="font-family:var(--fd);font-size:1.05rem;margin-bottom:8px">Our Promise</h3>
-          <p style="font-size:.8125rem;color:var(--ink-m);line-height:1.8">
+          <h3 style="font-family:var(--fd);font-size:1rem;margin-bottom:8px">Our Promise</h3>
+          <p style="font-size:.82rem;color:var(--im);line-height:1.9">
             ✓ No streaks that punish missing a day<br>
             ✓ No leaderboards or comparisons<br>
             ✓ No addictive reward mechanics<br>
@@ -447,9 +456,9 @@ input:checked+.tog-sl:before{transform:translateX(20px)}
 
       <!-- NOTIFICATIONS -->
       <div class="view" id="v-notifs">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
-          <h1 style="font-size:1.55rem">Alerts</h1>
-          <button class="btn btn-s btn-sm" onclick="readAllN()">Mark all read</button>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <h1 style="font-size:1.45rem">Alerts</h1>
+          <button class="btn bs bsm" onclick="readAllN()">Mark all read</button>
         </div>
         <div id="n-list"></div>
       </div>
@@ -466,31 +475,31 @@ input:checked+.tog-sl:before{transform:translateX(20px)}
     </div>
   </div>
 
-  <!-- Mobile nav -->
-  <nav class="mobile-nav">
-    <button class="m-btn on" id="mn-home" onclick="nav('home')"><span class="mi">🏡</span>Home</button>
-    <button class="m-btn" id="mn-sched" onclick="nav('sched')"><span class="mi">📅</span>Schedule</button>
-    <button class="m-btn" id="mn-goals" onclick="nav('goals')"><span class="mi">🎯</span>Goals</button>
-    <button class="m-btn" id="mn-kids" onclick="nav('kids')"><span class="mi">👧</span>Kids</button>
-    <button class="m-btn" id="mn-settings" onclick="nav('settings')"><span class="mi">⚙️</span>Settings</button>
+  <!-- Mobile bottom nav -->
+  <nav class="mnav">
+    <button class="mnb on" id="mn-home" onclick="nav('home')"><span class="mi">🏡</span>Home</button>
+    <button class="mnb" id="mn-sched" onclick="nav('sched')"><span class="mi">📅</span>Schedule</button>
+    <button class="mnb" id="mn-goals" onclick="nav('goals')"><span class="mi">🎯</span>Goals</button>
+    <button class="mnb" id="mn-kids" onclick="nav('kids')"><span class="mi">👧</span>Kids</button>
+    <button class="mnb" id="mn-settings" onclick="nav('settings')"><span class="mi">⚙️</span>Settings</button>
   </nav>
 </div>
 
-<!-- MODALS -->
+<!-- ═══════ MODALS ═══════ -->
 <div class="ov h" id="mo-mvd"><div class="mo">
-  <div class="mo-h"><h3>🧘 Lighter day mode</h3><button class="mo-x" onclick="cmo('mo-mvd')">×</button></div>
-  <div class="mo-b">
-    <p style="color:var(--ink-m);margin-bottom:16px;font-size:.9375rem">This shows only your most essential tasks today and quietly moves everything else to the next available day. Nothing gets lost.</p>
-    <button class="btn btn-p btn-w btn-lg" onclick="doMVD()">Yes, lighten today</button>
-    <button class="btn btn-s btn-w" style="margin-top:8px" onclick="cmo('mo-mvd')">Cancel</button>
+  <div class="moh"><h3>🧘 Lighter day mode</h3><button class="mox" onclick="cMo('mo-mvd')">×</button></div>
+  <div class="mob">
+    <p style="color:var(--im);margin-bottom:16px;font-size:.9rem;line-height:1.6">This shows only your most essential tasks today and quietly moves everything else to the next available day. Nothing gets lost.</p>
+    <button class="btn bp bw blg" onclick="doMVD()">Yes, lighten today</button>
+    <button class="btn bs bw" style="margin-top:8px" onclick="cMo('mo-mvd')">Cancel</button>
   </div>
 </div></div>
 
 <div class="ov h" id="mo-goal"><div class="mo">
-  <div class="mo-h"><h3>Add a learning goal</h3><button class="mo-x" onclick="cmo('mo-goal')">×</button></div>
-  <div class="mo-b">
-    <div id="g-err" class="al al-r" style="display:none"></div>
-    <div class="fg" id="g-cw"><label class="fl">Child</label><select class="fi" id="g-child"></select></div>
+  <div class="moh"><h3>Add a learning goal</h3><button class="mox" onclick="cMo('mo-goal')">×</button></div>
+  <div class="mob">
+    <div id="g-err" class="al alr" style="display:none"></div>
+    <div class="fg" id="g-cw"><label class="fl">Child</label><select class="fi" id="g-ch"></select></div>
     <div class="fg"><label class="fl">Subject</label>
       <select class="fi" id="g-subj">
         <option value="">Pick a subject…</option>
@@ -500,8 +509,8 @@ input:checked+.tog-sl:before{transform:translateX(20px)}
       </select>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="fg"><label class="fl">Goal type</label><select class="fi" id="g-type"><option value="lessons">Total lessons</option><option value="spw">Sessions/week</option></select></div>
-      <div class="fg"><label class="fl" id="g-ulabel">Number of lessons</label><input class="fi" id="g-units" type="number" min="1" placeholder="e.g. 180"></div>
+      <div class="fg"><label class="fl">Type</label><select class="fi" id="g-type" onchange="updGLabel()"><option value="lessons">Total lessons</option><option value="spw">Sessions/week</option></select></div>
+      <div class="fg"><label class="fl" id="g-ul">Lessons</label><input class="fi" id="g-units" type="number" inputmode="numeric" min="1" placeholder="e.g. 180"></div>
     </div>
     <div class="fg"><label class="fl">Frequency</label>
       <select class="fi" id="g-freq">
@@ -511,321 +520,317 @@ input:checked+.tog-sl:before{transform:translateX(20px)}
         <option value="4xw">4×/week (Mon–Thu)</option>
       </select>
     </div>
-    <div class="fg"><label class="fl">Passing score override <span style="font-weight:400;color:var(--ink-l)">(blank = use global)</span></label><input class="fi" id="g-pass" type="number" min="50" max="100" placeholder="e.g. 80"></div>
-    <div style="padding:11px;background:var(--cream);border-radius:var(--r);margin-bottom:14px">
+    <div class="fg"><label class="fl">Passing score override <span style="font-weight:400;color:var(--il)">(blank = global default)</span></label><input class="fi" id="g-pass" type="number" inputmode="numeric" min="50" max="100" placeholder="e.g. 80"></div>
+    <div style="padding:11px;background:var(--cream);border-radius:var(--r);margin-bottom:13px">
       <div style="display:flex;align-items:center;justify-content:space-between">
-        <div><p style="font-size:.875rem;font-weight:500">Require written answer first</p><p style="font-size:.72rem;color:var(--ink-l)">Turn off for very young children</p></div>
-        <label class="tog"><input type="checkbox" id="g-wf" checked><span class="tog-sl"></span></label>
+        <div><p style="font-size:.875rem;font-weight:500">Require written answer first</p><p style="font-size:.72rem;color:var(--il)">Turn off for very young children or Math</p></div>
+        <label class="tog"><input type="checkbox" id="g-wf" checked><span class="tsl"></span></label>
       </div>
     </div>
-    <button class="btn btn-p btn-w btn-lg" onclick="saveGoal()">Add goal &amp; build schedule</button>
+    <button class="btn bp bw blg" onclick="saveGoal()">Add goal &amp; build schedule</button>
   </div>
 </div></div>
 
 <div class="ov h" id="mo-kid"><div class="mo">
-  <div class="mo-h"><h3>Add a child</h3><button class="mo-x" onclick="cmo('mo-kid')">×</button></div>
-  <div class="mo-b">
-    <div id="k-err" class="al al-r" style="display:none"></div>
-    <div class="fg"><label class="fl">Avatar color</label><div id="k-colors" style="display:flex;gap:7px;flex-wrap:wrap"></div></div>
-    <div class="fg"><label class="fl">Name</label><input class="fi" id="k-name" placeholder="Emma"></div>
+  <div class="moh"><h3>Add a child</h3><button class="mox" onclick="cMo('mo-kid')">×</button></div>
+  <div class="mob">
+    <div id="k-err" class="al alr" style="display:none"></div>
+    <div class="fg"><label class="fl">Avatar color</label><div id="k-cols" style="display:flex;gap:7px;flex-wrap:wrap"></div></div>
+    <div class="fg"><label class="fl">Name</label><input class="fi" id="k-name" autocomplete="off" placeholder="Emma"></div>
     <div class="fg"><label class="fl">Birthdate</label><input class="fi" id="k-dob" type="date"></div>
-    <div class="fg"><label class="fl">4-digit PIN <span style="font-weight:400;color:var(--ink-l)">(child uses to open their view)</span></label><input class="fi" id="k-pin" type="password" maxlength="4" placeholder="1234"></div>
-    <div class="fg"><label class="fl">Health notes <span style="font-weight:400;color:var(--ink-l)">(optional)</span></label><textarea class="fi" id="k-health" placeholder="Allergies, medications, conditions…"></textarea></div>
-    <button class="btn btn-p btn-w btn-lg" onclick="saveKid()">Add child</button>
+    <div class="fg"><label class="fl">4-digit PIN <span style="font-weight:400;color:var(--il)">(child uses to open their learning view)</span></label><input class="fi" id="k-pin" type="password" inputmode="numeric" maxlength="4" placeholder="1234"></div>
+    <div class="fg"><label class="fl">Health notes <span style="font-weight:400;color:var(--il)">(optional)</span></label><textarea class="fi" id="k-health" placeholder="Allergies, medications, sensitivities…"></textarea></div>
+    <button class="btn bp bw blg" onclick="saveKid()">Add child</button>
   </div>
 </div></div>
 
-<div class="ov h" id="mo-kdetail"><div class="mo" style="max-width:540px">
-  <div class="mo-h"><h3 id="kd-title">Child</h3><button class="mo-x" onclick="cmo('mo-kdetail')">×</button></div>
-  <div class="mo-b" id="kd-body"></div>
+<div class="ov h" id="mo-kd"><div class="mo" style="max-width:560px">
+  <div class="moh"><h3 id="kd-title">Child</h3><button class="mox" onclick="cMo('mo-kd')">×</button></div>
+  <div class="mob" id="kd-body"></div>
 </div></div>
 
-<div class="ov h" id="mo-blocked"><div class="mo">
-  <div class="mo-h"><h3>🔒 Task blocked — review needed</h3><button class="mo-x" onclick="cmo('mo-blocked')">×</button></div>
-  <div class="mo-b" id="bl-body"></div>
+<div class="ov h" id="mo-bl"><div class="mo">
+  <div class="moh"><h3>🔒 Needs your review</h3><button class="mox" onclick="cMo('mo-bl')">×</button></div>
+  <div class="mob" id="bl-body"></div>
 </div></div>
 
 <script>
-// =====================================================
-// STATE & PERSISTENCE
-// =====================================================
-const SK = 'covey-v1';
-let S = { family:null, user:null, auth:false, children:[], profiles:{}, mastery:{global:75,overrides:{}}, goals:[], tasks:[], assessments:{}, logs:[], notifs:[], cards:[], sub:{plan:'trial',active:true} };
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+const SK='covey-v2';
+let S={family:null,user:null,auth:false,children:[],profiles:{},mastery:{global:75,ov:{}},goals:[],tasks:[],assessments:{},logs:[],notifs:[],cards:[],sub:{plan:'trial',active:true}};
 
-function save(){ try{ localStorage.setItem(SK, JSON.stringify(S)); }catch(e){} }
-function load(){
-  try{
-    const d = localStorage.getItem(SK);
-    if(d){ const p=JSON.parse(d); S=Object.assign(S,p); }
-  }catch(e){}
-}
+function save(){try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){}}
+function load(){try{const d=localStorage.getItem(SK);if(d){const p=JSON.parse(d);if(p&&typeof p==='object')Object.assign(S,p);}}catch(e){}}
 
-// =====================================================
+// ════════════════════════════════════════════
 // UTILS
-// =====================================================
-function uid(){ return Math.random().toString(36).slice(2,9)+Date.now().toString(36); }
-function tod(){ return new Date().toISOString().split('T')[0]; }
-function dAdd(ds,n){ const d=new Date(ds+'T00:00:00'); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; }
-function fDate(ds){ if(!ds)return''; return new Date(ds+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
-function fDateFull(ds){ if(!ds)return''; return new Date(ds+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}); }
-function age(dob){ if(!dob)return null; const b=new Date(dob),n=new Date(); let a=n.getFullYear()-b.getFullYear(); const m=n.getMonth()-b.getMonth(); if(m<0||(m===0&&n.getDate()<b.getDate()))a--; return a; }
-function greet(){ const h=new Date().getHours(); return h<12?'Good morning':h<17?'Good afternoon':'Good evening'; }
-function inits(n){ return(n||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
-const ACOLS=['#7BA685','#5B9EC9','#C4714A','#E8B84B','#8B5E8B','#C4A0C4','#4A6FA5','#E05B8A'];
-let selColor=ACOLS[0];
-function sCls(s){ const m={'Math':'sc-math','Reading':'sc-read','Science':'sc-sci','Writing':'sc-writ','History':'sc-hist','Life Skills':'sc-life','Art':'sc-art','Music':'sc-mus'}; return m[s]||'sc-def'; }
-function sDot(s){ const m={'Math':'#E8B84B','Reading':'#5B9EC9','Science':'#7BA685','Writing':'#8B5E8B','History':'#C4714A','Life Skills':'#4A6FA5','Art':'#E05B8A','Music':'#3A9080'}; return m[s]||'#BFB09A'; }
-function sEmoji(s){ const m={'Math':'🔢','Reading':'📚','Writing':'✏️','Science':'🔬','History':'🏛️','Life Skills':'🏠','Art':'🎨','Music':'🎵','Bible / Character':'✝️','Foreign Language':'🌍','Physical Education':'⚽','Other':'📝'}; return m[s]||'📝'; }
-function freqDays(f){ if(!f||f==='daily')return['mon','tue','wed','thu','fri']; if(f==='3xw')return['mon','wed','fri']; if(f==='2xw')return['tue','thu']; if(f==='4xw')return['mon','tue','wed','thu']; return['mon','wed','fri']; }
-function weekDates(off){ const t=new Date(); t.setDate(t.getDate()+off*7); const day=t.getDay(); const diff=t.getDate()-day+(day===0?-6:1); const m=new Date(t); m.setDate(diff); return Array.from({length:7},(_,i)=>{ const d=new Date(m); d.setDate(m.getDate()+i); return d.toISOString().split('T')[0]; }); }
+// ════════════════════════════════════════════
+function uid(){return Math.random().toString(36).slice(2,9)+Date.now().toString(36);}
+function tod(){return new Date().toISOString().split('T')[0];}
+function dAdd(ds,n){const d=new Date(ds+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().split('T')[0];}
+function fD(ds){if(!ds)return'';return new Date(ds+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+function fDF(ds){if(!ds)return'';return new Date(ds+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});}
+function getAge(dob){if(!dob)return null;const b=new Date(dob),n=new Date();let a=n.getFullYear()-b.getFullYear();if(n.getMonth()<b.getMonth()||(n.getMonth()===b.getMonth()&&n.getDate()<b.getDate()))a--;return a;}
+function greet(){const h=new Date().getHours();return h<12?'Good morning':h<17?'Good afternoon':'Good evening';}
+function inits(n){return(n||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
 
-// =====================================================
+const ACOLS=['#7BA685','#5B9EC9','#C4714A','#E8B84B','#8B5E8B','#C4A0C4','#4A6FA5','#E05B8A'];
+let selCol=ACOLS[0];
+
+function sCls(s){const m={'Math':'sm','Reading':'sr','Science':'ss','Writing':'sw','History':'sh','Life Skills':'sl2','Art':'sa','Music':'smu'};return m[s]||'sdf';}
+function sDot(s){const m={'Math':'#E8B84B','Reading':'#5B9EC9','Science':'#7BA685','Writing':'#8B5E8B','History':'#C4714A','Life Skills':'#4A6FA5','Art':'#E05B8A','Music':'#3A9080'};return m[s]||'#BFB09A';}
+function sEmo(s){const m={'Math':'🔢','Reading':'📚','Writing':'✏️','Science':'🔬','History':'🏛️','Life Skills':'🏠','Art':'🎨','Music':'🎵','Bible / Character':'✝️','Foreign Language':'🌍','Physical Education':'⚽','Other':'📝'};return m[s]||'📝';}
+function fDays(f){if(!f||f==='daily')return['mon','tue','wed','thu','fri'];if(f==='3xw')return['mon','wed','fri'];if(f==='2xw')return['tue','thu'];if(f==='4xw')return['mon','tue','wed','thu'];return['mon','wed','fri'];}
+function wkDates(off){const t=new Date();t.setDate(t.getDate()+off*7);const dy=t.getDay();const diff=t.getDate()-dy+(dy===0?-6:1);const m=new Date(t);m.setDate(diff);return Array.from({length:7},(_,i)=>{const d=new Date(m);d.setDate(m.getDate()+i);return d.toISOString().split('T')[0];});}
+
+// ════════════════════════════════════════════
 // SCHEDULE BUILDER
-// =====================================================
+// ════════════════════════════════════════════
 function buildSched(goal){
-  const days=freqDays(goal.freq);
-  const tasks=[];
-  let count=0, d=new Date(goal.start+'T00:00:00'), iter=0;
-  while(count<goal.total&&iter<2000){
+  const days=fDays(goal.freq);
+  const tks=[];let count=0,iter=0;
+  const d=new Date(goal.start+'T00:00:00');
+  while(count<goal.total&&iter<3000){
     iter++;
     const dn=d.toLocaleDateString('en-US',{weekday:'short'}).toLowerCase().slice(0,3);
     if(days.includes(dn)){
-      tasks.push({ id:uid(), cid:goal.cid, gid:goal.id, subj:goal.subj, title:goal.subj+' — Session '+(count+1), desc:'', date:d.toISOString().split('T')[0], ess:count%3!==2, assess:true, status:'planned', attempts:0, mins:30 });
+      tks.push({id:uid(),cid:goal.cid,gid:goal.id,subj:goal.subj,title:goal.subj+' — Session '+(count+1),desc:'',date:d.toISOString().split('T')[0],ess:count%3!==2,assess:true,status:'planned',attempts:0,mins:30});
       count++;
     }
     d.setDate(d.getDate()+1);
   }
-  return tasks;
+  return tks;
 }
 
-// =====================================================
+// ════════════════════════════════════════════
 // AI SERVICE
-// =====================================================
-async function aiCall(sys,usr,mt=1200){
+// ════════════════════════════════════════════
+async function aiCall(sys,usr,mt=1400){
   const key=localStorage.getItem('covey-key')||'';
   if(!key)return null;
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:mt,system:sys,messages:[{role:'user',content:usr}]})
-    });
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:mt,system:sys,messages:[{role:'user',content:usr}]})});
+    if(!r.ok)return null;
     const data=await r.json();
     return data?.content?.[0]?.text||null;
   }catch(e){return null;}
 }
 
 async function genQs(task,child){
-  const a=age(child.dob)||8;
-  const sys='You are a homeschool assessment generator. Return ONLY a valid JSON array, no markdown, no explanation.';
-  const usr=`Generate 5 questions for a ${a}-year-old studying ${task.subj}. Topic: ${task.title}.
-Return JSON array where each item has: questionId(string), questionText(string), type("write_then_choose" or "mc_only"), options(array of {id,text,isCorrect}), modelAnswer(string), gradingKeywords(array of strings), pointValue(1).
-Use mc_only for math/numeric. Use write_then_choose for conceptual topics. Each option array has exactly 4 items.`;
+  const a=getAge(child.dob)||8;
+  const sys='You are a homeschool assessment generator. Return ONLY a valid JSON array, no markdown, no code fences, no extra text.';
+  const usr=`Generate 5 questions for a ${a}-year-old studying ${task.subj}. Topic: ${task.title}.\nReturn JSON array. Each item: {questionId,questionText,type("write_then_choose" or "mc_only"),options:[{id,text,isCorrect}x4],modelAnswer,gradingKeywords:[5 words],pointValue:1}. Use mc_only for math/numbers, write_then_choose for concepts.`;
   const raw=await aiCall(sys,usr,1800);
-  if(!raw)return fallbackQs(task.subj);
-  try{ const j=JSON.parse(raw.replace(/```json|```/g,'').trim()); if(Array.isArray(j)&&j.length>0)return j; }catch(e){}
-  return fallbackQs(task.subj);
+  if(!raw)return fallQs(task.subj);
+  try{const j=JSON.parse(raw.replace(/```[\s\S]*?```/g,'').trim());if(Array.isArray(j)&&j.length>0)return j;}catch(e){}
+  return fallQs(task.subj);
 }
 
-async function gradeWritten(qText,model,kw,resp){
+async function gradeWr(qTxt,model,kw,resp){
   if(!resp?.trim())return{ok:false,fb:'No answer written.',ec:'careless'};
-  const sys='Grade a student short answer. Return ONLY valid JSON.';
-  const usr=`Question: ${qText}\nModel answer: ${model}\nKey concepts: ${(kw||[]).join(', ')}\nStudent wrote: ${resp}\nReturn: {"ok":true_or_false,"fb":"one encouraging sentence","ec":null_or_"concept"_or_"vocabulary"_or_"careless"}`;
-  const raw=await aiCall(sys,usr,280);
-  if(!raw)return ruleGrade(resp,kw);
-  try{ const j=JSON.parse(raw.replace(/```json|```/g,'').trim()); return{ok:j.ok,fb:j.fb,ec:j.ec}; }catch(e){ return ruleGrade(resp,kw); }
+  const sys='Grade a student short answer. Return ONLY valid JSON, no markdown.';
+  const usr=`Q: ${qTxt}\nModel: ${model}\nKeywords: ${(kw||[]).join(', ')}\nStudent: ${resp}\nReturn: {"ok":true_or_false,"fb":"one encouraging sentence","ec":null_or_"concept"_or_"vocabulary"_or_"careless"}`;
+  const raw=await aiCall(sys,usr,300);
+  if(!raw)return rGrade(resp,kw);
+  try{const j=JSON.parse(raw.replace(/```[\s\S]*?```/g,'').trim());return{ok:!!j.ok,fb:j.fb||'Good try!',ec:j.ec||null};}catch(e){return rGrade(resp,kw);}
 }
 
 async function genRetry(task,child,ecs,mc){
-  const a=age(child.dob)||8;
-  const sys='You are a gentle homeschool tutor. Return ONLY valid JSON.';
-  const usr=`A ${a}-year-old failed ${task.subj}: ${task.title}. Errors: ${(ecs||[]).join(', ')}. Return: {"expl":"2-3 simple sentences with real-world analogy","enc":"1 warm encouraging sentence"}`;
+  const a=getAge(child.dob)||8;
+  const sys='You are a gentle homeschool tutor. Return ONLY valid JSON, no markdown.';
+  const usr=`A ${a}-year-old struggled with ${task.subj}: "${task.title}". Errors: ${(ecs||[]).join(', ')||'general'}. Return: {"expl":"2-3 simple sentences with a real-world analogy for a ${a}-year-old","enc":"1 warm encouraging sentence"}`;
   const raw=await aiCall(sys,usr,400);
-  if(!raw)return{expl:`Let's look at ${task.subj} again. Sometimes topics need a second look — that's completely normal!`,enc:"You're doing great by trying again. That's what strong learners do."};
-  try{ const j=JSON.parse(raw.replace(/```json|```/g,'').trim()); return{expl:j.expl,enc:j.enc}; }catch(e){ return{expl:'Let\'s try this one more time.',enc:'You\'ve got this!'} }
+  if(!raw)return{expl:`Let's look at ${task.subj} again together. It sometimes takes a couple of tries — that's completely normal!`,enc:"You're doing amazing by trying again. That's what great learners do."};
+  try{const j=JSON.parse(raw.replace(/```[\s\S]*?```/g,'').trim());return{expl:j.expl||'Let\'s try this again.',enc:j.enc||'You\'ve got this!'};}catch(e){return{expl:'Let\'s review this together.',enc:'You\'ve got this!'};}
 }
 
-function ruleGrade(resp,kw){
+function rGrade(resp,kw){
   if(!resp?.trim())return{ok:false,fb:'Try writing your answer.',ec:'careless'};
   const r=resp.toLowerCase();
   const hits=(kw||[]).filter(k=>r.includes(k.toLowerCase())).length;
   const ratio=kw?.length?hits/kw.length:0;
-  const ok=ratio>=0.5||resp.length>25;
-  return{ok,fb:ok?'Good explanation!':'Try to include more key ideas in your answer.',ec:ok?null:'concept'};
+  const ok=ratio>=0.5||resp.trim().length>20;
+  return{ok,fb:ok?'Good explanation!':'Try to include more key ideas.',ec:ok?null:'concept'};
 }
 
-function fallbackQs(subj){
+function fallQs(subj){
   const pool={
     'Math':[
-      {questionId:'q1',questionText:'What do we call the answer when we add two numbers together?',type:'write_then_choose',options:[{id:'a',text:'Sum',isCorrect:true},{id:'b',text:'Difference',isCorrect:false},{id:'c',text:'Product',isCorrect:false},{id:'d',text:'Quotient',isCorrect:false}],modelAnswer:'The answer to an addition problem is called the sum.',gradingKeywords:['sum','add','total'],pointValue:1},
+      {questionId:'q1',questionText:'What do we call the answer when we add two numbers?',type:'write_then_choose',options:[{id:'a',text:'Sum',isCorrect:true},{id:'b',text:'Difference',isCorrect:false},{id:'c',text:'Product',isCorrect:false},{id:'d',text:'Quotient',isCorrect:false}],modelAnswer:'The answer to an addition problem is the sum.',gradingKeywords:['sum','add','total','answer','plus'],pointValue:1},
       {questionId:'q2',questionText:'What is 8 × 7?',type:'mc_only',options:[{id:'a',text:'54',isCorrect:false},{id:'b',text:'56',isCorrect:true},{id:'c',text:'58',isCorrect:false},{id:'d',text:'64',isCorrect:false}],modelAnswer:'56',gradingKeywords:['56'],pointValue:1},
-      {questionId:'q3',questionText:'What is the difference between a numerator and denominator in a fraction?',type:'write_then_choose',options:[{id:'a',text:'Top number is numerator, bottom is denominator',isCorrect:true},{id:'b',text:'Top number is denominator, bottom is numerator',isCorrect:false},{id:'c',text:'They are both the same thing',isCorrect:false},{id:'d',text:'Numerator is always larger',isCorrect:false}],modelAnswer:'The numerator is the top number of a fraction and the denominator is the bottom number.',gradingKeywords:['numerator','denominator','top','bottom'],pointValue:1},
+      {questionId:'q3',questionText:'What is the difference between a numerator and denominator?',type:'write_then_choose',options:[{id:'a',text:'Numerator is on top, denominator is on bottom',isCorrect:true},{id:'b',text:'Denominator is on top, numerator is on bottom',isCorrect:false},{id:'c',text:'They are the same thing',isCorrect:false},{id:'d',text:'Numerator is always larger',isCorrect:false}],modelAnswer:'The numerator is the top number and the denominator is the bottom number of a fraction.',gradingKeywords:['numerator','denominator','top','bottom','fraction'],pointValue:1},
       {questionId:'q4',questionText:'What is 15 ÷ 3?',type:'mc_only',options:[{id:'a',text:'4',isCorrect:false},{id:'b',text:'5',isCorrect:true},{id:'c',text:'6',isCorrect:false},{id:'d',text:'3',isCorrect:false}],modelAnswer:'5',gradingKeywords:['5'],pointValue:1},
-      {questionId:'q5',questionText:'What does "perimeter" mean?',type:'write_then_choose',options:[{id:'a',text:'The total distance around the outside of a shape',isCorrect:true},{id:'b',text:'The space inside a shape',isCorrect:false},{id:'c',text:'The height of a shape',isCorrect:false},{id:'d',text:'The weight of a shape',isCorrect:false}],modelAnswer:'Perimeter is the total distance around the outside edges of a shape.',gradingKeywords:['distance','outside','around','edges'],pointValue:1}
+      {questionId:'q5',questionText:'What does "perimeter" mean?',type:'write_then_choose',options:[{id:'a',text:'The total distance around the outside of a shape',isCorrect:true},{id:'b',text:'The space inside a shape',isCorrect:false},{id:'c',text:'The height of a shape',isCorrect:false},{id:'d',text:'The weight of an object',isCorrect:false}],modelAnswer:'Perimeter is the total distance around the outside edges of a shape.',gradingKeywords:['distance','outside','around','edges','total'],pointValue:1}
     ],
     'Reading':[
-      {questionId:'q1',questionText:'What is the main idea of a passage?',type:'write_then_choose',options:[{id:'a',text:'The most important point the author wants to share',isCorrect:true},{id:'b',text:'The first sentence of the passage',isCorrect:false},{id:'c',text:'The title of the book',isCorrect:false},{id:'d',text:'The last paragraph only',isCorrect:false}],modelAnswer:'The main idea is the most important point the author is trying to communicate.',gradingKeywords:['important','main','author','point'],pointValue:1},
-      {questionId:'q2',questionText:'What does it mean to make an inference?',type:'write_then_choose',options:[{id:'a',text:'To use clues in the text to figure out something not directly stated',isCorrect:true},{id:'b',text:'To copy what the author says exactly',isCorrect:false},{id:'c',text:'To guess randomly without evidence',isCorrect:false},{id:'d',text:'To only read the first sentence',isCorrect:false}],modelAnswer:'An inference is when you use evidence from the text to figure out something the author does not directly say.',gradingKeywords:['clues','evidence','text','figure out','stated'],pointValue:1},
-      {questionId:'q3',questionText:'What is a synonym?',type:'write_then_choose',options:[{id:'a',text:'A word that means the same or nearly the same as another word',isCorrect:true},{id:'b',text:'A word that means the opposite',isCorrect:false},{id:'c',text:'A word that sounds the same but has a different meaning',isCorrect:false},{id:'d',text:'A word that is very long',isCorrect:false}],modelAnswer:'A synonym is a word that means the same or nearly the same as another word, like happy and joyful.',gradingKeywords:['same','meaning','word'],pointValue:1},
-      {questionId:'q4',questionText:'What is the purpose of a topic sentence?',type:'write_then_choose',options:[{id:'a',text:'To introduce the main idea of a paragraph',isCorrect:true},{id:'b',text:'To end the paragraph with a conclusion',isCorrect:false},{id:'c',text:'To give examples and details',isCorrect:false},{id:'d',text:'To confuse the reader',isCorrect:false}],modelAnswer:'A topic sentence introduces the main idea of a paragraph.',gradingKeywords:['introduce','main idea','paragraph'],pointValue:1},
-      {questionId:'q5',questionText:'What does context clues mean?',type:'write_then_choose',options:[{id:'a',text:'Using words around an unknown word to figure out its meaning',isCorrect:true},{id:'b',text:'Looking the word up in a dictionary',isCorrect:false},{id:'c',text:'Skipping the unknown word and moving on',isCorrect:false},{id:'d',text:'Asking someone else for the answer',isCorrect:false}],modelAnswer:'Context clues are the words and sentences around an unknown word that help you figure out its meaning.',gradingKeywords:['words','around','meaning','figure out'],pointValue:1}
+      {questionId:'q1',questionText:'What is the main idea of a passage?',type:'write_then_choose',options:[{id:'a',text:'The most important point the author wants to share',isCorrect:true},{id:'b',text:'The first sentence',isCorrect:false},{id:'c',text:'The title of the book',isCorrect:false},{id:'d',text:'The last paragraph',isCorrect:false}],modelAnswer:'The main idea is the most important point the author is trying to communicate.',gradingKeywords:['important','main','author','point','communicate'],pointValue:1},
+      {questionId:'q2',questionText:'What does making an inference mean?',type:'write_then_choose',options:[{id:'a',text:'Using clues to figure out something not directly stated',isCorrect:true},{id:'b',text:'Copying what the author says exactly',isCorrect:false},{id:'c',text:'Guessing randomly',isCorrect:false},{id:'d',text:'Reading only the first sentence',isCorrect:false}],modelAnswer:'An inference means using evidence from the text to figure out something the author does not directly say.',gradingKeywords:['clues','evidence','text','figure out','stated'],pointValue:1},
+      {questionId:'q3',questionText:'What is a synonym?',type:'write_then_choose',options:[{id:'a',text:'A word with the same or similar meaning as another word',isCorrect:true},{id:'b',text:'A word that means the opposite',isCorrect:false},{id:'c',text:'A word that sounds the same',isCorrect:false},{id:'d',text:'A word that is very long',isCorrect:false}],modelAnswer:'A synonym is a word that means the same or nearly the same as another word.',gradingKeywords:['same','meaning','word','similar'],pointValue:1},
+      {questionId:'q4',questionText:'What is the purpose of a topic sentence?',type:'write_then_choose',options:[{id:'a',text:'To introduce the main idea of a paragraph',isCorrect:true},{id:'b',text:'To end the paragraph',isCorrect:false},{id:'c',text:'To give examples only',isCorrect:false},{id:'d',text:'To confuse the reader',isCorrect:false}],modelAnswer:'A topic sentence introduces the main idea of a paragraph.',gradingKeywords:['introduce','main idea','paragraph'],pointValue:1},
+      {questionId:'q5',questionText:'What are context clues?',type:'write_then_choose',options:[{id:'a',text:'Words around an unknown word that help you figure out its meaning',isCorrect:true},{id:'b',text:'Looking the word up in a dictionary',isCorrect:false},{id:'c',text:'Skipping the unknown word',isCorrect:false},{id:'d',text:'Asking someone else',isCorrect:false}],modelAnswer:'Context clues are surrounding words and sentences that help you figure out the meaning of an unknown word.',gradingKeywords:['words','around','meaning','figure out','unknown'],pointValue:1}
     ]
   };
   const p=pool[subj]||pool['Math'];
   return p.map((q,i)=>({...q,questionId:'q'+(i+1)}));
 }
 
-// =====================================================
+// ════════════════════════════════════════════
 // ACTION CARD
-// =====================================================
+// ════════════════════════════════════════════
 function getCard(){
   const t=tod();
   const ex=S.cards.find(c=>c.date===t&&!c.dis);
   if(ex)return ex;
-  const bl=S.tasks.find(t=>t.status==='blocked');
-  if(bl){ const ch=S.children.find(c=>c.id===bl.cid); const c={id:uid(),date:t,dis:false,type:'block',title:(ch?.name||'Your child')+' needs your help',desc:'"'+bl.title+'" is waiting for your review.',tid:bl.id,cid:bl.cid}; S.cards.push(c); save(); return c; }
+  const bl=S.tasks.find(tk=>tk.status==='blocked');
+  if(bl){const ch=S.children.find(c=>c.id===bl.cid);const c={id:uid(),date:t,dis:false,type:'bl',title:(ch?.name||'Your child')+' needs your help',desc:'"'+bl.title+'" is waiting for your review.',tid:bl.id,cid:bl.cid};S.cards.push(c);save();return c;}
   const ov=S.tasks.filter(tk=>tk.date<t&&tk.status==='planned');
-  if(ov.length){ const ch=S.children.find(c=>c.id===ov[0].cid); const c={id:uid(),date:t,dis:false,type:'over',title:ov.length+' lesson'+(ov.length>1?'s':'')+' to catch up on',desc:(ch?.name||'A child')+' has overdue tasks.',cid:ov[0].cid}; S.cards.push(c); save(); return c; }
-  const tips=['Short 5-min reviews before new material boost retention.','Switching subjects when focus fades can refresh energy.','You\'re doing a wonderful job. Consistency beats perfection.','If a topic keeps stalling, adjusting the difficulty is always okay.'];
-  const c={id:uid(),date:t,dis:false,type:'tip',title:'Today\'s teaching tip',desc:tips[Math.floor(Math.random()*tips.length)]};
-  S.cards.push(c); save(); return c;
+  if(ov.length){const ch=S.children.find(c=>c.id===ov[0].cid);const c={id:uid(),date:t,dis:false,type:'ov',title:ov.length+' lesson'+(ov.length>1?'s':'')+' to catch up on',desc:(ch?.name||'A child')+' has overdue tasks.',cid:ov[0].cid};S.cards.push(c);save();return c;}
+  const tips=['Short 5-min reviews before new material can boost retention significantly.','If a subject keeps stalling, the difficulty might be slightly off — adjusting is always okay.','You\'re doing a wonderful job. Consistency matters more than perfection.','Switching subjects when focus fades can refresh energy and improve outcomes.'];
+  const c={id:uid(),date:t,dis:false,type:'tip',title:'Teaching tip for today',desc:tips[new Date().getDay()%tips.length]};
+  S.cards.push(c);save();return c;
 }
 
-// =====================================================
-// RENDER HOME
-// =====================================================
+// ════════════════════════════════════════════
+// HOME
+// ════════════════════════════════════════════
 function renderHome(){
   const t=tod();
-  document.getElementById('h-greet').textContent=greet()+', '+(S.family?.pname?.split(' ')[0]||'friend')+' 👋';
-  document.getElementById('h-date').textContent=fDateFull(t);
+  document.getElementById('h-gr').textContent=greet()+', '+(S.family?.pname?.split(' ')[0]||'friend')+' 👋';
+  document.getElementById('h-dt').textContent=fDF(t);
   const card=getCard();
   const acEl=document.getElementById('h-ac');
   if(card&&!card.dis){
-    const cls=card.type==='block'?'ac-block':card.type==='over'?'ac-over':'ac-tip';
-    const ico=card.type==='block'?'⚠️':card.type==='over'?'⏰':'💡';
-    acEl.innerHTML=`<div class="ac ${cls}"><span class="ac-icon">${ico}</span><div class="ac-body"><div class="ac-title">${card.title}</div><div class="ac-desc">${card.desc}</div>${card.tid?`<button style="background:none;border:none;cursor:pointer;font-family:var(--fb);font-size:.8rem;color:var(--sage-d);font-weight:600;padding:0;margin-top:5px" onclick="openBl('${card.tid}')">Review now →</button>`:''}</div><button class="ac-x" onclick="disCard('${card.id}')">×</button></div>`;
-  } else acEl.innerHTML='';
+    const cls=card.type==='bl'?'ac-bl':card.type==='ov'?'ac-ov':'ac-tp';
+    const ico=card.type==='bl'?'⚠️':card.type==='ov'?'⏰':'💡';
+    acEl.innerHTML=`<div class="acard ${cls}"><span class="ac-ic">${ico}</span><div class="ac-bd"><div class="ac-ti">${card.title}</div><div class="ac-ds">${card.desc}</div>${card.tid?`<button style="background:none;border:none;cursor:pointer;font-family:var(--fb);font-size:.8rem;color:var(--sd);font-weight:600;padding:0;margin-top:5px" onclick="oBl('${card.tid}')">Review now →</button>`:''}</div><button class="ac-x" onclick="disCard('${card.id}')">×</button></div>`;
+  }else{acEl.innerHTML='';}
   const ub=document.getElementById('nb');
   const un=S.notifs.filter(n=>!n.read).length;
-  ub.textContent=un; ub.style.display=un>0?'inline':'none';
+  ub.textContent=un;ub.style.display=un>0?'inline':'none';
   const kw=document.getElementById('h-kids');
-  if(!S.children.length){ kw.innerHTML=`<div class="card"><div class="empty"><div class="empty-icon">👧</div><h4>No children added yet</h4><p>Add your first child to start planning their lessons.</p><button class="btn btn-p" onclick="nav('kids')">Add a child →</button></div></div>`; return; }
+  if(!S.children.length){kw.innerHTML=`<div class="card"><div class="empty"><div class="ei">👧</div><h4>No children added yet</h4><p>Add your first child to start planning their lessons.</p><button class="btn bp" onclick="nav('kids')">Add a child →</button></div></div>`;return;}
   kw.innerHTML='';
   S.children.forEach(ch=>{
-    const ctasks=S.tasks.filter(tk=>tk.cid===ch.id&&tk.date===t);
-    const done=ctasks.filter(tk=>tk.status==='done').length;
-    const tot=ctasks.length;
+    const ct=S.tasks.filter(tk=>tk.cid===ch.id&&tk.date===t);
+    const done=ct.filter(tk=>tk.status==='done').length;
+    const tot=ct.length;
     const pct=tot?Math.round(done/tot*100):0;
     const cg=S.goals.filter(g=>g.cid===ch.id&&g.active);
     const div=document.createElement('div');
-    div.className='card fi';
-    div.innerHTML=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-      <div class="av" style="width:42px;height:42px;background:${ch.col||'#7BA685'};font-size:.95rem">${inits(ch.name)}</div>
-      <div style="flex:1"><h3 style="font-family:var(--fd);font-size:1.02rem">${ch.name}${age(ch.dob)!==null?' <span style="font-weight:400;font-size:.78rem;color:var(--ink-l)">Age '+age(ch.dob)+'</span>':''}</h3><p style="font-size:.78rem;color:var(--ink-l)">${done} of ${tot} tasks today</p></div>
-      <div style="text-align:center"><div style="font-family:var(--fd);font-size:1.15rem;font-weight:700;color:${ch.col||'var(--sage)'}">${pct}%</div><div style="font-size:.65rem;color:var(--ink-f)">today</div></div>
-      <button class="btn btn-p btn-sm" onclick="openLearn('${ch.id}')">📚 Learn</button>
+    div.className='kidcard';
+    div.innerHTML=`<div style="display:flex;align-items:center;gap:11px;margin-bottom:12px">
+      <div class="av" style="width:40px;height:40px;background:${ch.col||'#7BA685'};font-size:.92rem">${inits(ch.name)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:var(--fd);font-size:1rem;font-weight:500">${ch.name}${getAge(ch.dob)!==null?` <span style="font-weight:400;font-size:.75rem;color:var(--il)">Age ${getAge(ch.dob)}</span>`:''}</div>
+        <div style="font-size:.75rem;color:var(--il)">${done} of ${tot} tasks done today</div>
+      </div>
+      <div style="text-align:center;margin-right:4px"><div style="font-family:var(--fd);font-size:1.1rem;font-weight:700;color:${ch.col||'var(--sage)'}">${pct}%</div><div style="font-size:.62rem;color:var(--if)">today</div></div>
+      <button class="btn bp bsm" onclick="openLearn('${ch.id}')">📚 Learn</button>
     </div>
-    ${ctasks.length===0&&cg.length===0?`<div style="text-align:center;padding:10px;color:var(--ink-f);font-size:.875rem">No goals yet — <button style="background:none;border:none;cursor:pointer;color:var(--sage-d);font-weight:600;font-family:var(--fb);font-size:.875rem" onclick="nav('goals')">add learning goals</button></div>`:''}
-    ${ctasks.length===0&&cg.length>0?`<div style="text-align:center;padding:10px;color:var(--ink-f);font-size:.875rem">Nothing scheduled for today 🎉</div>`:''}
+    ${ct.length===0&&cg.length===0?`<div style="text-align:center;padding:10px;color:var(--if);font-size:.85rem">No goals yet — <button style="background:none;border:none;cursor:pointer;color:var(--sd);font-weight:600;font-family:var(--fb);font-size:.85rem" onclick="nav('goals')">add learning goals</button></div>`:''}
+    ${ct.length===0&&cg.length>0?`<div style="text-align:center;padding:10px;color:var(--if);font-size:.85rem">Nothing scheduled for today 🎉</div>`:''}
     <div id="ht-${ch.id}"></div>`;
     kw.appendChild(div);
     const tw=document.getElementById('ht-'+ch.id);
-    ctasks.slice(0,5).forEach(tk=>{
+    if(!tw)return;
+    ct.slice(0,5).forEach(tk=>{
       const dot=sDot(tk.subj);
-      const isB=tk.status==='blocked'; const isD=tk.status==='done'; const isR=tk.status==='retry';
-      const badge=isD?'<span class="badge b-g">Done ✓</span>':isB?'<span class="badge b-t">Needs you</span>':isR?'<span class="badge b-y">Try again</span>':'<span class="badge b-n">Planned</span>';
-      tw.innerHTML+=`<div class="ti ${isB?'blocked':isD?'done':isR?'retry':''}" onclick="openTask('${tk.id}')"><div class="td" style="background:${dot}"></div><div class="ti-info"><div class="ti-title">${tk.title}</div><div class="ti-meta">${tk.subj} · ${tk.mins} min · ${tk.ess?'Essential':'Optional'}</div></div>${badge}</div>`;
+      const isB=tk.status==='blocked',isD=tk.status==='done',isR=tk.status==='retry';
+      const badge=isD?'<span class="badge bg">Done ✓</span>':isB?'<span class="badge bt2">Needs you</span>':isR?'<span class="badge by">Try again</span>':'<span class="badge bn">Planned</span>';
+      tw.innerHTML+=`<div class="ti ${isB?'blocked':isD?'done':isR?'retry':''}" onclick="openTask('${tk.id}')"><div class="td" style="background:${dot}"></div><div class="tii"><div class="ttl">${tk.title}</div><div class="tmt">${tk.subj} · ${tk.mins} min · ${tk.ess?'Essential':'Optional'}</div></div>${badge}</div>`;
     });
-    if(ctasks.length>5) tw.innerHTML+=`<p style="text-align:center;font-size:.75rem;color:var(--ink-f);padding:5px">+${ctasks.length-5} more</p>`;
+    if(ct.length>5)tw.innerHTML+=`<p style="text-align:center;font-size:.72rem;color:var(--if);padding:4px">+${ct.length-5} more — see schedule</p>`;
   });
 }
-function disCard(id){ const c=S.cards.find(x=>x.id===id); if(c){c.dis=true;save();renderHome();} }
+function disCard(id){const c=S.cards.find(x=>x.id===id);if(c){c.dis=true;save();renderHome();}}
 
-// =====================================================
+// ════════════════════════════════════════════
 // MVD
-// =====================================================
-function showMVD(){ oMo('mo-mvd'); }
+// ════════════════════════════════════════════
 function doMVD(){
   const t=tod();
   const hide=S.tasks.filter(tk=>tk.date===t&&!tk.ess&&tk.status==='planned');
-  hide.forEach(tk=>{ const nd=nextFreeDate(tk.cid); S.tasks=S.tasks.filter(x=>x.id!==tk.id); S.tasks.push({...tk,id:uid(),date:nd,reschedFrom:t}); });
-  save(); cmo('mo-mvd'); renderHome();
+  hide.forEach(tk=>{const nd=nxtDate(tk.cid);S.tasks=S.tasks.filter(x=>x.id!==tk.id);S.tasks.push({...tk,id:uid(),date:nd,reschedFrom:t});});
+  save();cMo('mo-mvd');renderHome();
 }
-function nextFreeDate(cid){ let d=dAdd(tod(),1); for(let i=0;i<60;i++){ if(S.tasks.filter(t=>t.date===d&&t.cid===cid).length<4)return d; d=dAdd(d,1); } return dAdd(tod(),7); }
+function nxtDate(cid){let d=dAdd(tod(),1);for(let i=0;i<60;i++){if(S.tasks.filter(t=>t.date===d&&t.cid===cid).length<4)return d;d=dAdd(d,1);}return dAdd(tod(),7);}
 
-// =====================================================
+// ════════════════════════════════════════════
 // SCHEDULE
-// =====================================================
+// ════════════════════════════════════════════
 let sOff=0;
 function renderSched(){
-  const dates=weekDates(sOff), t=tod();
-  const lbl=fDate(dates[0])+' – '+fDate(dates[6]);
-  document.getElementById('s-wlabel').textContent=lbl;
-  const cf=document.getElementById('sf-child')?.value||'all';
+  const dates=wkDates(sOff),t=tod();
+  document.getElementById('s-wl').textContent=fD(dates[0])+' – '+fD(dates[6]);
+  const cf=document.getElementById('sf-ch')?.value||'all';
   const DAY=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const bl=S.tasks.filter(tk=>tk.status==='blocked');
-  const bw=document.getElementById('s-blocked');
-  bw.innerHTML='';
-  if(bl.length){ let h='<div class="al al-r" style="margin-bottom:10px"><strong>⚠️ Needs attention:</strong> '; h+=bl.map(tk=>{ const ch=S.children.find(c=>c.id===tk.cid); return`<button style="background:none;border:none;cursor:pointer;color:var(--terra);font-weight:600;font-family:var(--fb);font-size:.875rem" onclick="openBl('${tk.id}')">${ch?.name}: ${tk.subj}</button>`; }).join(' · '); h+='</div>'; bw.innerHTML=h; }
-  const grid=document.getElementById('s-grid'); grid.innerHTML='';
+  const bls=S.tasks.filter(tk=>tk.status==='blocked');
+  const bw=document.getElementById('s-bl');bw.innerHTML='';
+  if(bls.length){let h='<div class="al alr" style="margin-bottom:10px"><strong>⚠️ Needs attention:</strong> ';h+=bls.map(tk=>{const ch=S.children.find(c=>c.id===tk.cid);return`<button style="background:none;border:none;cursor:pointer;color:var(--terra);font-weight:600;font-family:var(--fb);font-size:.85rem" onclick="oBl('${tk.id}')">${ch?.name||'Child'}: ${tk.subj}</button>`;}).join(' · ');h+='</div>';bw.innerHTML=h;}
+  const grid=document.getElementById('s-grid');grid.innerHTML='';
   dates.forEach((date,i)=>{
-    let tks=S.tasks.filter(tk=>tk.date===date); if(cf!=='all')tks=tks.filter(tk=>tk.cid===cf);
-    const isT=date===t; const isPast=date<t;
-    const col=document.createElement('div'); col.className='wd';
+    let tks=S.tasks.filter(tk=>tk.date===date);if(cf!=='all')tks=tks.filter(tk=>tk.cid===cf);
+    const isT=date===t,isPast=date<t;
+    const col=document.createElement('div');col.className='wd';
     const hcls='wdh'+(isT?' tod':'');
-    const nc=isT?'white':isPast?'var(--ink-f)':'var(--ink)';
+    const nc=isT?'white':isPast?'var(--if)':'var(--ink)';
     const dn=new Date(date+'T00:00:00').getDate();
-    let h=`<div class="${hcls}"><div style="font-size:.6rem;font-weight:500;text-transform:uppercase;color:inherit">${DAY[i]}</div><div style="font-size:.95rem;font-weight:700;font-family:var(--fd);color:${nc}">${dn}</div></div>`;
-    if(!tks.length) h+=`<div style="border:1.5px dashed var(--cream-b);border-radius:6px;height:36px;display:flex;align-items:center;justify-content:center"><span style="font-size:.58rem;color:var(--ink-f)">Free</span></div>`;
-    tks.forEach(tk=>{ const sc=sDot(tk.status==='done'?'_done':tk.subj); const bc=tk.status==='blocked'?'var(--terra)':tk.status==='done'?'var(--sage)':tk.status==='retry'?'var(--sun)':'var(--ink-f)'; h+=`<div class="wt ${sCls(tk.subj)}" style="border-left-color:${bc}" onclick="openTask('${tk.id}')" title="${tk.title}">${tk.subj.slice(0,3)}</div>`; });
-    col.innerHTML=h; grid.appendChild(col);
+    let h=`<div class="${hcls}"><div style="font-size:.58rem;font-weight:500;text-transform:uppercase;color:inherit">${DAY[i]}</div><div style="font-size:.9rem;font-weight:700;font-family:var(--fd);color:${nc}">${dn}</div></div>`;
+    if(!tks.length)h+=`<div style="border:1.5px dashed var(--cb);border-radius:5px;height:32px;display:flex;align-items:center;justify-content:center"><span style="font-size:.55rem;color:var(--if)">Free</span></div>`;
+    tks.forEach(tk=>{const bc=tk.status==='blocked'?'var(--terra)':tk.status==='done'?'var(--sage)':tk.status==='retry'?'var(--sun)':'var(--if)';h+=`<div class="wt ${sCls(tk.subj)}" style="border-left-color:${bc}" onclick="openTask('${tk.id}')" title="${tk.title}">${tk.subj.slice(0,3)}</div>`;});
+    col.innerHTML=h;grid.appendChild(col);
   });
 }
-function schedOff(n,reset){ if(reset)sOff=0; else sOff+=n; renderSched(); }
+function schedOff(n,reset){if(reset)sOff=0;else sOff+=n;renderSched();}
 
-// =====================================================
+// ════════════════════════════════════════════
 // GOALS
-// =====================================================
+// ════════════════════════════════════════════
 let gTab='';
 function renderGoals(){
-  const gl=document.getElementById('g-list'), tabs=document.getElementById('g-tabs');
-  if(!S.children.length){ gl.innerHTML=`<div class="card"><div class="empty"><div class="empty-icon">🎯</div><h4>No children yet</h4><p>Add your children first, then set learning goals.</p><button class="btn btn-p" onclick="nav('kids')">Add children →</button></div></div>`; tabs.style.display='none'; return; }
-  if(S.children.length>1){ tabs.style.display='flex'; if(!gTab||!S.children.find(c=>c.id===gTab))gTab=S.children[0].id; tabs.innerHTML=S.children.map(c=>`<button class="tab ${gTab===c.id?'on':''}" onclick="setGTab('${c.id}')">${c.name}</button>`).join(''); } else { tabs.style.display='none'; gTab=S.children[0]?.id||''; }
-  const cid=S.children.length>1?gTab:S.children[0]?.id;
+  const gl=document.getElementById('g-list'),tabs=document.getElementById('g-tabs');
+  if(!S.children.length){gl.innerHTML=`<div class="card"><div class="empty"><div class="ei">🎯</div><h4>Add children first</h4><p>Add your children, then set learning goals for each one.</p><button class="btn bp" onclick="nav('kids')">Add children →</button></div></div>`;tabs.style.display='none';return;}
+  if(S.children.length>1){tabs.style.display='flex';if(!gTab||!S.children.find(c=>c.id===gTab))gTab=S.children[0].id;tabs.innerHTML=S.children.map(c=>`<button class="tab ${gTab===c.id?'on':''}" onclick="setGTab('${c.id}')">${c.name}</button>`).join('');}else{tabs.style.display='none';gTab=S.children[0]?.id||'';}
+  const cid=gTab||S.children[0]?.id;
   const cg=S.goals.filter(g=>g.cid===cid&&g.active);
-  if(!cg.length){ gl.innerHTML=`<div class="card"><div class="empty"><div class="empty-icon">🎯</div><h4>No goals yet</h4><p>Add a goal and Covey will build the schedule for you.</p><button class="btn btn-p" onclick="openGoalMo()">+ Add first goal</button></div></div>`; return; }
+  if(!cg.length){gl.innerHTML=`<div class="card"><div class="empty"><div class="ei">🎯</div><h4>No goals yet</h4><p>Add a learning goal and Covey will automatically build the schedule.</p><button class="btn bp" onclick="oGoalMo()">+ Add first goal</button></div></div>`;return;}
   gl.innerHTML='';
   cg.forEach(goal=>{
     const pct=goal.total?Math.round(goal.done/goal.total*100):0;
     const tks=S.tasks.filter(t=>t.gid===goal.id);
-    const div=document.createElement('div'); div.className='card fi';
+    const div=document.createElement('div');div.className='card';
     div.innerHTML=`<div style="display:flex;align-items:flex-start;gap:11px">
-      <div style="width:38px;height:38px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem" class="${sCls(goal.subj)}">${sEmoji(goal.subj)}</div>
+      <div style="width:38px;height:38px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem" class="${sCls(goal.subj)}">${sEmo(goal.subj)}</div>
       <div style="flex:1;min-width:0">
         <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:3px">
-          <span style="font-weight:600;font-size:.9375rem">${goal.subj}</span>
-          <span class="badge b-n">${goal.freq.replace('xw','×/wk').replace('daily','daily')}</span>
-          ${!goal.wf?'<span class="badge b-b">MC only</span>':''}
+          <span style="font-weight:600;font-size:.9rem">${goal.subj}</span>
+          <span class="badge bn">${goal.freq.replace('xw','×/wk').replace('daily','daily')}</span>
+          ${!goal.wf?'<span class="badge bb">MC only</span>':''}
         </div>
-        <p style="font-size:.78rem;color:var(--ink-l);margin-bottom:7px">${goal.done} / ${goal.total} lessons · ${tks.length} sessions scheduled</p>
+        <p style="font-size:.75rem;color:var(--il);margin-bottom:7px">${goal.done} / ${goal.total} lessons · ${tks.length} sessions scheduled</p>
         <div class="pb"><div class="pf" style="width:${pct}%;background:${sDot(goal.subj)}"></div></div>
-        <p style="font-size:.68rem;color:var(--ink-f);margin-top:3px">${pct}% complete</p>
+        <p style="font-size:.68rem;color:var(--if);margin-top:3px">${pct}% complete</p>
       </div>
-      <button style="font-size:.72rem;color:var(--ink-f);background:none;border:none;cursor:pointer;font-family:var(--fb)" onclick="archGoal('${goal.id}')">Archive</button>
+      <button style="font-size:.72rem;color:var(--if);background:none;border:none;cursor:pointer;font-family:var(--fb);padding:2px" onclick="archGoal('${goal.id}')">Archive</button>
     </div>`;
     gl.appendChild(div);
   });
 }
 function setGTab(id){gTab=id;renderGoals();}
-function archGoal(id){ if(confirm('Archive this goal?')){ const g=S.goals.find(x=>x.id===id); if(g){g.active=false;save();renderGoals();} } }
-function openGoalMo(){
-  const gs=document.getElementById('g-child'); gs.innerHTML=S.children.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+function archGoal(id){if(confirm('Archive this goal? Sessions already scheduled will remain.')){const g=S.goals.find(x=>x.id===id);if(g){g.active=false;save();renderGoals();}}}
+function updGLabel(){const t=document.getElementById('g-type')?.value;if(t)document.getElementById('g-ul').textContent=t==='spw'?'Sessions/week':'Lessons';}
+function oGoalMo(){
+  const gs=document.getElementById('g-ch');gs.innerHTML=S.children.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
   document.getElementById('g-cw').style.display=S.children.length>1?'block':'none';
   document.getElementById('g-err').style.display='none';
+  ['g-units','g-pass'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('g-subj').value='';
   oMo('mo-goal');
 }
 function saveGoal(){
-  const cid=document.getElementById('g-child').value||S.children[0]?.id;
+  const cid=document.getElementById('g-ch').value||S.children[0]?.id;
   const subj=document.getElementById('g-subj').value;
   const type=document.getElementById('g-type').value;
   const units=parseInt(document.getElementById('g-units').value)||0;
@@ -834,556 +839,687 @@ function saveGoal(){
   const wf=document.getElementById('g-wf').checked;
   const err=document.getElementById('g-err');
   if(!subj){err.textContent='Please pick a subject.';err.style.display='block';return;}
-  if(!units||units<1){err.textContent='Please enter a valid number.';err.style.display='block';return;}
+  if(!units||units<1){err.textContent='Please enter a valid number (e.g. 180 for a year of lessons).';err.style.display='block';return;}
   err.style.display='none';
   const goal={id:uid(),cid,subj,type,total:units,done:0,freq,pass,wf,active:true,start:tod()};
   S.goals.push(goal);
   const tasks=buildSched(goal);
+  if(tasks.length===0){err.textContent='No sessions were generated. Please check your frequency and try again.';err.style.display='block';S.goals.pop();return;}
   S.tasks.push(...tasks);
-  save(); cmo('mo-goal');
+  save();cMo('mo-goal');
   if(gTab!==cid)gTab=cid;
   renderGoals();
   const gn=document.getElementById('g-notice');
-  gn.textContent='✅ '+subj+' schedule created — '+tasks.length+' sessions across your calendar.';
+  gn.textContent=`✅ ${subj} schedule created — ${tasks.length} sessions across your calendar!`;
   gn.style.display='block';
-  setTimeout(()=>gn.style.display='none',4000);
+  setTimeout(()=>gn.style.display='none',5000);
 }
 
-// =====================================================
+// ════════════════════════════════════════════
 // CHILDREN
-// =====================================================
+// ════════════════════════════════════════════
 function renderKids(){
   const kl=document.getElementById('k-list');
-  if(!S.children.length){ kl.innerHTML=`<div class="card"><div class="empty"><div class="empty-icon">👧</div><h4>No children yet</h4><p>Add your children to start managing their education.</p></div></div>`; return; }
+  if(!S.children.length){kl.innerHTML=`<div class="card"><div class="empty"><div class="ei">👧</div><h4>No children yet</h4><p>Add your children to start managing their education.</p></div></div>`;return;}
   kl.innerHTML='';
   S.children.forEach(ch=>{
     const cg=S.goals.filter(g=>g.cid===ch.id&&g.active);
     const done=S.tasks.filter(t=>t.cid===ch.id&&t.status==='done').length;
-    const lg=S.logs.filter(l=>S.tasks.some(t=>t.id===l.tid&&t.cid===ch.id));
-    const avg=lg.length?Math.round(lg.reduce((a,b)=>a+(b.pct||0),0)/lg.length):null;
-    const div=document.createElement('div'); div.className='card fi'; div.style.cursor='pointer'; div.onclick=()=>openKDetail(ch.id);
-    div.innerHTML=`<div style="display:flex;align-items:center;gap:13px">
-      <div class="av" style="width:50px;height:50px;background:${ch.col||'#7BA685'};font-size:1.1rem">${inits(ch.name)}</div>
-      <div style="flex:1">
-        <div style="display:flex;align-items:baseline;gap:7px;margin-bottom:2px"><h3 style="font-family:var(--fd);font-size:1.05rem">${ch.name}</h3>${age(ch.dob)!==null?`<span style="font-size:.78rem;color:var(--ink-l)">Age ${age(ch.dob)}</span>`:''}</div>
-        <p style="font-size:.78rem;color:var(--ink-l)">${cg.length} subjects · ${done} sessions done${avg!==null?' · '+avg+'% avg':''}</p>
+    const lgs=S.logs.filter(l=>S.tasks.some(t=>t.id===l.tid&&t.cid===ch.id));
+    const avg=lgs.length?Math.round(lgs.reduce((a,b)=>a+(b.pct||0),0)/lgs.length):null;
+    const div=document.createElement('div');div.className='card';div.style.cursor='pointer';div.onclick=()=>oKidDetail(ch.id);
+    div.innerHTML=`<div style="display:flex;align-items:center;gap:12px">
+      <div class="av" style="width:48px;height:48px;background:${ch.col||'#7BA685'};font-size:1.05rem">${inits(ch.name)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:baseline;gap:7px;margin-bottom:2px">
+          <span style="font-family:var(--fd);font-size:1rem;font-weight:500">${ch.name}</span>
+          ${getAge(ch.dob)!==null?`<span style="font-size:.75rem;color:var(--il)">Age ${getAge(ch.dob)}</span>`:''}
+        </div>
+        <p style="font-size:.75rem;color:var(--il)">${cg.length} subjects · ${done} sessions done${avg!==null?' · '+avg+'% avg':''}</p>
       </div>
-      <span style="color:var(--ink-f)">→</span>
+      <span style="color:var(--if)">→</span>
     </div>`;
     kl.appendChild(div);
   });
 }
-function openAddKidMo(){
-  selColor=ACOLS[0];
-  const cr=document.getElementById('k-colors');
-  cr.innerHTML=ACOLS.map(c=>`<div class="cs ${c===selColor?'sel':''}" style="background:${c}" onclick="pickCol('${c}')"></div>`).join('');
-  ['k-name','k-dob','k-pin','k-health'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; });
+function oKidMo(){
+  selCol=ACOLS[0];
+  const cr=document.getElementById('k-cols');
+  cr.innerHTML=ACOLS.map(c=>`<div class="cs ${c===selCol?'sel':''}" style="background:${c}" onclick="pickCol(this,'${c}')"></div>`).join('');
+  ['k-name','k-dob','k-pin','k-health'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('k-err').style.display='none';
   oMo('mo-kid');
 }
-function pickCol(c){ selColor=c; document.querySelectorAll('.cs').forEach(el=>el.classList.toggle('sel',el.style.background===c)); }
+function pickCol(el,c){selCol=c;document.querySelectorAll('#k-cols .cs').forEach(e=>e.classList.toggle('sel',e===el));}
 function saveKid(){
   const name=document.getElementById('k-name').value.trim();
   const err=document.getElementById('k-err');
-  if(!name){err.textContent='Name is required.';err.style.display='block';return;}
-  if(S.children.length>=5){err.textContent='Maximum 5 children.';err.style.display='block';return;}
+  if(!name){err.textContent='Please enter a name.';err.style.display='block';return;}
+  if(S.children.length>=5){err.textContent='Maximum 5 children reached.';err.style.display='block';return;}
   err.style.display='none';
-  S.children.push({id:uid(),name,dob:document.getElementById('k-dob').value,col:selColor,pin:document.getElementById('k-pin').value,health:document.getElementById('k-health').value,created:new Date().toISOString()});
-  save(); cmo('mo-kid'); renderKids(); renderHome(); updSelects();
+  S.children.push({id:uid(),name,dob:document.getElementById('k-dob').value,col:selCol,pin:document.getElementById('k-pin').value,health:document.getElementById('k-health').value,created:new Date().toISOString()});
+  save();cMo('mo-kid');renderKids();renderHome();updSel();
 }
-function openKDetail(cid){
-  const ch=S.children.find(c=>c.id===cid); if(!ch)return;
+function oKidDetail(cid){
+  const ch=S.children.find(c=>c.id===cid);if(!ch)return;
   document.getElementById('kd-title').textContent=ch.name;
   const cg=S.goals.filter(g=>g.cid===cid&&g.active);
   const done=S.tasks.filter(t=>t.cid===cid&&t.status==='done').length;
-  const bl=S.tasks.filter(t=>t.cid===cid&&t.status==='blocked');
-  const lg=S.logs.filter(l=>S.tasks.some(t=>t.id===l.tid&&t.cid===cid));
-  const avg=lg.length?Math.round(lg.reduce((a,b)=>a+(b.pct||0),0)/lg.length):null;
+  const bls=S.tasks.filter(t=>t.cid===cid&&t.status==='blocked');
+  const lgs=S.logs.filter(l=>S.tasks.some(t=>t.id===l.tid&&t.cid===cid));
+  const avg=lgs.length?Math.round(lgs.reduce((a,b)=>a+(b.pct||0),0)/lgs.length):null;
   document.getElementById('kd-body').innerHTML=`
-    <div style="display:flex;align-items:center;gap:13px;margin-bottom:16px">
-      <div class="av" style="width:54px;height:54px;background:${ch.col};font-size:1.1rem">${inits(ch.name)}</div>
-      <div><h3 style="font-family:var(--fd);font-size:1.1rem">${ch.name}</h3><p style="font-size:.78rem;color:var(--ink-l)">${age(ch.dob)!==null?'Age '+age(ch.dob)+' · ':''}Homeschool</p></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div class="av" style="width:52px;height:52px;background:${ch.col};font-size:1.1rem">${inits(ch.name)}</div>
+      <div><div style="font-family:var(--fd);font-size:1.05rem">${ch.name}</div><div style="font-size:.78rem;color:var(--il)">${getAge(ch.dob)!==null?'Age '+getAge(ch.dob)+' · ':''}Homeschool</div></div>
     </div>
-    ${bl.length?`<div class="al al-r" style="margin-bottom:12px">${bl.length} task${bl.length>1?'s':''} blocked — ${bl.map(t=>`<button style="background:none;border:none;cursor:pointer;color:var(--terra);font-weight:600;font-family:var(--fb)" onclick="cmo('mo-kdetail');openBl('${t.id}')">${t.subj}</button>`).join(', ')}</div>`:''}
+    ${bls.length?`<div class="al alr" style="margin-bottom:12px">${bls.length} task${bls.length>1?'s':''} blocked — review needed: ${bls.map(t=>`<button style="background:none;border:none;cursor:pointer;color:var(--terra);font-weight:600;font-family:var(--fb)" onclick="cMo('mo-kd');oBl('${t.id}')">${t.subj}</button>`).join(', ')}</div>`:''}
     <div class="sg">
-      ${[['Subjects',cg.length,'var(--sage)'],['Sessions Done',done,'var(--sky)'],['Avg Score',avg!==null?avg+'%':'—','var(--sun)'],['Needs Help',bl.length,bl.length>0?'var(--terra)':'var(--ink-f)']].map(([l,v,c])=>`<div class="sc"><div class="sv" style="color:${c}">${v}</div><div class="sl">${l}</div></div>`).join('')}
+      ${[['Subjects',cg.length,'var(--sage)'],['Sessions Done',done,'var(--sky)'],['Avg Score',avg!==null?avg+'%':'—','var(--sun)'],['Needs Help',bls.length,bls.length>0?'var(--terra)':'var(--if)']].map(([l,v,c])=>`<div class="sc"><div class="sv" style="color:${c}">${v}</div><div class="slab">${l}</div></div>`).join('')}
     </div>
-    ${ch.health?`<div style="background:var(--cream);border-radius:var(--r);padding:11px;margin-bottom:12px"><p style="font-size:.72rem;color:var(--ink-l);margin-bottom:3px">Health notes</p><p style="font-size:.875rem">${ch.health}</p></div>`:''}
+    ${ch.health?`<div style="background:var(--cream);border-radius:var(--r);padding:10px;margin-bottom:12px"><p style="font-size:.7rem;color:var(--il);margin-bottom:3px">Health notes</p><p style="font-size:.85rem">${ch.health}</p></div>`:''}
     <div style="display:flex;gap:7px;flex-wrap:wrap">
-      <button class="btn btn-p btn-sm" onclick="cmo('mo-kdetail');openLearn('${cid}')">📚 Open learning view</button>
-      <button class="btn btn-s btn-sm" onclick="delKid('${cid}')">Remove child</button>
+      <button class="btn bp bsm" onclick="cMo('mo-kd');openLearn('${cid}')">📚 Open learning view</button>
+      <button class="btn bs bsm" onclick="delKid('${cid}')">Remove child</button>
     </div>`;
-  oMo('mo-kdetail');
+  oMo('mo-kd');
 }
-function delKid(id){ if(confirm('Remove this child and all their data?')){ S.children=S.children.filter(c=>c.id!==id); S.goals=S.goals.filter(g=>g.cid!==id); S.tasks=S.tasks.filter(t=>t.cid!==id); save(); cmo('mo-kdetail'); renderKids(); renderHome(); } }
+function delKid(id){if(confirm('Remove this child and all their data? This cannot be undone.')){S.children=S.children.filter(c=>c.id!==id);S.goals=S.goals.filter(g=>g.cid!==id);S.tasks=S.tasks.filter(t=>t.cid!==id);save();cMo('mo-kd');renderKids();renderHome();}}
 
-// =====================================================
-// CHILD LEARN VIEW (PIN gated)
-// =====================================================
-let pinCid='', pinVal='';
-function openLearn(cid){ pinCid=cid; pinVal=''; showView('learn'); renderPin(); }
+// ════════════════════════════════════════════
+// CHILD LEARN VIEW
+// ════════════════════════════════════════════
+let pinCid='',pinVal='',learnFrom='home';
+function openLearn(cid,from){pinCid=cid;pinVal='';learnFrom=from||'home';nav('learn');renderPin();}
 function renderPin(){
-  const ch=S.children.find(c=>c.id===pinCid); if(!ch)return;
+  const ch=S.children.find(c=>c.id===pinCid);if(!ch)return;
   const wrap=document.getElementById('learn-wrap');
-  if(!ch.pin){ renderLearnTasks(pinCid); return; }
-  wrap.innerHTML=`<div style="text-align:center;padding:16px 0">
-    <div class="av" style="width:60px;height:60px;background:${ch.col};font-size:1.3rem;margin:0 auto 10px">${inits(ch.name)}</div>
-    <h2 style="font-family:var(--fd);font-size:1.35rem;margin-bottom:3px">Hi, ${ch.name}! 👋</h2>
-    <p style="color:var(--ink-l);font-size:.875rem;margin-bottom:18px">Enter your PIN to start learning</p>
-    <div class="pin-dots" id="pdots">${[0,1,2,3].map(i=>`<div class="pin-dot" id="pd${i}"></div>`).join('')}</div>
-    <div class="pin-pad">${[1,2,3,4,5,6,7,8,9,'','0','⌫'].map(k=>`<button class="pk" ${k===''?'style="visibility:hidden"':''} onclick="pk('${k}')">${k}</button>`).join('')}</div>
-    <p id="pin-err" style="color:var(--terra);font-size:.875rem;margin-top:10px;display:none">Wrong PIN — try again</p>
-    <button class="btn btn-s btn-sm" style="margin-top:14px" onclick="nav('home')">← Back</button>
+  if(!ch.pin){renderLearnTasks();return;}
+  wrap.innerHTML=`<div style="text-align:center;padding:16px 0 24px">
+    <div class="av" style="width:60px;height:60px;background:${ch.col};font-size:1.3rem;margin:0 auto 11px">${inits(ch.name)}</div>
+    <h2 style="font-family:var(--fd);font-size:1.3rem;margin-bottom:3px">Hi, ${ch.name}! 👋</h2>
+    <p style="color:var(--il);font-size:.85rem;margin-bottom:16px">Enter your PIN to start learning</p>
+    <div class="pdots" id="pdots">${[0,1,2,3].map(i=>`<div class="pdot" id="pd${i}"></div>`).join('')}</div>
+    <div class="ppad">${[1,2,3,4,5,6,7,8,9,'','0','⌫'].map(k=>`<button class="pk" ${k===''?'style="visibility:hidden"':''} onclick="doPin('${k}')">${k}</button>`).join('')}</div>
+    <p id="pin-err" style="color:var(--terra);font-size:.85rem;margin-top:10px;min-height:20px"></p>
+    <button class="btn bs bsm" style="margin-top:14px" onclick="nav('${learnFrom}')">← Back</button>
   </div>`;
 }
-function pk(k){
+function doPin(k){
   if(k==='⌫')pinVal=pinVal.slice(0,-1);
   else if(pinVal.length<4)pinVal+=k;
-  [0,1,2,3].forEach(i=>{ const d=document.getElementById('pd'+i); if(d)d.classList.toggle('f',i<pinVal.length); });
+  [0,1,2,3].forEach(i=>{const d=document.getElementById('pd'+i);if(d)d.classList.toggle('f',i<pinVal.length);});
   if(pinVal.length===4){
     const ch=S.children.find(c=>c.id===pinCid);
-    if(ch&&ch.pin===pinVal){ renderLearnTasks(pinCid); }
-    else{ document.getElementById('pin-err').style.display='block'; pinVal=''; [0,1,2,3].forEach(i=>{ const d=document.getElementById('pd'+i); if(d)d.classList.remove('f'); }); }
+    if(ch&&ch.pin===pinVal){renderLearnTasks();}
+    else{const e=document.getElementById('pin-err');if(e)e.textContent='Wrong PIN — try again';pinVal='';[0,1,2,3].forEach(i=>{const d=document.getElementById('pd'+i);if(d)d.classList.remove('f');});}
   }
 }
-function renderLearnTasks(cid){
-  const ch=S.children.find(c=>c.id===cid); const t=tod();
-  const tasks=S.tasks.filter(tk=>tk.cid===cid&&tk.date===t);
+function renderLearnTasks(){
+  const ch=S.children.find(c=>c.id===pinCid);const t=tod();
+  const tasks=S.tasks.filter(tk=>tk.cid===pinCid&&tk.date===t);
   const wrap=document.getElementById('learn-wrap');
-  wrap.innerHTML=`<div style="display:flex;align-items:center;gap:11px;margin-bottom:18px">
-    <div class="av" style="width:42px;height:42px;background:${ch.col};font-size:.95rem">${inits(ch.name)}</div>
-    <div><h2 style="font-family:var(--fd);font-size:1.25rem">${ch.name}'s learning</h2><p style="font-size:.78rem;color:var(--ink-l)">${fDateFull(t)}</p></div>
-    <button class="btn btn-s btn-sm" style="margin-left:auto" onclick="nav('home')">← Exit</button>
+  wrap.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+    <div class="av" style="width:40px;height:40px;background:${ch.col};font-size:.92rem">${inits(ch.name)}</div>
+    <div><div style="font-family:var(--fd);font-size:1.1rem">${ch.name}'s learning</div><div style="font-size:.75rem;color:var(--il)">${fDF(t)}</div></div>
+    <button class="btn bs bsm" style="margin-left:auto" onclick="nav('${learnFrom}')">← Exit</button>
   </div>
-  ${!tasks.length?`<div class="card"><div class="empty"><div class="empty-icon">🎉</div><h4>All done for today!</h4><p>No more lessons. Great work!</p></div></div>`:''}
-  ${tasks.map(tk=>{ const dot=sDot(tk.subj); const isB=tk.status==='blocked'; const isD=tk.status==='done'; const isR=tk.status==='retry'; return `<div class="ti ${isB?'blocked':isD?'done':isR?'retry':''}" style="padding:14px;margin-bottom:8px;${isB?'cursor:default':''}" ${!isB?`onclick="openTask('${tk.id}')"`:''}><div style="width:11px;height:11px;border-radius:50%;background:${dot};flex-shrink:0"></div><div style="flex:1"><div style="font-size:1rem;font-weight:600">${tk.title}</div><div style="font-size:.78rem;color:var(--ink-l)">${tk.subj} · ${tk.mins} min</div></div>${isD?'<span style="font-size:1.4rem">✅</span>':isB?'<span style="font-size:1.1rem">🔒</span>':isR?'<span class="badge b-y">Try again</span>':'<span class="btn btn-p btn-sm">Start →</span>'}</div>`; }).join('')}`;
+  ${!tasks.length?`<div class="card"><div class="empty"><div class="ei">🎉</div><h4>All done for today!</h4><p>No more lessons scheduled. Great work!</p></div></div>`:tasks.map(tk=>{const dot=sDot(tk.subj);const isB=tk.status==='blocked',isD=tk.status==='done',isR=tk.status==='retry';return`<div class="ti ${isB?'blocked':isD?'done':isR?'retry':''}" style="padding:14px;margin-bottom:8px;${isB?'cursor:default':''}" ${!isB?`onclick="openTask('${tk.id}','learn')"`:''}>
+    <div style="width:11px;height:11px;border-radius:50%;background:${dot};flex-shrink:0"></div>
+    <div style="flex:1;min-width:0"><div style="font-size:.95rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tk.title}</div><div style="font-size:.75rem;color:var(--il)">${tk.subj} · ${tk.mins} min</div></div>
+    ${isD?'<span style="font-size:1.3rem">✅</span>':isB?'<span style="font-size:1rem">🔒</span>':isR?'<span class="badge by" style="font-size:.78rem">Try again →</span>':'<span class="btn bp bsm">Start →</span>'}
+  </div>`}).join('')}`;
 }
 
-// =====================================================
-// TASK / ASSESSMENT ENGINE
-// =====================================================
-let curTid='', curQs=[], curQi=0, curResps=[], wrAns='', wrSub=false, selOpt=null, curAtt=0, retryEx=null, phase='intro';
-function openTask(tid){
-  curTid=tid; curQs=[]; curQi=0; curResps=[]; wrAns=''; wrSub=false; selOpt=null; retryEx=null; phase='intro';
-  const tk=S.tasks.find(t=>t.id===tid); if(!tk)return;
+// ════════════════════════════════════════════
+// ASSESSMENT ENGINE
+// ════════════════════════════════════════════
+let curTid='',curQs=[],curQi=0,curResps=[],wrAns='',wrSub=false,selOpt=null,curAtt=0,retryEx=null,phase='intro',taskFrom='home';
+function openTask(tid,from){
+  curTid=tid;curQs=[];curQi=0;curResps=[];wrAns='';wrSub=false;selOpt=null;retryEx=null;phase='intro';
+  taskFrom=from||'home';
+  const tk=S.tasks.find(t=>t.id===tid);if(!tk)return;
   curAtt=tk.attempts||0;
-  showView('assess'); renderAssess();
+  nav('assess');renderAssess();
 }
 function renderAssess(){
   const tk=S.tasks.find(t=>t.id===curTid);
   const ch=tk?S.children.find(c=>c.id===tk.cid):null;
-  if(!tk||!ch){ document.getElementById('assess-wrap').innerHTML='<p>Task not found. <button class="btn btn-s btn-sm" onclick="nav(\'home\')">← Back</button></p>'; return; }
+  const wrap=document.getElementById('assess-wrap');
+  if(!tk||!ch){wrap.innerHTML=`<div class="card"><p style="color:var(--il)">Task not found. <button class="btn bs bsm" onclick="nav('home')">← Home</button></p></div>`;return;}
   const goal=S.goals.find(g=>g.id===tk.gid);
   const rw=goal?.wf!==false;
-  const wrap=document.getElementById('assess-wrap');
   const sc=sCls(tk.subj);
+  const backFn=taskFrom==='learn'?`openLearn('${ch.id}','${learnFrom}')`:`nav('home')`;
 
   if(phase==='intro'){
-    wrap.innerHTML=`<button class="btn btn-s btn-sm" style="margin-bottom:14px" onclick="goBack()">← Back</button>
+    wrap.innerHTML=`<button class="btn bs bsm" style="margin-bottom:13px" onclick="${backFn}">← Back</button>
     <div class="qcard" style="text-align:center">
-      <div style="font-size:2.2rem;margin-bottom:10px">📝</div>
-      <div style="display:inline-block;font-size:.75rem;font-weight:600;padding:2px 11px;border-radius:99px;margin-bottom:8px" class="${sc}">${tk.subj}</div>
-      <h2 style="font-family:var(--fd);font-size:1.25rem;margin-bottom:6px">${tk.title}</h2>
-      ${tk.desc?`<p style="color:var(--ink-m);font-size:.875rem;line-height:1.6;background:var(--cream);padding:11px;border-radius:var(--r);margin-bottom:14px;text-align:left">${tk.desc}</p>`:''}
-      <div style="background:var(--sky-p);border:1.5px solid #A8D0E6;border-radius:var(--r);padding:11px;margin-bottom:16px;text-align:left">
-        <p style="font-size:.8125rem;font-weight:500;margin-bottom:3px">How this works:</p>
-        <p style="font-size:.78rem;color:var(--ink-m);line-height:1.6">${rw?'Write your answer in your own words first — then pick the matching choice. Writing first helps your brain remember!':'Read each question and pick the best answer.'}</p>
+      <div style="font-size:2rem;margin-bottom:10px">📝</div>
+      <div style="display:inline-block;font-size:.75rem;font-weight:600;padding:2px 10px;border-radius:99px;margin-bottom:8px" class="${sc}">${tk.subj}</div>
+      <h2 style="font-family:var(--fd);font-size:1.2rem;margin-bottom:6px">${tk.title}</h2>
+      ${tk.desc?`<p style="color:var(--im);font-size:.875rem;line-height:1.6;background:var(--cream);padding:11px;border-radius:var(--r);margin-bottom:14px;text-align:left">${tk.desc}</p>`:''}
+      <div style="background:var(--skyp);border:1.5px solid #A8D0E6;border-radius:var(--r);padding:11px;margin-bottom:16px;text-align:left">
+        <p style="font-size:.82rem;font-weight:600;margin-bottom:3px">How this works:</p>
+        <p style="font-size:.78rem;color:var(--im);line-height:1.6">${rw?'Write your answer first in your own words — then pick the matching choice. Writing first helps you remember!':'Read each question carefully and pick the best answer.'}</p>
       </div>
-      ${!tk.assess?`<button class="btn btn-p btn-w btn-lg" onclick="markDone('${tk.id}')">✓ Mark complete</button>`:`
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-s" style="flex:1" onclick="phase='review';renderAssess()">📖 Review lesson first</button>
-        <button class="btn btn-p" style="flex:1" onclick="startAssess()">Start review ✨</button>
-      </div>`}
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn bs" style="flex:1;min-width:130px" onclick="phase='review';renderAssess()">📖 Review lesson first</button>
+        <button class="btn bp" style="flex:1;min-width:130px" onclick="startAssess()">Start review ✨</button>
+      </div>
+      ${!tk.assess?`<button class="btn bs bw" style="margin-top:8px" onclick="markDone('${tk.id}')">✓ Mark complete (no assessment)</button>`:''}
     </div>`;
-  } else if(phase==='review'){
-    wrap.innerHTML=`<button class="btn btn-s btn-sm" style="margin-bottom:14px" onclick="phase='intro';renderAssess()">← Back</button>
+  }else if(phase==='review'){
+    wrap.innerHTML=`<button class="btn bs bsm" style="margin-bottom:13px" onclick="phase='intro';renderAssess()">← Back</button>
     <div class="qcard">
       <h3 style="font-family:var(--fd);margin-bottom:10px">📖 Lesson notes</h3>
-      <div style="background:var(--cream);border-radius:var(--r);padding:13px;margin-bottom:14px;min-height:70px"><p style="color:var(--ink-m);line-height:1.7">${tk.desc||'Review your lesson materials before starting.'}</p></div>
-      <button class="btn btn-p btn-w btn-lg" onclick="startAssess()">Ready — start the review ✨</button>
+      <div style="background:var(--cream);border-radius:var(--r);padding:13px;margin-bottom:14px;min-height:60px">
+        <p style="color:var(--im);line-height:1.7">${tk.desc||'Review your lesson materials, textbook, or notes before starting the review.'}</p>
+      </div>
+      <button class="btn bp bw blg" onclick="startAssess()">Ready — start the review ✨</button>
     </div>`;
-  } else if(phase==='question'&&curQs.length){
+  }else if(phase==='question'&&curQs.length){
     const q=curQs[curQi];
     const showMC=q.type==='mc_only'||wrSub||!rw;
     const canNext=q.type==='mc_only'?!!selOpt:(rw?(wrSub&&!!selOpt):!!selOpt);
-    wrap.innerHTML=`<button class="btn btn-s btn-sm" style="margin-bottom:10px" onclick="goBack()">← Back</button>
-    <div style="margin-bottom:12px">
+    wrap.innerHTML=`<button class="btn bs bsm" style="margin-bottom:10px" onclick="${backFn}">← Exit</button>
+    <div style="margin-bottom:11px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-        <span style="font-size:.72rem;color:var(--ink-l);font-weight:500">Question ${curQi+1} of ${curQs.length}</span>
+        <span style="font-size:.7rem;color:var(--il);font-weight:500">Question ${curQi+1} of ${curQs.length}</span>
         <span class="badge ${sc}">${tk.subj}</span>
       </div>
-      <div style="height:4px;background:var(--cream-b);border-radius:2px"><div style="height:100%;border-radius:2px;width:${((curQi+1)/curQs.length)*100}%;background:${sDot(tk.subj)};transition:width .3s"></div></div>
+      <div style="height:4px;background:var(--cb);border-radius:2px"><div style="height:100%;border-radius:2px;width:${((curQi+1)/curQs.length)*100}%;background:${sDot(tk.subj)};transition:width .3s"></div></div>
     </div>
     <div class="qcard">
-      <p style="font-size:1rem;font-weight:500;margin-bottom:15px;line-height:1.5">${q.questionText}</p>
-      ${q.type==='write_then_choose'&&rw?`<div style="margin-bottom:15px">
-        <label style="display:block;font-size:.875rem;font-weight:600;color:var(--ink-m);margin-bottom:7px">${wrSub?'✓ Your answer:':'✏️ Write your answer first:'}</label>
+      <p style="font-size:.975rem;font-weight:500;margin-bottom:14px;line-height:1.55">${q.questionText}</p>
+      ${q.type==='write_then_choose'&&rw?`<div style="margin-bottom:14px">
+        <label style="display:block;font-size:.85rem;font-weight:600;color:var(--im);margin-bottom:7px">${wrSub?'✓ Your answer:':'✏️ Write your answer first:'}</label>
         <textarea class="wa" id="wa-inp" rows="3" placeholder="Explain in your own words…" ${wrSub?'disabled':''}>${wrAns}</textarea>
-        ${!wrSub?`<button class="btn btn-p btn-w" style="margin-top:8px" onclick="submitWr()">Submit my answer — unlock choices</button>`:''}
+        ${!wrSub?`<button class="btn bp bw" style="margin-top:8px" onclick="submitWr()">Submit my answer — unlock choices</button>`:''}
       </div>`:''}
       <div id="mc-wrap" class="${showMC?'':'locked'}">
-        ${showMC?`<p style="font-size:.78rem;font-weight:500;color:var(--ink-m);margin-bottom:7px">${q.type==='write_then_choose'?'Now pick the matching choice:':'Pick the best answer:'}</p>`:''}
+        ${showMC?`<p style="font-size:.78rem;font-weight:600;color:var(--im);margin-bottom:8px">${q.type==='write_then_choose'?'Now pick the matching choice:':'Pick the best answer:'}</p>`:''}
         ${(q.options||[]).map(o=>`<button class="opt ${selOpt===o.id?'sel':''}" onclick="selO('${o.id}')" ${!showMC?'disabled':''}><div class="oc">${selOpt===o.id?'✓':''}</div>${o.text}</button>`).join('')}
       </div>
-      <button class="btn btn-p btn-w" style="margin-top:12px" onclick="nextQ()" ${canNext?'':'disabled'}>${curQi<curQs.length-1?'Next question →':'Submit all answers'}</button>
+      <button class="btn bp bw" style="margin-top:12px" onclick="nextQ()" ${canNext?'':'disabled'}>${curQi<curQs.length-1?'Next question →':'Submit all answers'}</button>
     </div>`;
     const wi=document.getElementById('wa-inp');
-    if(wi&&!wrSub) wi.addEventListener('input',e=>wrAns=e.target.value);
-  } else if(phase==='grading'){
-    wrap.innerHTML=`<div class="qcard" style="text-align:center;padding:36px"><div style="font-size:1.8rem;display:inline-block;animation:sp 1s linear infinite">⏳</div><p style="color:var(--ink-m);margin-top:10px">Reviewing your answers…</p></div>`;
-  } else if(phase==='retry_ex'&&retryEx){
-    wrap.innerHTML=`<div class="qcard fi">
-      <div style="text-align:center;margin-bottom:16px"><div style="font-size:2.8rem;margin-bottom:8px">🤔</div>
-      <h3 style="font-family:var(--fd);font-size:1.25rem;margin-bottom:3px">Let's review together</h3>
-      <p style="color:var(--ink-l);font-size:.875rem">One more try — you can do this!</p></div>
-      <div style="background:var(--sun-p);border:1.5px solid var(--sun);border-radius:var(--r);padding:13px;margin-bottom:10px">
-        <p style="font-weight:600;font-size:.875rem;margin-bottom:5px">Here's what to remember:</p>
-        <p style="color:var(--ink-m);line-height:1.7;font-size:.9375rem">${retryEx.expl}</p>
+    if(wi&&!wrSub){wi.focus();wi.addEventListener('input',e=>{wrAns=e.target.value;const btn=wi.parentElement?.querySelector('button');if(btn)btn.disabled=!wrAns.trim();});}
+  }else if(phase==='grading'){
+    wrap.innerHTML=`<div class="qcard" style="text-align:center;padding:40px"><div style="font-size:1.8rem;display:inline-block;animation:spin 1s linear infinite">⏳</div><p style="color:var(--im);margin-top:12px;font-size:.9rem">Reviewing your answers…</p></div>`;
+  }else if(phase==='retry_ex'&&retryEx){
+    wrap.innerHTML=`<div class="qcard" style="animation:fi .3s ease">
+      <div style="text-align:center;margin-bottom:16px"><div style="font-size:2.6rem;margin-bottom:8px">🤔</div>
+      <h3 style="font-family:var(--fd);font-size:1.2rem;margin-bottom:3px">Let's review together</h3>
+      <p style="color:var(--il);font-size:.85rem">One more try — you can do this!</p></div>
+      <div style="background:var(--sunp);border:1.5px solid var(--sun);border-radius:var(--r);padding:13px;margin-bottom:10px">
+        <p style="font-weight:600;font-size:.85rem;margin-bottom:5px">Here's what to remember:</p>
+        <p style="color:var(--im);line-height:1.7;font-size:.9rem">${retryEx.expl}</p>
       </div>
-      <div style="background:#EEF5EF;border-radius:var(--r);padding:11px;margin-bottom:16px">
-        <p style="color:var(--sage-d);font-size:.875rem;font-style:italic">💚 ${retryEx.enc}</p>
+      <div style="background:#EEF5EF;border-radius:var(--r);padding:10px;margin-bottom:16px">
+        <p style="color:var(--sd);font-size:.85rem;font-style:italic">💚 ${retryEx.enc}</p>
       </div>
-      <button class="btn btn-p btn-w btn-lg" onclick="doRetry()">Try again →</button>
+      <button class="btn bp bw blg" onclick="doRetry()">Try again →</button>
     </div>`;
   }
 }
-
-function submitWr(){ const wi=document.getElementById('wa-inp'); wrAns=wi?wi.value:wrAns; if(!wrAns.trim())return; wrSub=true; renderAssess(); }
-function selO(id){ selOpt=id; renderAssess(); }
+function submitWr(){const wi=document.getElementById('wa-inp');wrAns=wi?wi.value.trim():wrAns;if(!wrAns)return;wrSub=true;renderAssess();}
+function selO(id){selOpt=id;renderAssess();}
 async function startAssess(){
-  const tk=S.tasks.find(t=>t.id===curTid); const ch=S.children.find(c=>c.id===tk?.cid); if(!tk||!ch)return;
-  phase='grading'; renderAssess();
+  const tk=S.tasks.find(t=>t.id===curTid);const ch=S.children.find(c=>c.id===tk?.cid);if(!tk||!ch)return;
+  phase='grading';renderAssess();
   const cached=S.assessments[curTid];
-  if(cached?.qs&&curAtt===0){ curQs=cached.qs; } else { curQs=await genQs(tk,ch); S.assessments[curTid]={qs:curQs,gen:new Date().toISOString()}; save(); }
-  curQi=0; curResps=[]; wrAns=''; wrSub=false; selOpt=null;
-  phase='question'; renderAssess();
+  if(cached?.qs&&curAtt===0){curQs=cached.qs;}else{curQs=await genQs(tk,ch);S.assessments[curTid]={qs:curQs,gen:new Date().toISOString()};save();}
+  curQi=0;curResps=[];wrAns='';wrSub=false;selOpt=null;phase='question';renderAssess();
 }
 async function nextQ(){
   const q=curQs[curQi];
   const tk=S.tasks.find(t=>t.id===curTid);
   const goal=S.goals.find(g=>g.id===tk?.gid);
   const rw=goal?.wf!==false;
-  let resp={qid:q.questionId,wr:wrAns,sel:selOpt};
   const isOC=(q.options||[]).find(o=>o.id===selOpt)?.isCorrect||false;
+  let resp={qid:q.questionId,wr:wrAns,sel:selOpt,wok:true,ook:isOC,ec:null};
   if(q.type==='write_then_choose'&&rw&&wrAns.trim()){
-    phase='grading'; renderAssess();
-    const gr=await gradeWritten(q.questionText,q.modelAnswer,q.gradingKeywords,wrAns);
-    resp={...resp,wok:gr.ok,ook:isOC,ec:gr.ec,wfb:gr.fb};
-  } else { resp={...resp,wok:true,ook:isOC,ec:null}; }
-  curResps.push(resp); wrAns=''; wrSub=false; selOpt=null;
-  if(curQi<curQs.length-1){ curQi++; phase='question'; renderAssess(); }
-  else { await finalize(); }
+    phase='grading';renderAssess();
+    const gr=await gradeWr(q.questionText,q.modelAnswer,q.gradingKeywords,wrAns);
+    resp={...resp,wok:gr.ok,ec:gr.ec,wfb:gr.fb};
+  }
+  curResps.push(resp);wrAns='';wrSub=false;selOpt=null;
+  if(curQi<curQs.length-1){curQi++;phase='question';renderAssess();}
+  else{await finalize();}
 }
 async function finalize(){
-  phase='grading'; renderAssess();
+  phase='grading';renderAssess();
   const tk=S.tasks.find(t=>t.id===curTid);
   const ch=S.children.find(c=>c.id===tk?.cid);
   const goal=S.goals.find(g=>g.id===tk?.gid);
-  const ps=tk?.ps||goal?.pass||S.mastery.global||75;
-  let tot=0, mx=0; const ecs=[];
-  curResps.forEach(r=>{ const q=curQs.find(x=>x.questionId===r.qid); mx+=q?.pointValue||1; if(r.ook&&r.wok)tot+=q?.pointValue||1; else if(r.ook||r.wok)tot+=(q?.pointValue||1)*0.5; if(r.ec)ecs.push(r.ec); });
-  const pct=mx?Math.round(tot/mx*100):0; const passed=pct>=ps; const na=curAtt+1;
+  const ps=goal?.pass||S.mastery.global||75;
+  let tot=0,mx=0;const ecs=[];
+  curResps.forEach(r=>{const q=curQs.find(x=>x.questionId===r.qid);const pv=q?.pointValue||1;mx+=pv;if(r.ook&&r.wok)tot+=pv;else if(r.ook||r.wok)tot+=pv*0.5;if(r.ec)ecs.push(r.ec);});
+  const pct=mx?Math.round(tot/mx*100):0;const passed=pct>=ps;const na=curAtt+1;
   S.logs.push({id:uid(),tid:curTid,att:na,pct,passed,resps:curResps,ecs:[...new Set(ecs)],dt:new Date().toISOString()});
-  if(passed){ const tk2=S.tasks.find(t=>t.id===curTid); if(tk2)tk2.status='done'; if(goal)goal.done=Math.min((goal.done||0)+1,goal.total); }
-  else if(na>=2){ const tk2=S.tasks.find(t=>t.id===curTid); if(tk2)tk2.status='blocked'; S.notifs.push({id:uid(),type:'blocked',title:(ch?.name||'Your child')+' needs help with '+tk?.subj,body:'"'+tk?.title+'" has been attempted twice. Please review together.',read:false,tid:curTid,cid:ch?.id,dt:new Date().toISOString()}); }
-  else { const tk2=S.tasks.find(t=>t.id===curTid); if(tk2)tk2.status='retry'; }
-  curAtt=na; save();
+  const tkRef=S.tasks.find(t=>t.id===curTid);
+  if(tkRef){
+    tkRef.attempts=na;
+    if(passed){tkRef.status='done';if(goal)goal.done=Math.min((goal.done||0)+1,goal.total);}
+    else if(na>=2){tkRef.status='blocked';S.notifs.push({id:uid(),type:'blocked',title:(ch?.name||'Your child')+' needs help with '+tk.subj,body:'"'+tk.title+'" was attempted twice. Please review this topic together.',read:false,tid:curTid,cid:ch?.id,dt:new Date().toISOString()});}
+    else{tkRef.status='retry';}
+  }
+  curAtt=na;save();
   if(!passed&&na<2){
-    const missed=curResps.filter(r=>!r.ook).slice(0,3);
-    const mc=missed.flatMap(r=>{ const q=curQs.find(x=>x.questionId===r.qid); return q?.gradingKeywords||[]; }).slice(0,5);
-    retryEx=await genRetry(tk,ch,[...new Set(ecs)],mc); phase='retry_ex';
-  } else { showRes(pct,passed,ps); return; }
+    const missed=curResps.filter(r=>!r.ook).flatMap(r=>{const q=curQs.find(x=>x.questionId===r.qid);return q?.gradingKeywords||[];}).slice(0,5);
+    retryEx=await genRetry(tk,ch,[...new Set(ecs)],missed);phase='retry_ex';
+  }else{showRes(pct,passed);}
   renderAssess();
 }
-function showRes(pct,passed,ps){
+function showRes(pct,passed){
   phase='results';
+  const backFn=taskFrom==='learn'?`openLearn('${pinCid}','${learnFrom}')`:`nav('home')`;
   const wrap=document.getElementById('assess-wrap');
-  wrap.innerHTML=`<div class="qcard fi" style="text-align:center">
-    <div class="ri ${passed?'cel':''}">${passed?'🌟':'🧡'}</div>
+  wrap.innerHTML=`<div class="qcard" style="text-align:center;animation:fi .3s ease">
+    <div class="ri" style="${passed?'animation:cel .55s cubic-bezier(.34,1.56,.64,1) forwards':''}">${passed?'🌟':'🧡'}</div>
     <div class="rs ${passed?'pass':'fail'}">${pct}%</div>
-    <p style="font-family:var(--fd);font-size:1.2rem;color:${passed?'var(--sage-d)':'var(--terra)'};margin-bottom:5px">${passed?'Great work!':'Keep going!'}</p>
-    <p style="color:var(--ink-l);font-size:.875rem;margin-bottom:18px">${passed?'Lesson complete! Moving forward.':'Your parent has been notified to help.'}</p>
-    <div style="display:flex;flex-direction:column;gap:5px;text-align:left;margin-bottom:18px">
-      ${curQs.map(q=>{ const r=curResps.find(x=>x.qid===q.questionId); const ok=r?.ook&&r?.wok; return`<div style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:${ok?'#EEF7EF':'#FEF3F3'};border-radius:var(--r)"><span>${ok?'✅':'❌'}</span><span style="font-size:.8rem;color:var(--ink)">${q.questionText}</span></div>`; }).join('')}
+    <p style="font-family:var(--fd);font-size:1.1rem;color:${passed?'var(--sd)':'var(--terra)'};margin-bottom:5px">${passed?'Great work!':'Keep going!'}</p>
+    <p style="color:var(--il);font-size:.85rem;margin-bottom:16px">${passed?'Lesson complete — moving forward!':'Your parent has been notified to help.'}</p>
+    <div style="display:flex;flex-direction:column;gap:5px;text-align:left;margin-bottom:16px">
+      ${curQs.map(q=>{const r=curResps.find(x=>x.qid===q.questionId);const ok=r?.ook&&r?.wok;return`<div style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:${ok?'#EEF7EF':'#FEF3F3'};border-radius:var(--r)"><span>${ok?'✅':'❌'}</span><span style="font-size:.8rem;color:var(--ink);line-height:1.4">${q.questionText}</span></div>`;}).join('')}
     </div>
-    <button class="btn btn-p btn-w btn-lg" onclick="goBack()">${passed?'← Back to home':'← Go back'}</button>
+    <button class="btn bp bw blg" onclick="${backFn}">${passed?'← Continue':'← Go back'}</button>
   </div>`;
 }
 async function doRetry(){
-  const tk=S.tasks.find(t=>t.id===curTid); const ch=S.children.find(c=>c.id===tk?.cid);
-  phase='grading'; renderAssess();
-  curQs=await genQs(tk,ch); S.assessments[curTid]={qs:curQs,gen:new Date().toISOString()}; save();
-  curQi=0; curResps=[]; wrAns=''; wrSub=false; selOpt=null; phase='question'; renderAssess();
+  const tk=S.tasks.find(t=>t.id===curTid);const ch=S.children.find(c=>c.id===tk?.cid);
+  phase='grading';renderAssess();
+  curQs=await genQs(tk,ch);S.assessments[curTid]={qs:curQs,gen:new Date().toISOString()};save();
+  curQi=0;curResps=[];wrAns='';wrSub=false;selOpt=null;phase='question';renderAssess();
 }
-function goBack(){ nav('home'); renderHome(); }
-function markDone(tid){ const tk=S.tasks.find(t=>t.id===tid); if(tk){ tk.status='done'; const g=S.goals.find(x=>x.id===tk.gid); if(g)g.done=Math.min((g.done||0)+1,g.total); save(); nav('home'); renderHome(); } }
+function markDone(tid){const tk=S.tasks.find(t=>t.id===tid);if(tk){tk.status='done';const g=S.goals.find(x=>x.id===tk.gid);if(g)g.done=Math.min((g.done||0)+1,g.total);save();nav('home');renderHome();}}
 
-// =====================================================
+// ════════════════════════════════════════════
 // BLOCKED TASK
-// =====================================================
-function openBl(tid){
-  const tk=S.tasks.find(t=>t.id===tid); const ch=tk?S.children.find(c=>c.id===tk.cid):null; if(!tk)return;
-  const lg=S.logs.filter(l=>l.tid===tid); const last=lg[lg.length-1];
+// ════════════════════════════════════════════
+function oBl(tid){
+  const tk=S.tasks.find(t=>t.id===tid);const ch=tk?S.children.find(c=>c.id===tk.cid):null;if(!tk)return;
+  const lg=S.logs.filter(l=>l.tid===tid);const last=lg[lg.length-1];
   document.getElementById('bl-body').innerHTML=`
-    <div class="al al-y" style="margin-bottom:13px"><strong>${ch?.name||'Your child'}</strong> attempted "${tk.title}" twice. Review this topic together before trying again.</div>
-    ${last?`<div style="background:var(--cream);border-radius:var(--r);padding:11px;margin-bottom:13px"><p style="font-size:.72rem;color:var(--ink-l);margin-bottom:2px">Last score</p><p style="font-size:1.2rem;font-weight:700;font-family:var(--fd);color:var(--terra)">${last.pct}%</p></div>`:''}
-    <p style="font-size:.875rem;color:var(--ink-m);margin-bottom:14px">Once you've reviewed together, mark it ready for another try.</p>
+    <div class="al aly" style="margin-bottom:12px"><strong>${ch?.name||'Your child'}</strong> attempted "${tk.title}" twice. Review this topic together before they try again.</div>
+    ${last?`<div style="background:var(--cream);border-radius:var(--r);padding:10px;margin-bottom:12px"><p style="font-size:.7rem;color:var(--il);margin-bottom:2px">Last attempt score</p><p style="font-size:1.2rem;font-weight:700;font-family:var(--fd);color:var(--terra)">${last.pct}%</p></div>`:''}
+    <p style="font-size:.875rem;color:var(--im);margin-bottom:13px;line-height:1.5">Once you've reviewed this topic together, mark it ready for another try, or skip it.</p>
     <div style="display:flex;gap:7px;flex-wrap:wrap">
-      <button class="btn btn-p btn-sm" onclick="blReady('${tid}')">✓ Ready to try again</button>
-      <button class="btn btn-s btn-sm" onclick="blSkip('${tid}')">Skip this topic</button>
-      <button class="btn btn-s btn-sm" onclick="cmo('mo-blocked')">Cancel</button>
+      <button class="btn bp bsm" onclick="blReady('${tid}')">✓ Ready to try again</button>
+      <button class="btn bs bsm" onclick="blSkip('${tid}')">Skip this topic</button>
+      <button class="btn bs bsm" onclick="cMo('mo-bl')">Cancel</button>
     </div>`;
-  oMo('mo-blocked');
+  oMo('mo-bl');
 }
-function blReady(tid){ const tk=S.tasks.find(t=>t.id===tid); if(tk){tk.status='retry';tk.attempts=1;save();} cmo('mo-blocked'); renderHome(); }
-function blSkip(tid){ const tk=S.tasks.find(t=>t.id===tid); if(tk){tk.status='skipped';save();} cmo('mo-blocked'); renderHome(); }
+function blReady(tid){const tk=S.tasks.find(t=>t.id===tid);if(tk){tk.status='retry';tk.attempts=1;save();}cMo('mo-bl');renderHome();}
+function blSkip(tid){const tk=S.tasks.find(t=>t.id===tid);if(tk){tk.status='skipped';save();}cMo('mo-bl');renderHome();}
 
-// =====================================================
+// ════════════════════════════════════════════
 // NOTIFICATIONS
-// =====================================================
+// ════════════════════════════════════════════
 function renderNotifs(){
   const nl=document.getElementById('n-list');
-  if(!S.notifs.length){ nl.innerHTML=`<div class="card"><div class="empty"><div class="empty-icon">🔔</div><h4>No alerts</h4><p>Notifications appear here when a child needs your attention.</p></div></div>`; return; }
+  if(!S.notifs.length){nl.innerHTML=`<div class="card"><div class="empty"><div class="ei">🔔</div><h4>No alerts</h4><p>Notifications appear here when a child needs your attention.</p></div></div>`;return;}
   nl.innerHTML='';
   [...S.notifs].reverse().forEach(n=>{
-    const div=document.createElement('div'); div.className='card fi';
-    div.style.borderLeft=n.read?'':'3px solid var(--terra)'; div.style.opacity=n.read?'0.6':'1';
+    const div=document.createElement('div');div.className='card';
+    div.style.borderLeft=n.read?'none':'3px solid var(--terra)';div.style.opacity=n.read?'0.6':'1';
     div.innerHTML=`<div style="display:flex;align-items:flex-start;gap:9px">
-      <span style="font-size:1.15rem">${n.type==='blocked'?'⚠️':'🔔'}</span>
-      <div style="flex:1"><p style="font-weight:600;font-size:.875rem">${n.title}</p><p style="font-size:.8rem;color:var(--ink-m)">${n.body}</p><p style="font-size:.68rem;color:var(--ink-f);margin-top:3px">${n.dt?new Date(n.dt).toLocaleDateString():''}</p></div>
-      ${n.tid?`<button class="btn btn-s btn-sm" onclick="openBl('${n.tid}');rdN('${n.id}')">Review</button>`:''}
+      <span style="font-size:1.1rem">${n.type==='blocked'?'⚠️':'🔔'}</span>
+      <div style="flex:1;min-width:0"><p style="font-weight:600;font-size:.875rem">${n.title}</p><p style="font-size:.8rem;color:var(--im);line-height:1.5">${n.body}</p><p style="font-size:.68rem;color:var(--if);margin-top:3px">${n.dt?new Date(n.dt).toLocaleDateString():''}</p></div>
+      ${n.tid?`<button class="btn bs bsm" style="flex-shrink:0" onclick="oBl('${n.tid}');rdN('${n.id}')">Review</button>`:''}
     </div>`;
     nl.appendChild(div);
   });
 }
-function rdN(id){ const n=S.notifs.find(x=>x.id===id); if(n){n.read=true;save();updBadge();} }
-function readAllN(){ S.notifs.forEach(n=>n.read=true); save(); updBadge(); renderNotifs(); }
-function updBadge(){ const u=S.notifs.filter(n=>!n.read).length; const b=document.getElementById('nb'); if(b){b.textContent=u;b.style.display=u>0?'inline':'none';} }
+function rdN(id){const n=S.notifs.find(x=>x.id===id);if(n){n.read=true;save();updBadge();}}
+function readAllN(){S.notifs.forEach(n=>n.read=true);save();updBadge();renderNotifs();}
+function updBadge(){const u=S.notifs.filter(n=>!n.read).length;const b=document.getElementById('nb');if(b){b.textContent=u;b.style.display=u>0?'inline':'none';}}
 
-// =====================================================
+// ════════════════════════════════════════════
 // REPORTS
-// =====================================================
-function renderReports(){
-  const cid=document.getElementById('r-child')?.value;
-  const days=parseInt(document.getElementById('r-range')?.value)||30;
-  if(!cid){ document.getElementById('r-content').innerHTML='<div class="card"><p style="color:var(--ink-l);text-align:center;padding:18px">Select a child to view their report.</p></div>'; return; }
-  const cut=dAdd(tod(),-days); const t=tod();
+// ════════════════════════════════════════════
+function renderRep(){
+  const cid=document.getElementById('r-ch')?.value;
+  const days=parseInt(document.getElementById('r-rng')?.value)||30;
+  if(!cid){document.getElementById('r-con').innerHTML='<div class="card"><p style="color:var(--il);text-align:center;padding:16px">Select a child to view their report.</p></div>';return;}
+  const cut=dAdd(tod(),-days);const t=tod();
   const tks=S.tasks.filter(x=>x.cid===cid&&x.date>=cut&&x.date<=t);
   const done=tks.filter(x=>x.status==='done').length;
-  const lg=S.logs.filter(l=>{ const tk=S.tasks.find(x=>x.id===l.tid); return tk?.cid===cid&&tk?.date>=cut; });
+  const lg=S.logs.filter(l=>{const tk=S.tasks.find(x=>x.id===l.tid);return tk?.cid===cid&&tk?.date>=cut;});
   const avg=lg.length?Math.round(lg.reduce((a,b)=>a+(b.pct||0),0)/lg.length):null;
   const pr=lg.length?Math.round(lg.filter(l=>l.passed).length/lg.length*100):null;
   const cg=S.goals.filter(g=>g.cid===cid&&g.active);
-  document.getElementById('r-content').innerHTML=`
+  document.getElementById('r-con').innerHTML=`
     <div class="sg">
-      ${[['Sessions Done',done+'/'+tks.length,'var(--sage)'],['Completion',tks.length?Math.round(done/tks.length*100)+'%':'—','var(--sky)'],['Avg Score',avg!==null?avg+'%':'—','var(--sun)'],['Pass Rate',pr!==null?pr+'%':'—','var(--sage-d)']].map(([l,v,c])=>`<div class="sc"><div class="sv" style="color:${c}">${v}</div><div class="sl">${l}</div></div>`).join('')}
+      ${[['Sessions Done',done+'/'+tks.length,'var(--sage)'],['Completion',tks.length?Math.round(done/tks.length*100)+'%':'—','var(--sky)'],['Avg Score',avg!==null?avg+'%':'—','var(--sun)'],['Pass Rate',pr!==null?pr+'%':'—','var(--sd)']].map(([l,v,c])=>`<div class="sc"><div class="sv" style="color:${c}">${v}</div><div class="slab">${l}</div></div>`).join('')}
     </div>
-    <div class="card" style="margin-bottom:12px">
-      <h3 style="font-family:var(--fd);font-size:1.02rem;margin-bottom:13px">By Subject</h3>
-      ${!cg.length?'<p style="color:var(--ink-l);font-size:.875rem">No goals set.</p>':cg.map(goal=>{
-        const pct=goal.total?Math.round(goal.done/goal.total*100):0;
-        const sl=lg.filter(l=>{ const tk=S.tasks.find(x=>x.id===l.tid); return tk?.subj===goal.subj; });
+    <div class="card" style="margin-bottom:10px">
+      <h3 style="font-family:var(--fd);font-size:1rem;margin-bottom:12px">By Subject</h3>
+      ${!cg.length?'<p style="color:var(--il);font-size:.875rem">No goals set yet.</p>':cg.map(g=>{
+        const pct=g.total?Math.round(g.done/g.total*100):0;
+        const sl=lg.filter(l=>{const tk=S.tasks.find(x=>x.id===l.tid);return tk?.subj===g.subj;});
         const sa=sl.length?Math.round(sl.reduce((a,b)=>a+(b.pct||0),0)/sl.length):null;
-        return`<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:.875rem;font-weight:600">${goal.subj}</span><span style="font-size:.78rem;color:var(--ink-l)">${goal.done}/${goal.total}${sa!==null?' · '+sa+'% avg':''}</span></div><div class="pb"><div class="pf" style="width:${pct}%;background:${sDot(goal.subj)}"></div></div></div>`;
+        return`<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:.875rem;font-weight:600">${g.subj}</span><span style="font-size:.75rem;color:var(--il)">${g.done}/${g.total}${sa!==null?' · '+sa+'% avg':''}</span></div><div class="pb"><div class="pf" style="width:${pct}%;background:${sDot(g.subj)}"></div></div></div>`;
       }).join('')}
     </div>
     <div class="card">
-      <h3 style="font-family:var(--fd);font-size:1.02rem;margin-bottom:13px">Recent Assessments</h3>
-      ${!lg.length?'<p style="color:var(--ink-l);font-size:.875rem">No assessments yet.</p>':lg.slice(-8).reverse().map(l=>{ const tk=S.tasks.find(x=>x.id===l.tid); return`<div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--cream);border-radius:var(--r);margin-bottom:5px"><span>${l.passed?'✅':'❌'}</span><span style="flex:1;font-size:.8125rem">${tk?.title||'Assessment'}</span><span style="font-size:.78rem;color:var(--ink-l)">${tk?.subj||''}</span><span style="font-weight:600;font-size:.875rem;color:${l.passed?'var(--sage-d)':'var(--terra)'}">${l.pct}%</span></div>`; }).join('')}
+      <h3 style="font-family:var(--fd);font-size:1rem;margin-bottom:12px">Recent Assessments</h3>
+      ${!lg.length?'<p style="color:var(--il);font-size:.875rem">No assessments yet in this period.</p>':lg.slice(-8).reverse().map(l=>{const tk=S.tasks.find(x=>x.id===l.tid);return`<div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--cream);border-radius:var(--r);margin-bottom:5px"><span>${l.passed?'✅':'❌'}</span><span style="flex:1;font-size:.82rem;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tk?.title||'Assessment'}</span><span style="font-size:.75rem;color:var(--il);flex-shrink:0">${tk?.subj||''}</span><span style="font-weight:600;font-size:.85rem;color:${l.passed?'var(--sd)':'var(--terra)'};flex-shrink:0">${l.pct}%</span></div>`;}).join('')}
     </div>`;
 }
 function expPDF(){
-  const cid=document.getElementById('r-child')?.value; const ch=S.children.find(c=>c.id===cid);
-  if(!ch){ alert('Please select a child first.'); return; }
-  const days=parseInt(document.getElementById('r-range')?.value)||30;
-  const cut=dAdd(tod(),-days); const t=tod();
-  const tks=S.tasks.filter(x=>x.cid===cid&&x.date>=cut); const done=tks.filter(x=>x.status==='done').length;
-  const lg=S.logs.filter(l=>{ const tk=S.tasks.find(x=>x.id===l.tid); return tk?.cid===cid&&tk?.date>=cut; });
+  const cid=document.getElementById('r-ch')?.value;const ch=S.children.find(c=>c.id===cid);
+  if(!ch){alert('Please select a child first.');return;}
+  const days=parseInt(document.getElementById('r-rng')?.value)||30;
+  const cut=dAdd(tod(),-days);
+  const tks=S.tasks.filter(x=>x.cid===cid&&x.date>=cut);const done=tks.filter(x=>x.status==='done').length;
+  const lg=S.logs.filter(l=>{const tk=S.tasks.find(x=>x.id===l.tid);return tk?.cid===cid&&tk?.date>=cut;});
   const avg=lg.length?Math.round(lg.reduce((a,b)=>a+(b.pct||0),0)/lg.length):null;
   const cg=S.goals.filter(g=>g.cid===cid&&g.active);
-  const html=`<!DOCTYPE html><html><head><title>Covey Report — ${ch.name}</title><style>body{font-family:Arial,sans-serif;color:#2C2416;padding:40px;max-width:700px;margin:0 auto}h1{color:#4E7A57;margin-bottom:4px}.sub{color:#8C7B65;font-size:.875rem;margin-bottom:20px}.stat{display:inline-block;margin:0 12px 8px 0;padding:10px 14px;background:#F5EDE0;border-radius:8px;text-align:center}.sv{font-size:1.3rem;font-weight:700;color:#4E7A57;display:block}.sl{font-size:.72rem;color:#8C7B65}table{width:100%;border-collapse:collapse;margin-top:10px}th{text-align:left;padding:8px;background:#F5EDE0;font-size:.875rem}td{padding:8px;border-bottom:1px solid #F5EDE0;font-size:.875rem}@media print{button{display:none}}</style></head><body>
-  <h1>🌿 Covey Progress Report</h1><div class="sub">${ch.name} · Generated ${new Date().toLocaleDateString()} · Last ${days} days</div>
-  <div style="margin:14px 0">${[['Done',done+'/'+tks.length],['Rate',tks.length?Math.round(done/tks.length*100)+'%':'—'],['Avg',avg!==null?avg+'%':'—']].map(([l,v])=>`<div class="stat"><span class="sv">${v}</span><span class="sl">${l}</span></div>`).join('')}</div>
-  <h2 style="font-size:1rem;border-bottom:1px solid #E8D9C5;padding-bottom:5px;margin:16px 0 10px">By Subject</h2>
-  <table><tr><th>Subject</th><th>Progress</th><th>Avg Score</th></tr>${cg.map(g=>{ const sl=lg.filter(l=>{ const tk=S.tasks.find(x=>x.id===l.tid); return tk?.subj===g.subj; }); const sa=sl.length?Math.round(sl.reduce((a,b)=>a+b.pct,0)/sl.length):null; return`<tr><td>${g.subj}</td><td>${g.done}/${g.total} (${g.total?Math.round(g.done/g.total*100):0}%)</td><td>${sa!==null?sa+'%':'—'}</td></tr>`; }).join('')}</table>
-  <p style="margin-top:28px;font-size:.7rem;color:#BFB09A">Generated by Covey Homeschool App</p>
-  <br><button onclick="window.print()">🖨️ Print / Save as PDF</button></body></html>`;
-  const w=window.open('','_blank'); w.document.write(html); w.document.close();
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>Covey Report — ${ch.name}</title><style>body{font-family:Arial,sans-serif;color:#2C2416;padding:36px;max-width:680px;margin:0 auto}h1{color:#4E7A57;margin-bottom:4px}.sub{color:#8C7B65;font-size:.875rem;margin-bottom:18px}.stat{display:inline-block;margin:0 10px 8px 0;padding:10px 13px;background:#F5EDE0;border-radius:8px;text-align:center;min-width:80px}.sv{font-size:1.2rem;font-weight:700;color:#4E7A57;display:block}.sl{font-size:.7rem;color:#8C7B65}table{width:100%;border-collapse:collapse;margin:10px 0}th{text-align:left;padding:8px;background:#F5EDE0;font-size:.85rem}td{padding:8px;border-bottom:1px solid #F5EDE0;font-size:.85rem}h2{font-size:1rem;margin:16px 0 8px;color:#2C2416;border-bottom:1px solid #E8D9C5;padding-bottom:4px}@media print{button{display:none}}</style></head><body>
+  <h1>🌿 Covey Progress Report</h1><div class="sub">${ch.name} &nbsp;·&nbsp; Generated ${new Date().toLocaleDateString()} &nbsp;·&nbsp; Last ${days} days</div>
+  <div>${[['Done',done+'/'+tks.length],['Rate',tks.length?Math.round(done/tks.length*100)+'%':'—'],['Avg Score',avg!==null?avg+'%':'—']].map(([l,v])=>`<div class="stat"><span class="sv">${v}</span><span class="sl">${l}</span></div>`).join('')}</div>
+  <h2>Progress by Subject</h2><table><tr><th>Subject</th><th>Progress</th><th>Avg Score</th></tr>${cg.map(g=>{const sl=lg.filter(l=>{const tk=S.tasks.find(x=>x.id===l.tid);return tk?.subj===g.subj;});const sa=sl.length?Math.round(sl.reduce((a,b)=>a+b.pct,0)/sl.length):null;return`<tr><td>${g.subj}</td><td>${g.done}/${g.total} (${g.total?Math.round(g.done/g.total*100):0}%)</td><td>${sa!==null?sa+'%':'—'}</td></tr>`;}).join('')}</table>
+  <p style="margin-top:28px;font-size:.7rem;color:#BFB09A">Generated by Covey Homeschool App · Your data is private and stored only on your device.</p>
+  <br><button onclick="window.print()" style="padding:10px 20px;background:#7BA685;color:white;border:none;border-radius:8px;cursor:pointer;font-size:1rem">🖨️ Print / Save as PDF</button>
+  </body></html>`);w.document.close();
 }
 
-// =====================================================
+// ════════════════════════════════════════════
 // SETTINGS
-// =====================================================
+// ════════════════════════════════════════════
 function renderSettings(){
   const k=localStorage.getItem('covey-key')||'';
-  const ki=document.getElementById('set-key'); if(ki)ki.value=k;
-  const ko=document.getElementById('key-ok'); if(ko)ko.style.display=k?'block':'none';
-  const pr=document.getElementById('ps-range'); const pd=document.getElementById('ps-show');
+  const ki=document.getElementById('set-key');if(ki)ki.value=k;
+  const ko=document.getElementById('key-ok');if(ko)ko.style.display=k?'block':'none';
+  const pr=document.getElementById('ps-rng');const pv=document.getElementById('ps-val');
   if(pr)pr.value=S.mastery.global||75;
-  if(pd)pd.textContent=(S.mastery.global||75)+'%';
+  if(pv)pv.textContent=(S.mastery.global||75)+'%';
 }
-function saveKey(){ const k=document.getElementById('set-key').value.trim(); localStorage.setItem('covey-key',k); document.getElementById('key-ok').style.display=k?'block':'none'; showSetOk(); }
-function savePS(){ S.mastery.global=parseInt(document.getElementById('ps-range').value)||75; save(); showSetOk(); }
-function showSetOk(){ const el=document.getElementById('set-ok'); el.style.display='block'; setTimeout(()=>el.style.display='none',2000); }
-function expData(){ const b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='covey-backup-'+tod()+'.json'; a.click(); }
-function impData(e){ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{ try{ const d=JSON.parse(ev.target.result); if(!d.family){alert('Invalid backup file.');return;} Object.assign(S,d); save(); alert('✅ Data restored! Reloading…'); location.reload(); }catch(er){alert('Could not read this file. Please use a valid Covey backup.');} }; r.readAsText(f); }
+function saveKey(){const k=document.getElementById('set-key').value.trim();localStorage.setItem('covey-key',k);document.getElementById('key-ok').style.display=k?'block':'none';showSetOk();}
+function savePS(){S.mastery.global=parseInt(document.getElementById('ps-rng').value)||75;save();showSetOk();}
+function showSetOk(){const el=document.getElementById('set-ok');el.style.display='block';setTimeout(()=>el.style.display='none',2200);}
+function expData(){const b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='covey-backup-'+tod()+'.json';a.click();}
+function impData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(!d||!d.family){alert('This file doesn\'t look like a Covey backup. Please try again.');return;}Object.assign(S,d);save();alert('✅ Data restored! Reloading…');location.reload();}catch(er){alert('Could not read this file. Please use a valid Covey backup.');}};r.readAsText(f);}
 
-// =====================================================
+// ════════════════════════════════════════════
 // ONBOARDING
-// =====================================================
+// ════════════════════════════════════════════
 const OBQ=[
-  {id:'time',q:'When does {n} learn best?',opts:['Morning','Midday','Afternoon','Evening','Not sure']},
-  {id:'span',q:'How long can {n} usually focus?',opts:['5–10 min','10–20 min','20–30 min','30+ min','It varies'],map:v=>({'5–10 min':7,'10–20 min':15,'20–30 min':25,'30+ min':35,'It varies':15})[v]||15},
-  {id:'diff',q:'When schoolwork gets hard, {n} usually…',opts:['Keeps trying quietly','Gets frustrated but tries again','Shuts down','Gets distracted']},
-  {id:'help',q:'When {n} doesn\'t understand, what helps?',opts:['Simpler explanation','Seeing pictures/examples','Doing it hands-on','Watching a video']},
-  {id:'motiv',q:'What motivates {n} most?',opts:['Praise','Being challenged','A topic they love','Finishing quickly']},
-  {id:'tone',q:'What feedback tone works for {n}?',opts:['Calm and gentle','Fun and playful','Serious and focused','Like a friendly sibling']},
-  {id:'miss',q:'When {n} gets a wrong answer, they usually…',opts:['Want to try again right away','Need encouragement first','Get upset','Seem unbothered']},
-  {id:'timer',q:'How does {n} do with timed activities?',opts:['Works well','Gets anxious','Doesn\'t notice','Haven\'t tried']}
+  {id:'time',q:'When does {n} usually learn best?',opts:['Morning','Midday','Afternoon','Evening','Not sure yet']},
+  {id:'span',q:'How long can {n} usually focus before needing a break?',opts:['5–10 min','10–20 min','20–30 min','30+ min','It varies'],map:v=>({'5–10 min':7,'10–20 min':15,'20–30 min':25,'30+ min':35,'It varies':15}[v]||15)},
+  {id:'diff',q:'When schoolwork gets hard, {n} usually…',opts:['Keeps trying quietly','Gets frustrated but tries again','Shuts down or avoids it','Gets silly or distracted']},
+  {id:'help',q:"When {n} doesn't understand something, what usually helps?",opts:['Hearing a simpler explanation','Seeing pictures or examples','Doing it hands-on','Watching a short video']},
+  {id:'motiv',q:'What motivates {n} most during learning?',opts:['Praise and encouragement','Being challenged with harder work','A topic they love','Finishing and having free time']},
+  {id:'tone',q:'What kind of feedback voice works best for {n}?',opts:['Calm and gentle','Fun and playful','Serious and focused','Friendly like a sibling']},
+  {id:'miss',q:'When {n} gets a wrong answer, they usually…',opts:['Want to try again right away','Need encouragement first','Get upset or frustrated','Seem unbothered']},
+  {id:'timer',q:'How does {n} do with timed activities?',opts:['Works well with a timer','Gets anxious with a timer','Doesn\'t notice either way','Haven\'t tried timers']}
 ];
-let obKids=[], obPData={}, obKi=0, obQi=0, obTmp={pn:'',fn:'',em:'',pw:''};
-function showOnboard(){ obKids=[{n:'',dob:'',pin:'',col:ACOLS[0]}]; obPData={}; obKi=0; obQi=0; document.getElementById('sc-login').classList.remove('on'); document.getElementById('sc-onboard').classList.add('on'); setStep(1); ob1Show(); }
-function setStep(n){ [1,2,3].forEach(i=>{ const d=document.getElementById('sd'+i); const l=document.getElementById('sl'+i); if(d)d.className='sdot '+(i<n?'done':i===n?'cur':'fut'); if(l&&i<3)l.className='sline '+(i<n?'done':'fut'); }); }
-function ob1Show(){ document.getElementById('ob1').style.display='block'; document.getElementById('ob2').style.display='none'; document.getElementById('ob3').style.display='none'; }
-function ob1(){
-  const pn=document.getElementById('ob-pn').value.trim(), fn=document.getElementById('ob-fn').value.trim(), em=document.getElementById('ob-em').value.trim(), pw=document.getElementById('ob-pw').value;
-  const err=document.getElementById('ob1-err');
-  if(!pn||!fn||!em||pw.length<6){err.textContent='Please fill all fields. Password must be at least 6 characters.';err.style.display='block';return;}
-  if(!em.includes('@')){err.textContent='Please enter a valid email.';err.style.display='block';return;}
-  err.style.display='none'; obTmp={pn,fn,em,pw};
-  if(!obKids.length)obKids=[{n:'',dob:'',pin:'',col:ACOLS[0]}];
-  renderObKids(); document.getElementById('ob1').style.display='none'; document.getElementById('ob2').style.display='block'; setStep(2);
+
+// Onboard temp data — always initialized before use
+let obKids=[], obPData={}, obKi=0, obQi=0;
+let obTmp={pn:'',fn:'',em:'',pw:''};
+
+function goOnboard(){
+  obTmp={pn:'',fn:'',em:'',pw:''};
+  obKids=[{n:'',dob:'',pin:'',col:ACOLS[0]}];
+  obPData={};obKi=0;obQi=0;
+  document.getElementById('sc-login').classList.remove('on');
+  document.getElementById('sc-onboard').classList.add('on');
+  document.getElementById('ob1').style.display='block';
+  document.getElementById('ob2').style.display='none';
+  document.getElementById('ob3').style.display='none';
+  setObStep(1);
+  renderObKids();
 }
-function obAddKid(){ if(obKids.length>=5)return; obKids.push({n:'',dob:'',pin:'',col:ACOLS[obKids.length%ACOLS.length]}); renderObKids(); }
-function renderObKids(){
-  const el=document.getElementById('ob-kids'); el.innerHTML='';
-  obKids.forEach((k,i)=>{
-    const d=document.createElement('div'); d.style.cssText='background:var(--cream);border-radius:var(--r);padding:13px;margin-bottom:10px';
-    d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px"><strong style="font-size:.875rem">Child ${i+1}</strong>${i>0?`<button style="background:none;border:none;cursor:pointer;color:var(--ink-l);font-size:.78rem;font-family:var(--fb)" onclick="obRmKid(${i})">Remove</button>`:''}</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px">${ACOLS.map(c=>`<div class="cs ${k.col===c?'sel':''}" style="background:${c};width:24px;height:24px" onclick="obKCol(${i},'${c}')"></div>`).join('')}</div>
-    <div class="fg" style="margin-bottom:9px"><label class="fl">Name</label><input class="fi" placeholder="Emma" value="${k.n}" oninput="obKids[${i}].n=this.value"></div>
-    <div class="fg" style="margin-bottom:9px"><label class="fl">Birthdate</label><input class="fi" type="date" value="${k.dob}" oninput="obKids[${i}].dob=this.value"></div>
-    <div class="fg" style="margin-bottom:0"><label class="fl">4-digit PIN</label><input class="fi" type="password" maxlength="4" placeholder="1234" value="${k.pin}" oninput="obKids[${i}].pin=this.value"></div>`;
-    el.appendChild(d);
+
+function setObStep(n){
+  [1,2,3].forEach(i=>{
+    const d=document.getElementById('sd'+i);
+    const l=document.getElementById('sl'+i);
+    if(d)d.className='sd '+(i<n?'dn':i===n?'cu':'ft');
+    if(l&&i<3)l.className='sln '+(i<n?'dn':'ft');
   });
 }
-function obKCol(i,c){ obKids[i].col=c; renderObKids(); }
-function obRmKid(i){ obKids.splice(i,1); renderObKids(); }
-function ob2(){
-  const valid=obKids.filter(k=>k.n.trim()); if(!valid.length){alert('Please add at least one child.');return;} obKids=valid;
-  S.family={id:uid(),pname:obTmp.pn,fname:obTmp.fn,email:obTmp.em,pw:obTmp.pw,created:new Date().toISOString()};
-  S.auth=true; S.user={email:obTmp.em,name:obTmp.pn};
-  S.children=obKids.map(k=>({id:uid(),name:k.n,dob:k.dob,col:k.col,pin:k.pin,health:'',created:new Date().toISOString()}));
-  S.mastery={global:75,overrides:{}}; save();
-  obKi=0; obQi=0; obPData={};
-  document.getElementById('ob2').style.display='none'; document.getElementById('ob3').style.display='block'; setStep(3); renderObQ();
+
+function ob1Next(){
+  const pn=document.getElementById('ob-pn').value.trim();
+  const fn=document.getElementById('ob-fn').value.trim();
+  const em=document.getElementById('ob-em').value.trim();
+  const pw=document.getElementById('ob-pw').value;
+  const err=document.getElementById('ob1-err');
+  if(!pn){err.textContent='Please enter your name.';err.style.display='block';document.getElementById('ob-pn').focus();return;}
+  if(!fn){err.textContent='Please enter your family name.';err.style.display='block';document.getElementById('ob-fn').focus();return;}
+  if(!em||!em.includes('@')){err.textContent='Please enter a valid email address.';err.style.display='block';document.getElementById('ob-em').focus();return;}
+  if(pw.length<6){err.textContent='Password must be at least 6 characters.';err.style.display='block';document.getElementById('ob-pw').focus();return;}
+  err.style.display='none';
+  obTmp={pn,fn,em,pw};
+  if(!obKids.length)obKids=[{n:'',dob:'',pin:'',col:ACOLS[0]}];
+  renderObKids();
+  document.getElementById('ob1').style.display='none';
+  document.getElementById('ob2').style.display='block';
+  setObStep(2);
+  document.getElementById('ob-card').scrollTop=0;
 }
+
+function obAddKid(){
+  if(obKids.length>=5)return;
+  obKids.push({n:'',dob:'',pin:'',col:ACOLS[obKids.length%ACOLS.length]});
+  renderObKids();
+  document.getElementById('ob-addkid-btn').style.display=obKids.length>=5?'none':'block';
+}
+
+function renderObKids(){
+  const el=document.getElementById('ob-kl');el.innerHTML='';
+  obKids.forEach((k,i)=>{
+    const d=document.createElement('div');
+    d.style.cssText='background:var(--cream);border-radius:var(--r);padding:13px;margin-bottom:10px';
+    d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+      <strong style="font-size:.875rem;color:var(--ink)">Child ${i+1}</strong>
+      ${i>0?`<button style="background:none;border:none;cursor:pointer;color:var(--il);font-size:.78rem;font-family:var(--fb)" onclick="obRmKid(${i})">Remove</button>`:''}
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px">
+      ${ACOLS.map(c=>`<div class="cs ${k.col===c?'sel':''}" style="background:${c};width:24px;height:24px" onclick="obKCol(${i},'${c}',this)"></div>`).join('')}
+    </div>
+    <div class="fg" style="margin-bottom:9px"><label class="fl">Name</label><input class="fi" placeholder="Emma" value="${k.n||''}" oninput="obKids[${i}].n=this.value.trim()"></div>
+    <div class="fg" style="margin-bottom:9px"><label class="fl">Birthdate <span style="font-weight:400;color:var(--il)">(optional)</span></label><input class="fi" type="date" value="${k.dob||''}" oninput="obKids[${i}].dob=this.value"></div>
+    <div class="fg" style="margin-bottom:0"><label class="fl">4-digit PIN <span style="font-weight:400;color:var(--il)">(child uses to access their view)</span></label><input class="fi" type="password" inputmode="numeric" maxlength="4" placeholder="1234" value="${k.pin||''}" oninput="obKids[${i}].pin=this.value"></div>`;
+    el.appendChild(d);
+  });
+  const btn=document.getElementById('ob-addkid-btn');
+  if(btn)btn.style.display=obKids.length>=5?'none':'block';
+}
+
+function obKCol(i,c,el){
+  obKids[i].col=c;
+  el.closest('div').querySelectorAll('.cs').forEach(e=>e.classList.toggle('sel',e===el));
+}
+function obRmKid(i){obKids.splice(i,1);renderObKids();}
+
+function ob2Next(){
+  // Sync any values typed but not yet saved via oninput
+  const inputs=document.querySelectorAll('#ob-kl input[placeholder="Emma"]');
+  inputs.forEach((inp,i)=>{if(obKids[i]&&inp.value.trim())obKids[i].n=inp.value.trim();});
+  const valid=obKids.filter(k=>k.n&&k.n.trim());
+  if(!valid.length){alert('Please enter at least one child\'s name to continue.');return;}
+  obKids=valid;
+  // Save family and children to state
+  S.family={id:uid(),pname:obTmp.pn,fname:obTmp.fn,email:obTmp.em,pw:obTmp.pw,created:new Date().toISOString()};
+  S.auth=true;
+  S.user={email:obTmp.em,name:obTmp.pn};
+  S.children=obKids.map(k=>({id:uid(),name:k.n,dob:k.dob||'',col:k.col,pin:k.pin||'',health:'',created:new Date().toISOString()}));
+  S.mastery={global:75,ov:{}};
+  save();
+  obKi=0;obQi=0;obPData={};
+  document.getElementById('ob2').style.display='none';
+  document.getElementById('ob3').style.display='block';
+  setObStep(3);
+  renderObQ();
+  document.getElementById('ob-card').scrollTop=0;
+}
+
 function renderObQ(){
-  const ch=S.children[obKi]; if(!ch||obQi>=OBQ.length){saveProfiles();return;}
-  const q=OBQ[obQi]; const qt=q.q.replace('{n}',ch.name);
-  document.getElementById('ob3-content').innerHTML=`<div>
+  const ch=S.children[obKi];
+  if(!ch||obQi>=OBQ.length){finishOnboard();return;}
+  const q=OBQ[obQi];
+  const qt=q.q.replace('{n}',ch.name);
+  document.getElementById('ob3-wrap').innerHTML=`<div>
     <div style="display:flex;align-items:center;gap:9px;margin-bottom:7px">
       <div class="av" style="width:34px;height:34px;background:${ch.col};font-size:.85rem">${inits(ch.name)}</div>
-      <div><p style="font-weight:600;font-size:.9375rem">${ch.name}'s learning style</p><p style="font-size:.72rem;color:var(--ink-l)">Child ${obKi+1} of ${S.children.length} · Q${obQi+1} of ${OBQ.length}</p></div>
+      <div>
+        <p style="font-weight:600;font-size:.9rem;color:var(--ink)">${ch.name}'s learning style</p>
+        <p style="font-size:.7rem;color:var(--il)">Child ${obKi+1} of ${S.children.length} · Question ${obQi+1} of ${OBQ.length}</p>
+      </div>
     </div>
-    <div style="height:5px;background:var(--cream-b);border-radius:3px;overflow:hidden;margin-bottom:14px"><div style="height:100%;background:var(--sage);width:${(obQi/OBQ.length)*100}%;transition:width .3s"></div></div>
-    <p style="font-size:.9375rem;font-weight:500;margin-bottom:13px;line-height:1.5">${qt}</p>
+    <div style="height:5px;background:var(--cb);border-radius:3px;overflow:hidden;margin-bottom:14px">
+      <div style="height:100%;background:var(--sage);width:${(obQi/OBQ.length)*100}%;transition:width .3s"></div>
+    </div>
+    <p style="font-size:.95rem;font-weight:500;margin-bottom:13px;line-height:1.55;color:var(--ink)">${qt}</p>
     <div style="display:flex;flex-direction:column;gap:7px" id="ob-opts"></div>
-    <div style="display:flex;gap:8px;margin-top:14px">${obQi>0?`<button class="btn btn-s btn-sm" onclick="obQi--;renderObQ()">← Back</button>`:''}<button class="btn btn-s btn-sm" style="margin-left:auto" onclick="obSkip()">Skip →</button></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px">
+      ${obQi>0?`<button class="btn bs bsm" onclick="obQi--;renderObQ()">← Back</button>`:'<span></span>'}
+      <button class="btn bs bsm" onclick="obSkipQ()">Skip →</button>
+    </div>
   </div>`;
   const opts=document.getElementById('ob-opts');
   q.opts.forEach(opt=>{
     const btn=document.createElement('button');
-    btn.style.cssText='padding:10px 13px;text-align:left;background:var(--cream);border:2px solid var(--cream-b);border-radius:var(--r);cursor:pointer;font-family:var(--fb);font-size:.9375rem;color:var(--ink);transition:all .15s';
+    btn.className='btn';
+    btn.style.cssText='width:100%;text-align:left;padding:11px 13px;background:var(--cream);border:2px solid var(--cb);border-radius:var(--r);font-size:.9375rem;color:var(--ink);justify-content:flex-start;transition:all .15s';
     btn.textContent=opt;
-    btn.addEventListener('mouseenter',()=>{btn.style.borderColor='var(--sage)';btn.style.background='var(--cream-d)';});
-    btn.addEventListener('mouseleave',()=>{btn.style.borderColor='var(--cream-b)';btn.style.background='var(--cream)';});
+    btn.addEventListener('mouseenter',()=>{btn.style.borderColor='var(--sage)';btn.style.background='var(--cd)';});
+    btn.addEventListener('mouseleave',()=>{btn.style.borderColor='var(--cb)';btn.style.background='var(--cream)';});
     btn.onclick=()=>{
-      const cid=S.children[obKi].id; if(!obPData[cid])obPData[cid]={};
-      const val=q.map?q.map(opt):opt; obPData[cid][q.id]=val;
-      obQi++; if(obQi>=OBQ.length){ S.profiles[cid]=obPData[cid]; save(); obKi++; if(obKi<S.children.length){obQi=0;renderObQ();}else{saveProfiles();} } else renderObQ();
+      const cid=S.children[obKi].id;
+      if(!obPData[cid])obPData[cid]={};
+      obPData[cid][q.id]=q.map?q.map(opt):opt;
+      obQi++;
+      if(obQi>=OBQ.length){
+        S.profiles[cid]=obPData[cid];save();
+        obKi++;
+        if(obKi<S.children.length){obQi=0;renderObQ();}
+        else{finishOnboard();}
+      }else{renderObQ();}
+      document.getElementById('ob-card').scrollTop=0;
     };
     opts.appendChild(btn);
   });
 }
-function obSkip(){ obQi=OBQ.length; renderObQ(); }
-function saveProfiles(){
-  Object.keys(obPData).forEach(cid=>{ S.profiles[cid]=obPData[cid]; }); save();
+function obSkipQ(){
+  // Skip remaining questions for this child, move to next or finish
+  const ch=S.children[obKi];
+  if(ch&&obPData[ch.id])S.profiles[ch.id]=obPData[ch.id];
+  obKi++;obQi=0;
+  if(obKi<S.children.length){renderObQ();}
+  else{finishOnboard();}
+}
+function finishOnboard(){
+  Object.keys(obPData).forEach(cid=>{S.profiles[cid]=obPData[cid];});
+  save();
   document.getElementById('sc-onboard').classList.remove('on');
   document.getElementById('sc-app').classList.add('on');
-  initApp(); nav('home');
+  initApp();nav('home');
 }
 
-// =====================================================
+// ════════════════════════════════════════════
 // AUTH
-// =====================================================
+// ════════════════════════════════════════════
 function doLogin(){
-  const em=document.getElementById('li-email').value.trim(), pw=document.getElementById('li-pw').value;
-  const err=document.getElementById('login-err');
-  if(!S.family){err.textContent='No account found. Please create one.';err.style.display='block';return;}
-  if(S.family.email!==em){err.textContent='Email not found.';err.style.display='block';return;}
-  if(S.family.pw!==pw){err.textContent='Incorrect password.';err.style.display='block';return;}
-  err.style.display='none'; S.auth=true; S.user={email:em,name:S.family.pname}; save();
+  const em=document.getElementById('li-em').value.trim();
+  const pw=document.getElementById('li-pw').value;
+  const err=document.getElementById('li-err');
+  if(!S.family){err.textContent='No account found on this device. Please create one.';err.style.display='block';return;}
+  if(S.family.email!==em){err.textContent='Email not recognised.';err.style.display='block';return;}
+  if(S.family.pw!==pw){err.textContent='Incorrect password. Try again.';err.style.display='block';return;}
+  err.style.display='none';S.auth=true;S.user={email:em,name:S.family.pname};save();
   document.getElementById('sc-login').classList.remove('on');
   document.getElementById('sc-app').classList.add('on');
-  initApp(); nav('home');
+  initApp();nav('home');
 }
-function logout(){ S.auth=false; save(); document.getElementById('sc-app').classList.remove('on'); document.getElementById('sc-login').classList.add('on'); document.getElementById('li-email').value=''; document.getElementById('li-pw').value=''; }
-function clearAllData(){ if(confirm('This will erase all data and let you start fresh. Are you sure?')){ localStorage.removeItem(SK); location.reload(); } }
+function doLogout(){
+  S.auth=false;save();
+  document.getElementById('sc-app').classList.remove('on');
+  document.getElementById('sc-login').classList.add('on');
+  document.getElementById('li-em').value='';
+  document.getElementById('li-pw').value='';
+  document.getElementById('li-err').style.display='none';
+}
 
-// =====================================================
-// NAV / VIEWS
-// =====================================================
+// ════════════════════════════════════════════
+// NAV / VIEW SWITCHING
+// ════════════════════════════════════════════
 const VIEWS=['home','sched','goals','kids','reports','settings','notifs','learn','assess'];
-function showView(name){ VIEWS.forEach(v=>{ const el=document.getElementById('v-'+v); if(el)el.classList.toggle('on',v===name); }); }
+const NAV_BTNS=['home','sched','goals','kids','settings'];
+function showView(name){VIEWS.forEach(v=>{const el=document.getElementById('v-'+v);if(el)el.classList.toggle('on',v===name);});}
 function nav(name){
   showView(name);
-  ['home','sched','goals','kids','settings'].forEach(v=>{ const sn=document.getElementById('sn-'+v),mn=document.getElementById('mn-'+v); if(sn)sn.classList.toggle('on',v===name); if(mn)mn.classList.toggle('on',v===name); });
-  if(name==='home')renderHome();
-  else if(name==='sched'){updSelects();renderSched();}
-  else if(name==='goals')renderGoals();
-  else if(name==='kids')renderKids();
-  else if(name==='reports'){updRChild();renderReports();}
-  else if(name==='settings')renderSettings();
-  else if(name==='notifs')renderNotifs();
+  NAV_BTNS.forEach(v=>{
+    const sn=document.getElementById('sn-'+v);
+    const mn=document.getElementById('mn-'+v);
+    if(sn)sn.classList.toggle('on',v===name);
+    if(mn)mn.classList.toggle('on',v===name);
+  });
+  if(name==='home'){renderHome();}
+  else if(name==='sched'){updSel();renderSched();}
+  else if(name==='goals'){renderGoals();}
+  else if(name==='kids'){renderKids();}
+  else if(name==='reports'){updRCh();renderRep();}
+  else if(name==='settings'){renderSettings();}
+  else if(name==='notifs'){renderNotifs();}
   window.scrollTo(0,0);
 }
-function updSelects(){
-  const sf=document.getElementById('sf-child'); if(sf)sf.innerHTML='<option value="all">All children</option>'+S.children.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+function updSel(){
+  const sf=document.getElementById('sf-ch');
+  if(sf)sf.innerHTML='<option value="all">All children</option>'+S.children.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
 }
-function updRChild(){ const rc=document.getElementById('r-child'); if(rc)rc.innerHTML=S.children.map(c=>`<option value="${c.id}">${c.name}</option>`).join(''); }
-function oMo(id){ document.getElementById(id)?.classList.remove('h'); }
-function cmo(id){ document.getElementById(id)?.classList.add('h'); }
-document.querySelectorAll('.ov').forEach(el=>el.addEventListener('click',e=>{ if(e.target===el)el.classList.add('h'); }));
+function updRCh(){const rc=document.getElementById('r-ch');if(rc)rc.innerHTML=S.children.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');}
+function oMo(id){const el=document.getElementById(id);if(el)el.classList.remove('h');}
+function cMo(id){const el=document.getElementById(id);if(el)el.classList.add('h');}
+document.querySelectorAll('.ov').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.add('h');}));
 
-// =====================================================
-// INIT
-// =====================================================
+// ════════════════════════════════════════════
+// INIT & BOOT
+// ════════════════════════════════════════════
 function initApp(){
-  document.getElementById('s-family').textContent=S.family?.fname||'';
-  document.getElementById('s-uname').textContent=S.user?.name||'';
-  document.getElementById('s-uemail').textContent=S.user?.email||'';
-  updSelects(); updBadge();
-  // Auto-reschedule overdue tasks
+  document.getElementById('sl-fname').textContent=S.family?.fname||'';
+  document.getElementById('sl-uname').textContent=S.user?.name||'';
+  document.getElementById('sl-email').textContent=S.user?.email||'';
+  updSel();updBadge();
+  // Auto-reschedule any overdue planned tasks
   const t=tod();
   const od=S.tasks.filter(tk=>tk.date<t&&tk.status==='planned');
-  od.forEach(tk=>{ const nd=nextFreeDate(tk.cid); S.tasks=S.tasks.filter(x=>x.id!==tk.id); S.tasks.push({...tk,id:uid(),date:nd,reschedFrom:tk.date}); });
+  od.forEach(tk=>{const nd=nxtDate(tk.cid);S.tasks=S.tasks.filter(x=>x.id!==tk.id);S.tasks.push({...tk,id:uid(),date:nd,reschedFrom:tk.date});});
   if(od.length)save();
 }
+
 function boot(){
   load();
+  // Remove hardcoded 'on' from home view — nav() will add it back properly
+  const homeEl=document.getElementById('v-home');
+  if(homeEl)homeEl.classList.remove('on');
   if(S.auth&&S.family){
     document.getElementById('sc-app').classList.add('on');
-    initApp(); nav('home');
-  } else if(S.family){
+    initApp();nav('home');
+  }else if(S.family){
     document.getElementById('sc-login').classList.add('on');
-  } else {
-    document.getElementById('sc-onboard').classList.add('on');
+  }else{
+    // Fresh user — go to onboarding
+    obTmp={pn:'',fn:'',em:'',pw:''};
     obKids=[{n:'',dob:'',pin:'',col:ACOLS[0]}];
-    setStep(1);
+    obPData={};obKi=0;obQi=0;
+    document.getElementById('sc-onboard').classList.add('on');
+    setObStep(1);
+    document.getElementById('ob1').style.display='block';
+    document.getElementById('ob2').style.display='none';
+    document.getElementById('ob3').style.display='none';
+    renderObKids();
   }
 }
-document.addEventListener('DOMContentLoaded', boot);
+
+document.addEventListener('DOMContentLoaded',boot);
 </script>
 </body>
 </html>

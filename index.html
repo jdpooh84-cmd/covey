@@ -1076,22 +1076,100 @@ function doPin(k){
 function renderLearnTasks(){
   const ch=S.children.find(c=>c.id===pinCid);const t=tod();
   const tasks=S.tasks.filter(tk=>tk.cid===pinCid&&tk.date===t);
+  const allFutureTasks=S.tasks.filter(tk=>tk.cid===pinCid&&tk.date>t&&tk.status==='planned').slice(0,10);
+  const allPastRetry=S.tasks.filter(tk=>tk.cid===pinCid&&(tk.status==='retry'||tk.status==='blocked'));
   const wrap=document.getElementById('learn-wrap');
+  const doneTodayCount=tasks.filter(tk=>tk.status==='done').length;
+  const allDoneToday=tasks.length>0&&doneTodayCount===tasks.length;
+
   wrap.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
     <div class="av" style="width:40px;height:40px;background:${ch.col};font-size:.92rem">${inits(ch.name)}</div>
     <div><div style="font-family:var(--fd);font-size:1.1rem">${ch.name}'s learning</div><div style="font-size:.75rem;color:var(--il)">${fDF(t)}</div></div>
     <button class="btn bs bsm" style="margin-left:auto" onclick="nav('${learnFrom}')">← Exit</button>
   </div>
-  ${!tasks.length?`<div class="card"><div class="empty"><div class="ei">🎉</div><h4>All done for today!</h4><p>No more lessons scheduled. Great work!</p></div></div>`:tasks.map(tk=>{const dot=sDot(tk.subj);const isB=tk.status==='blocked',isD=tk.status==='done',isR=tk.status==='retry';return`<div class="ti ${isB?'blocked':isD?'done':isR?'retry':''}" style="padding:14px;margin-bottom:8px;${isB?'cursor:default':''}" ${!isB?`onclick="openTask('${tk.id}','learn')"`:''}>
+
+  ${allPastRetry.length?`<div class="al aly" style="margin-bottom:10px">⚠️ ${allPastRetry.length} lesson${allPastRetry.length!==1?'s':''} need${allPastRetry.length===1?'s':''} another try or parent review.</div>`:''}
+
+  <div style="margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
+    <p style="font-size:.82rem;font-weight:600;color:var(--im)">TODAY'S LESSONS</p>
+    <span style="font-size:.72rem;color:var(--il)">${doneTodayCount}/${tasks.length} done</span>
+  </div>
+
+  ${!tasks.length
+    ?`<div class="card" style="margin-bottom:14px"><div class="empty" style="padding:18px"><div class="ei">🎉</div><h4>Nothing scheduled today</h4><p>No lessons were planned for today. Browse lessons below to keep learning!</p></div></div>`
+    :tasks.map(tk=>{const dot=sDot(tk.subj);const isB=tk.status==='blocked',isD=tk.status==='done',isR=tk.status==='retry';return`<div class="ti ${isB?'blocked':isD?'done':isR?'retry':''}" style="padding:14px;margin-bottom:8px;${isB?'cursor:default':''}" ${!isB?`onclick="openTask('${tk.id}','learn')"`:''}>
     <div style="width:11px;height:11px;border-radius:50%;background:${dot};flex-shrink:0"></div>
     <div style="flex:1;min-width:0"><div style="font-size:.95rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tk.title}</div><div style="font-size:.75rem;color:var(--il)">${tk.subj} · ${tk.mins} min</div></div>
     ${isD?'<span style="font-size:1.3rem">✅</span>':isB?'<span style="font-size:1rem">🔒</span>':isR?'<span class="badge by" style="font-size:.78rem">Try again →</span>':'<span class="btn bp bsm">Start →</span>'}
-  </div>`}).join('')}`;
+  </div>`;}).join('')}
+
+  ${allDoneToday?`<div style="background:#EEF7EF;border-radius:var(--r);padding:12px;text-align:center;margin-bottom:14px">
+    <p style="font-size:.9rem;font-weight:600;color:var(--sd)">🌟 All done for today — amazing work!</p>
+    <p style="font-size:.78rem;color:var(--il);margin-top:3px">Want to keep going? Browse more lessons below.</p>
+  </div>`:''}
+
+  <div style="border-top:1.5px solid var(--cb);margin:16px 0 12px"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <p style="font-size:.82rem;font-weight:600;color:var(--im)">BROWSE ALL LESSONS</p>
+    <button class="btn bs bsm" onclick="nav('curric')">Full curriculum →</button>
+  </div>
+  <p style="font-size:.78rem;color:var(--il);margin-bottom:10px">You can open any lesson at any time — not just today's scheduled ones.</p>
+
+  ${Object.keys(CURRICULUM).map(subj=>{
+    const grade=S.profiles[ch.id]?.grade||'';
+    if(!grade)return'';
+    const objs=CURRICULUM[subj]?.[grade];
+    if(!objs||!objs.length)return'';
+    const progress=S.profiles[ch.id]?.curricProgress?.[subj]||{};
+    const nextObj=objs.find(o=>!progress[o.id]||progress[o.id]!=='done');
+    const doneCount=objs.filter(o=>progress[o.id]==='done').length;
+    return`<div style="background:white;border-radius:var(--r);box-shadow:var(--sh);padding:12px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:1.1rem">${sEmo(subj)}</span>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:.875rem">${subj}</div>
+          <div style="font-size:.72rem;color:var(--il)">${doneCount}/${objs.length} objectives done</div>
+        </div>
+        <div class="pb" style="width:80px"><div class="pf" style="width:${Math.round(doneCount/objs.length*100)}%;background:${sDot(subj)}"></div></div>
+      </div>
+      ${nextObj?`<button onclick="openLesson('${nextObj.id}','${subj}','${grade}','${ch.id}','learn')" class="btn bp bsm" style="width:100%;text-align:left">▶ Continue: ${nextObj.title} →</button>`:'<p style="font-size:.78rem;color:var(--sd);font-weight:600">✅ All ${subj} objectives complete!</p>'}
+      ${objs.filter(o=>o.id!==nextObj?.id).slice(0,2).map(o=>{const done=progress[o.id]==='done';return`<button onclick="openLesson('${o.id}','${subj}','${grade}','${ch.id}','learn')" style="width:100%;text-align:left;padding:7px 10px;border:1.5px solid var(--cb);border-radius:var(--r);background:${done?'#EEF7EF':'white'};cursor:pointer;font-family:var(--fb);font-size:.78rem;color:var(--im);margin-top:5px;display:block">${done?'✓ Review:':''} ${o.title}</button>`;}).join('')}
+      <button onclick="showAllSubjLessons('${subj}','${grade}','${ch.id}')" style="background:none;border:none;cursor:pointer;color:var(--sd);font-size:.72rem;font-weight:600;font-family:var(--fb);margin-top:6px;padding:0">See all ${objs.length} ${subj} lessons →</button>
+    </div>`;
+  }).join('')}`;
 }
 
-// ════════════════════════════════════════════
-// ASSESSMENT ENGINE
-// ════════════════════════════════════════════
+function showAllSubjLessons(subj, grade, childId) {
+  const ch=S.children.find(c=>c.id===childId);
+  const objs=CURRICULUM[subj]?.[grade]||[];
+  const progress=S.profiles[childId]?.curricProgress?.[subj]||{};
+  const wrap=document.getElementById('learn-wrap');
+  wrap.innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <button class="btn bs bsm" onclick="renderLearnTasks()">← Back</button>
+      <div>
+        <div style="font-family:var(--fd);font-size:1.05rem">${sEmo(subj)} ${subj}</div>
+        <div style="font-size:.75rem;color:var(--il)">${GRADE_LABELS[grade]||grade} · All ${objs.length} lessons</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${objs.map((obj,i)=>{
+        const done=progress[obj.id]==='done';
+        return`<div style="background:white;border-radius:var(--r);box-shadow:var(--sh);padding:13px;border-left:4px solid ${done?'var(--sage)':'var(--cb)'}">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:24px;height:24px;border-radius:50%;background:${done?'var(--sage)':'var(--cb)'};display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:${done?'white':'var(--il)'};flex-shrink:0">${done?'✓':i+1}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:.875rem">${obj.title}</div>
+              <div style="font-size:.72rem;color:var(--il)">~${obj.weeks} week${obj.weeks!==1?'s':''} · ${obj.test}</div>
+            </div>
+            <button onclick="openLesson('${obj.id}','${subj}','${grade}','${childId}','learn')" class="btn bsm" style="background:${done?'#EEF7EF':'var(--sage)'};color:${done?'var(--sd)':'white'};flex-shrink:0">${done?'Review':'Open →'}</button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+
 let curTid='',curQs=[],curQi=0,curResps=[],wrAns='',wrSub=false,selOpt=null,curAtt=0,retryEx=null,phase='intro',taskFrom='home';
 function openTask(tid,from){
   curTid=tid;curQs=[];curQi=0;curResps=[];wrAns='';wrSub=false;selOpt=null;retryEx=null;phase='intro';
@@ -2577,14 +2655,15 @@ let langTab='', langChildId='', langLang='Spanish', langLevel=0, langUnit=-1;
 function renderCurric(){
   const tabs=document.getElementById('cur-child-tabs');
   const con=document.getElementById('cur-content');
-  if(!S.children.length){con.innerHTML=`<div class="card"><div class="empty"><div class="ei">📚</div><h4>Add children first</h4><p>Add your children so you can assign and view curriculum by grade level.</p><button class="btn bp" onclick="nav('kids')">Add children →</button></div></div>`;tabs.style.display='none';return;}
+  if(!S.children.length){con.innerHTML=`<div class="card"><div class="empty"><div class="ei">📚</div><h4>Add children first</h4><p>Add children to view and plan curriculum.</p><button class="btn bp" onclick="nav('kids')">Add children →</button></div></div>`;tabs.style.display='none';return;}
   if(S.children.length>1){tabs.style.display='flex';if(!curTab||!S.children.find(c=>c.id===curTab))curTab=S.children[0].id;tabs.innerHTML=S.children.map(c=>`<button class="tab ${curTab===c.id?'on':''}" onclick="setCurTab('${c.id}')">${c.name}</button>`).join('');}else{tabs.style.display='none';curTab=S.children[0]?.id||'';}
-  const child=S.children.find(c=>c.id===curTab);
-  if(!child)return;
+  const child=S.children.find(c=>c.id===curTab);if(!child)return;
   const assignedGrade=S.profiles[child.id]?.grade||'';
-  const SUBJS=Object.keys(CURRICULUM);
   const GRADE_ORDER=['preK','K','1','2','3','4','5','6','7','8','9','10','11','12'];
+  const SUBJS=Object.keys(CURRICULUM);
+
   con.innerHTML=`
+    <!-- Grade selector -->
     <div class="card" style="margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
         <div>
@@ -2594,77 +2673,220 @@ function renderCurric(){
             ${GRADE_ORDER.map(g=>`<option value="${g}" ${assignedGrade===g?'selected':''}>${GRADE_LABELS[g]||g}</option>`).join('')}
           </select>
         </div>
-        ${assignedGrade?`<div style="background:#EEF7EF;border-radius:var(--r);padding:10px 14px"><p style="font-size:.8rem;color:var(--sd)">✅ ${child.name} is set to <strong>${GRADE_LABELS[assignedGrade]||assignedGrade}</strong></p><p style="font-size:.72rem;color:var(--il)">Can be changed anytime — move up or down as needed</p></div>`:''}
+        ${assignedGrade?`<div style="background:#EEF7EF;border-radius:var(--r);padding:10px 14px"><p style="font-size:.8rem;color:var(--sd)">✅ <strong>${GRADE_LABELS[assignedGrade]||assignedGrade}</strong></p><p style="font-size:.72rem;color:var(--il)">Change anytime — move up or down per subject as needed</p></div>`:''}
       </div>
     </div>
+
     ${assignedGrade?`
-    <div style="margin-bottom:12px">
-      <p style="font-size:.82rem;font-weight:600;color:var(--im);margin-bottom:8px">View subject curriculum:</p>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        ${SUBJS.map(s=>`<button class="btn bsm ${curSubject===s?'bp':'bs'}" onclick="setCurSubj('${s}')">${s}</button>`).join('')}
-      </div>
+    <!-- View switcher -->
+    <div class="tabs" style="margin-bottom:14px">
+      <button class="tab ${curView==='plan'?'on':''}" onclick="curView='plan';renderCurric()">📅 180-Day Plan</button>
+      <button class="tab ${curView==='objectives'?'on':''}" onclick="curView='objectives';renderCurric()">📋 Objectives by Subject</button>
+      <button class="tab ${curView==='allsubjects'?'on':''}" onclick="curView='allsubjects';renderCurric()">📊 All Subjects Overview</button>
     </div>
-    <div id="cur-objectives"></div>
+    <div id="cur-main-view"></div>
     `:
-    `<div class="card"><div class="empty"><div class="ei">🎓</div><h4>Select a grade level for ${child.name}</h4><p>Once you set the grade, you can see all curriculum objectives, preview the full plan, and print it for state compliance.</p></div></div>`}`;
-  if(assignedGrade) renderCurricObjectives(child, assignedGrade);
+    `<div class="card"><div class="empty"><div class="ei">🎓</div><h4>Select a grade level for ${child.name}</h4><p>Once you set the grade, you can see the full 180-day lesson plan, all objectives, and print your compliance report.</p></div></div>`}`;
+
+  if(assignedGrade) renderCurricView(child, assignedGrade);
 }
 
-function setCurTab(id){curTab=id;renderCurric();}
-function setCurGrade(grade, childId){
-  if(!S.profiles[childId])S.profiles[childId]={};
-  S.profiles[childId].grade=grade;
-  save();renderCurric();
-}
-function setCurSubj(s){curSubject=s;
-  const child=S.children.find(c=>c.id===curTab);
-  const grade=S.profiles[child?.id]?.grade||'';
-  if(child&&grade)renderCurricObjectives(child,grade);
+let curView='plan';
+
+function renderCurricView(child, grade){
+  const el=document.getElementById('cur-main-view');if(!el)return;
+  if(curView==='plan') renderYearPlan(child, grade, el);
+  else if(curView==='objectives') renderCurricObjectives(child, grade);
+  else if(curView==='allsubjects') renderAllSubjects(child, grade, el);
 }
 
-function renderCurricObjectives(child, grade){
-  const el=document.getElementById('cur-objectives');if(!el)return;
-  const objs=CURRICULUM[curSubject]?.[grade];
-  if(!objs||!objs.length){el.innerHTML=`<div class="card"><p style="color:var(--il);font-size:.875rem;padding:8px">No curriculum defined for ${curSubject} at this grade level.</p></div>`;return;}
-  const progress=S.profiles[child.id]?.curricProgress?.[curSubject]||{};
-  const totalWeeks=objs.reduce((a,b)=>a+(b.weeks||2),0);
-  const completedCount=objs.filter(o=>progress[o.id]==='done').length;
+function renderYearPlan(child, grade, el){
+  const SUBJS=Object.keys(CURRICULUM);
+  const progress=S.profiles[child.id]?.curricProgress||{};
+
+  // Build the full year plan — spread all objectives across 180 school days
+  // 5 subjects, rotating so each gets equal time, with multi-week objectives spanning multiple days
+  const yearPlan=[]; // Array of 180 items, each = {day, date, subj, obj, sessionNum, totalSessions}
+  const schoolStart=new Date(new Date().getFullYear(),7,25); // Aug 25 start
+  let dayCount=0;
+  const subjQueues={};
+
+  SUBJS.forEach(subj=>{
+    const objs=CURRICULUM[subj]?.[grade]||[];
+    subjQueues[subj]=[];
+    objs.forEach(obj=>{
+      const sessions=Math.max(1,obj.weeks*3); // ~3 sessions per week per subject = full coverage
+      for(let s=0;s<sessions;s++){
+        subjQueues[subj].push({obj,session:s+1,total:sessions});
+      }
+    });
+  });
+
+  // Interleave subjects across school days (Mon-Fri)
+  let d=new Date(schoolStart);
+  let schoolDay=0;
+  const subjCycle=SUBJS.filter(s=>subjQueues[s].length>0);
+  const subjIdx={}; SUBJS.forEach(s=>subjIdx[s]=0);
+
+  while(schoolDay<180){
+    const dow=d.getDay();
+    if(dow>=1&&dow<=5){ // Monday-Friday only
+      const activeSubjs=SUBJS.filter(s=>subjIdx[s]<subjQueues[s].length);
+      if(!activeSubjs.length){schoolDay++;d.setDate(d.getDate()+1);continue;}
+      // Each school day covers 2-3 subjects
+      const daySubjs=activeSubjs.slice((schoolDay*2)%activeSubjs.length,((schoolDay*2)%activeSubjs.length)+2);
+      daySubjs.forEach(subj=>{
+        if(subjIdx[subj]<subjQueues[subj].length){
+          const item=subjQueues[subj][subjIdx[subj]];
+          yearPlan.push({
+            day:schoolDay+1,
+            date:d.toISOString().split('T')[0],
+            subj,
+            obj:item.obj,
+            session:item.session,
+            total:item.total
+          });
+          subjIdx[subj]++;
+        }
+      });
+      schoolDay++;
+    }
+    d.setDate(d.getDate()+1);
+  }
+
+  // Group by week for display
+  const weeks={};
+  yearPlan.forEach(item=>{
+    const wk=Math.ceil(item.day/5);
+    if(!weeks[wk])weeks[wk]=[];
+    weeks[wk].push(item);
+  });
+
+  const totalDays=Object.keys(weeks).length*5;
+  const completedObjs=SUBJS.reduce((a,subj)=>{
+    return a+Object.values(progress[subj]||{}).filter(v=>v==='done').length;
+  },0);
+  const totalObjs=SUBJS.reduce((a,subj)=>a+(CURRICULUM[subj]?.[grade]?.length||0),0);
+
   el.innerHTML=`
-    <div class="card" style="margin-bottom:10px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
         <div>
-          <h3 style="font-family:var(--fd);font-size:1rem">${curSubject} — ${GRADE_LABELS[grade]||grade}</h3>
-          <p style="font-size:.75rem;color:var(--il)">${objs.length} objectives · ~${totalWeeks} weeks · ${completedCount} completed</p>
+          <h3 style="font-family:var(--fd);font-size:1rem">Full Year Plan — ${child.name}</h3>
+          <p style="font-size:.75rem;color:var(--il)">${GRADE_LABELS[grade]||grade} · 180 school days · ${totalObjs} objectives across ${SUBJS.length} subjects</p>
         </div>
-        <button class="btn bs bsm" onclick="printCurriculum()">🖨️ Print / Export</button>
+        <button class="btn bp bsm" onclick="printCurriculum()">🖨️ Print compliance report</button>
       </div>
-      <div class="pb" style="margin-bottom:4px"><div class="pf" style="width:${objs.length?Math.round(completedCount/objs.length*100):0}%;background:${sDot(curSubject)}"></div></div>
-      <p style="font-size:.68rem;color:var(--if)">${objs.length?Math.round(completedCount/objs.length*100):0}% of objectives completed</p>
+      <div class="pb" style="margin-bottom:4px"><div class="pf" style="width:${totalObjs?Math.round(completedObjs/totalObjs*100):0}%;background:var(--sage)"></div></div>
+      <p style="font-size:.68rem;color:var(--if)">${completedObjs} of ${totalObjs} objectives completed · ${Math.round(completedObjs/totalObjs*100)||0}% of the year done</p>
     </div>
-    <div style="display:flex;flex-direction:column;gap:8px">
-      ${objs.map((obj,i)=>{
-        const status=progress[obj.id]||'pending';
-        const isDone=status==='done';
-        const testColors={'quiz':'var(--sky)','project':'var(--terra)','written':'var(--plum,#8B5E8B)','oral':'var(--sun)'};
-        const testLabels={'quiz':'📝 Quiz','project':'🔬 Project','written':'✍️ Written','oral':'🗣️ Oral'};
-        return`<div style="background:white;border-radius:var(--r);box-shadow:var(--sh);padding:14px;border-left:4px solid ${isDone?'var(--sage)':i===completedCount?'var(--sun)':'var(--cb)'}">
-          <div style="display:flex;align-items:flex-start;gap:10px">
-            <div style="width:26px;height:26px;border-radius:50%;background:${isDone?'var(--sage)':i===completedCount?'var(--sun)':'var(--cb)'};display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:${isDone||i===completedCount?'white':'var(--il)'};flex-shrink:0">${isDone?'✓':i+1}</div>
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:3px">
-                <span style="font-weight:600;font-size:.9rem">${obj.title}</span>
-                <span style="font-size:.68rem;background:${testColors[obj.test]||'var(--cb)'};color:white;padding:1px 7px;border-radius:99px">${testLabels[obj.test]||obj.test}</span>
-                <span style="font-size:.68rem;color:var(--il)">~${obj.weeks} week${obj.weeks!==1?'s':''}</span>
-              </div>
-              <p style="font-size:.8rem;color:var(--im);line-height:1.5;margin-bottom:5px">${obj.desc}</p>
-              <p style="font-size:.68rem;color:var(--if)">Standard: ${obj.std}</p>
+
+    <!-- Subject legend -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      ${SUBJS.map(s=>`<div style="display:flex;align-items:center;gap:4px"><div style="width:12px;height:12px;border-radius:3px;background:${sDot(s)}"></div><span style="font-size:.72rem;color:var(--im)">${s}</span></div>`).join('')}
+    </div>
+
+    <!-- Week-by-week plan -->
+    <div style="display:flex;flex-direction:column;gap:6px" id="year-plan-list">
+      ${Object.entries(weeks).slice(0,curWeeksShown||8).map(([wk,items])=>{
+        const weekDays=[...new Set(items.map(i=>i.date))];
+        const startDate=weekDays[0];
+        const endDate=weekDays[weekDays.length-1];
+        const hasCompleted=items.some(i=>(progress[i.subj]||{})[i.obj.id]==='done');
+        return`<div style="background:white;border-radius:var(--r);box-shadow:var(--sh);overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:${hasCompleted?'#EEF7EF':'white'};border-bottom:1px solid var(--cb);cursor:pointer" onclick="toggleWeek(${wk})">
+            <div>
+              <span style="font-weight:600;font-size:.875rem">Week ${wk} — Days ${(parseInt(wk)-1)*5+1}–${Math.min(parseInt(wk)*5,180)}</span>
+              <span style="font-size:.72rem;color:var(--il);margin-left:8px">${fD(startDate)} – ${fD(endDate)}</span>
             </div>
-            <button onclick="toggleCurricObj('${child.id}','${curSubject}','${obj.id}')" style="background:${isDone?'var(--sage)':'var(--cd)'};border:none;border-radius:6px;padding:5px 10px;font-size:.72rem;font-weight:600;color:${isDone?'white':'var(--im)'};cursor:pointer;flex-shrink:0;font-family:var(--fb)">${isDone?'✓ Done':'Mark done'}</button>
+            <span id="wk-arrow-${wk}" style="color:var(--il);font-size:.85rem">▼</span>
+          </div>
+          <div id="wk-body-${wk}" style="display:none;padding:10px 14px">
+            ${weekDays.map(date=>{
+              const dayItems=items.filter(i=>i.date===date);
+              const dow=new Date(date+'T00:00:00').toLocaleDateString('en-US',{weekday:'short'});
+              const dayNum=dayItems[0]?.day||'';
+              const isToday=date===tod();
+              return`<div style="margin-bottom:8px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+                  <div style="font-size:.72rem;font-weight:700;color:${isToday?'var(--sd)':'var(--il)'};min-width:60px">${dow} · Day ${dayNum}</div>
+                  ${isToday?'<span style="font-size:.65rem;background:var(--sage);color:white;padding:1px 7px;border-radius:99px">TODAY</span>':''}
+                </div>
+                ${dayItems.map(item=>{
+                  const isDone=(progress[item.subj]||{})[item.obj.id]==='done';
+                  return`<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--r);background:${isDone?'#EEF7EF':'var(--cream)'};margin-bottom:4px;border-left:3px solid ${sDot(item.subj)}">
+                    <span style="font-size:.7rem;font-weight:600;min-width:70px;color:${sDot(item.subj)}">${item.subj.slice(0,5)}</span>
+                    <span style="flex:1;font-size:.82rem;color:var(--ink)">${item.obj.title} <span style="color:var(--il);font-size:.7rem">· Session ${item.session}/${item.total}</span></span>
+                    ${isDone?'<span style="font-size:.85rem">✅</span>':''}
+                    <button onclick="openLesson('${item.obj.id}','${item.subj}','${grade}','${child.id}','curric')" class="btn bsm" style="background:${isDone?'var(--cd)':'var(--sage)'};color:${isDone?'var(--im)':'white'};padding:4px 10px;font-size:.7rem;flex-shrink:0">${isDone?'Review':'Open'}</button>
+                  </div>`;
+                }).join('')}
+              </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    ${Object.keys(weeks).length>(curWeeksShown||8)?`<button class="btn bs bw" style="margin-top:10px" onclick="curWeeksShown=(curWeeksShown||8)+8;renderCurricView(S.children.find(c=>c.id==='${child.id}'),'${grade}')">Load more weeks (${Object.keys(weeks).length-(curWeeksShown||8)} remaining) →</button>`:''}`;
+}
+
+let curWeeksShown=8;
+function toggleWeek(wk){
+  const body=document.getElementById('wk-body-'+wk);
+  const arrow=document.getElementById('wk-arrow-'+wk);
+  if(!body)return;
+  const isOpen=body.style.display!=='none';
+  body.style.display=isOpen?'none':'block';
+  if(arrow)arrow.textContent=isOpen?'▼':'▲';
+}
+
+function renderAllSubjects(child, grade, el){
+  const SUBJS=Object.keys(CURRICULUM);
+  const progress=S.profiles[child.id]?.curricProgress||{};
+  el.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+      <h3 style="font-family:var(--fd);font-size:1rem">All Subjects — ${GRADE_LABELS[grade]||grade}</h3>
+      <button class="btn bp bsm" onclick="printCurriculum()">🖨️ Print report</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${SUBJS.map(subj=>{
+        const objs=CURRICULUM[subj]?.[grade]||[];
+        if(!objs.length)return'';
+        const subjProg=progress[subj]||{};
+        const done=objs.filter(o=>subjProg[o.id]==='done').length;
+        const pct=Math.round(done/objs.length*100)||0;
+        const totalWeeks=objs.reduce((a,b)=>a+(b.weeks||2),0);
+        return`<div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <span style="font-size:1.3rem">${sEmo(subj)}</span>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:.95rem">${subj}</div>
+              <div style="font-size:.72rem;color:var(--il)">${objs.length} objectives · ~${totalWeeks} weeks</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:var(--fd);font-size:1.1rem;font-weight:700;color:${sDot(subj)}">${pct}%</div>
+              <div style="font-size:.65rem;color:var(--if)">${done}/${objs.length} done</div>
+            </div>
+          </div>
+          <div class="pb" style="margin-bottom:10px"><div class="pf" style="width:${pct}%;background:${sDot(subj)}"></div></div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            ${objs.map((obj,i)=>{
+              const isDone=subjProg[obj.id]==='done';
+              const isCurrent=!isDone&&i===done;
+              return`<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--r);background:${isDone?'#EEF7EF':isCurrent?'var(--sunp)':'var(--cream)'};border-left:3px solid ${isDone?'var(--sage)':isCurrent?'var(--sun)':'var(--cb)'}">
+                <span style="font-size:.72rem;font-weight:700;min-width:18px;color:${isDone?'var(--sd)':isCurrent?'#8B6914':'var(--if)'}">${isDone?'✓':i+1}</span>
+                <span style="flex:1;font-size:.82rem;color:var(--ink)">${obj.title}</span>
+                <span style="font-size:.68rem;color:var(--il);flex-shrink:0">~${obj.weeks}wk</span>
+                <button onclick="openLesson('${obj.id}','${subj}','${grade}','${child.id}','curric')" class="btn bsm" style="background:${isDone?'var(--cd)':'var(--sage)'};color:${isDone?'var(--im)':'white'};padding:4px 10px;font-size:.7rem;flex-shrink:0">${isDone?'Review':'Open'}</button>
+              </div>`;
+            }).join('')}
           </div>
         </div>`;
       }).join('')}
     </div>`;
 }
+
+
 
 function toggleCurricObj(childId, subj, objId){
   if(!S.profiles[childId])S.profiles[childId]={};
@@ -2677,6 +2899,9 @@ function toggleCurricObj(childId, subj, objId){
   const grade=S.profiles[childId]?.grade||'';
   if(child&&grade)renderCurricObjectives(child,grade);
 }
+function setCurTab(id){curTab=id;curWeeksShown=8;renderCurric();}
+function setCurGrade(grade,childId){if(!S.profiles[childId])S.profiles[childId]={};S.profiles[childId].grade=grade;curWeeksShown=8;save();renderCurric();}
+function setCurSubj(s){curSubject=s;const child=S.children.find(c=>c.id===curTab);const grade=S.profiles[child?.id]?.grade||'';if(child&&grade){curView='objectives';renderCurric();}}
 
 function printCurriculum(){
   const child=S.children.find(c=>c.id===curTab);

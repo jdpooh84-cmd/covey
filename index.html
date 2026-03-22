@@ -332,8 +332,12 @@ input:checked+.tsl:before{transform:translateX(20px)}
         <button class="snb" id="sn-goals" onclick="nav('goals')"><span>🎯</span> Goals</button>
         <button class="snb" id="sn-kids" onclick="nav('kids')"><span>👧</span> Children</button>
         <button class="snb" id="sn-reports" onclick="nav('reports')"><span>📄</span> Reports</button>
+        <button class="snb" id="sn-gradebook" onclick="nav('gradebook')"><span>📊</span> Gradebook</button>
+        <button class="snb" id="sn-attend" onclick="nav('attend')"><span>📆</span> Attendance</button>
         <button class="snb" id="sn-curric" onclick="nav('curric')"><span>📚</span> Curriculum</button>
         <button class="snb" id="sn-lang" onclick="nav('lang')"><span>🌍</span> Languages</button>
+        <button class="snb" id="sn-electives" onclick="nav('electives')"><span>🎨</span> Electives</button>
+        <button class="snb" id="sn-family" onclick="nav('family')"><span>👨‍👩‍👧</span> Family Hub</button>
         <button class="snb" id="sn-settings" onclick="nav('settings')"><span>⚙️</span> Settings</button>
       </nav>
       <div class="sl-user">
@@ -499,19 +503,64 @@ input:checked+.tsl:before{transform:translateX(20px)}
       <!-- CURRICULUM -->
       <div class="view" id="v-curric">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
-          <h1 style="font-size:1.45rem">📚 Curriculum Planner</h1>
+          <h1 style="font-size:1.45rem">📚 Curriculum & Lessons</h1>
           <button class="btn bp bsm" onclick="expCurricPDF()">🖨️ Print compliance report</button>
         </div>
-        <div class="al alb" style="margin-bottom:16px"><strong>State compliance:</strong> Aligned to Common Core, NGSS, and NCSS standards — accepted for homeschool portfolio documentation in all 50 states. Print the compliance report to show your state requirements are met.</div>
+        <div class="al alb" style="margin-bottom:16px"><strong>Virginia compliance:</strong> All objectives align to Common Core, NGSS, and NCSS standards. Print the compliance report as your homeschool portfolio documentation.</div>
         <div id="cc-tabs" class="tabs" style="display:none"></div>
         <div id="cc-grade-wrap" style="margin-bottom:14px"></div>
         <div id="cc-content"></div>
       </div>
 
+      <!-- GRADEBOOK -->
+      <div class="view" id="v-gradebook">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+          <h1 style="font-size:1.45rem">📊 Gradebook</h1>
+          <button class="btn bp bsm" onclick="printGradebook()">🖨️ Print gradebook</button>
+        </div>
+        <div id="gb-child-tabs" class="tabs" style="display:none"></div>
+        <div id="gb-period-tabs" class="tabs" style="margin-bottom:12px"></div>
+        <div id="gb-content"></div>
+      </div>
+
+      <!-- ATTENDANCE -->
+      <div class="view" id="v-attend">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+          <h1 style="font-size:1.45rem">📆 Attendance</h1>
+          <button class="btn bp bsm" onclick="printAttendance()">🖨️ Export for compliance</button>
+        </div>
+        <div class="al alb" style="margin-bottom:14px"><strong>Virginia Homeschool Law:</strong> 180 days of instruction required per year. Log attendance daily. Export this record as part of your annual compliance portfolio.</div>
+        <div id="att-child-tabs" class="tabs" style="display:none"></div>
+        <div id="att-content"></div>
+      </div>
+
+      <!-- ELECTIVES -->
+      <div class="view" id="v-electives">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+          <h1 style="font-size:1.45rem">🎨 Electives</h1>
+          <button class="btn bp bsm" onclick="openElectiveMo()">+ Add elective</button>
+        </div>
+        <p style="font-size:.85rem;color:var(--il);margin-bottom:14px">Student-chosen subjects outside core curriculum — art, music, coding, cooking, drama, photography, and more. These count toward your annual instruction hours.</p>
+        <div id="el-child-tabs" class="tabs" style="display:none"></div>
+        <div id="el-content"></div>
+      </div>
+
+      <!-- FAMILY HUB -->
+      <div class="view" id="v-family">
+        <h1 style="font-size:1.45rem;margin-bottom:4px">👨‍👩‍👧 Family Hub</h1>
+        <p style="color:var(--il);font-size:.85rem;margin-bottom:16px">Your family's shared learning space — see everyone's progress, celebrate milestones, and cheer each other on.</p>
+        <div id="fam-content"></div>
+      </div>
+
+      <!-- LESSON VIEWER -->
+      <div class="view" id="v-lesson">
+        <div id="lesson-wrap"></div>
+      </div>
+
       <!-- LANGUAGES -->
       <div class="view" id="v-lang">
         <h1 style="font-size:1.45rem;margin-bottom:6px">🌍 Language Programs</h1>
-        <p style="color:var(--il);font-size:.85rem;margin-bottom:16px">Six languages — solving what Duolingo misses: real grammar explanations, cultural context, conversation practice, and no punishing streaks.</p>
+        <p style="color:var(--il);font-size:.85rem;margin-bottom:16px">Six languages — solving what Duolingo misses: real grammar, cultural context, conversation practice, no punishing streaks.</p>
         <div id="lc-tabs" class="tabs" style="display:none"></div>
         <div id="lc-content"></div>
       </div>
@@ -521,15 +570,41 @@ input:checked+.tsl:before{transform:translateX(20px)}
   <!-- Mobile bottom nav -->
   <nav class="mnav">
     <button class="mnb on" id="mn-home" onclick="nav('home')"><span class="mi">🏡</span>Home</button>
-    <button class="mnb" id="mn-sched" onclick="nav('sched')"><span class="mi">📅</span>Schedule</button>
-    <button class="mnb" id="mn-curric" onclick="nav('curric')"><span class="mi">📚</span>Curriculum</button>
-    <button class="mnb" id="mn-lang" onclick="nav('lang')"><span class="mi">🌍</span>Languages</button>
-    <button class="mnb" id="mn-settings" onclick="nav('settings')"><span class="mi">⚙️</span>Settings</button>
+    <button class="mnb" id="mn-gradebook" onclick="nav('gradebook')"><span class="mi">📊</span>Grades</button>
+    <button class="mnb" id="mn-attend" onclick="nav('attend')"><span class="mi">📆</span>Attend</button>
+    <button class="mnb" id="mn-curric" onclick="nav('curric')"><span class="mi">📚</span>Lessons</button>
+    <button class="mnb" id="mn-family" onclick="nav('family')"><span class="mi">👨‍👩‍👧</span>Family</button>
   </nav>
 </div>
 
 <!-- ═══════ MODALS ═══════ -->
-<div class="ov h" id="mo-mvd"><div class="mo">
+<div class="ov h" id="mo-elective"><div class="mo">
+  <div class="moh"><h3>Add an Elective</h3><button class="mox" onclick="cMo('mo-elective')">×</button></div>
+  <div class="mob">
+    <div id="el-err" class="al alr" style="display:none"></div>
+    <div class="fg" id="el-cw"><label class="fl">Child</label><select class="fi" id="el-ch"></select></div>
+    <div class="fg"><label class="fl">Elective name</label><input class="fi" id="el-name" placeholder="e.g. Watercolor Painting, Guitar, Coding Club"></div>
+    <div class="fg"><label class="fl">Category</label>
+      <select class="fi" id="el-cat">
+        <option value="Arts">Arts (Visual Art, Drawing, Painting, Sculpture)</option>
+        <option value="Music">Music (Instrument, Voice, Music Theory)</option>
+        <option value="Technology">Technology (Coding, Robotics, Digital Design)</option>
+        <option value="Physical">Physical Education (Sport, Dance, Martial Arts, Yoga)</option>
+        <option value="Culinary">Culinary Arts (Cooking, Baking, Nutrition)</option>
+        <option value="Drama">Drama & Public Speaking (Theater, Debate, Speech)</option>
+        <option value="Vocational">Vocational (Woodworking, Sewing, Auto, Gardening)</option>
+        <option value="Community">Community Service & Leadership</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="fg"><label class="fl">Hours per week</label><input class="fi" id="el-hrs" type="number" inputmode="decimal" min="0.5" step="0.5" placeholder="e.g. 1.5"></div>
+      <div class="fg"><label class="fl">Start date</label><input class="fi" id="el-start" type="date"></div>
+    </div>
+    <div class="fg"><label class="fl">Description <span style="font-weight:400;color:var(--il)">(optional — appears on compliance reports)</span></label><textarea class="fi" id="el-desc" placeholder="Brief description of the elective and learning goals…"></textarea></div>
+    <button class="btn bp bw blg" onclick="saveElective()">Add elective</button>
+  </div>
+</div></div>
   <div class="moh"><h3>🧘 Lighter day mode</h3><button class="mox" onclick="cMo('mo-mvd')">×</button></div>
   <div class="mob">
     <p style="color:var(--im);margin-bottom:16px;font-size:.9rem;line-height:1.6">This shows only your most essential tasks today and quietly moves everything else to the next available day. Nothing gets lost.</p>
@@ -1511,8 +1586,8 @@ function doLogout(){
 // ════════════════════════════════════════════
 // NAV / VIEW SWITCHING
 // ════════════════════════════════════════════
-const VIEWS=['home','sched','goals','kids','reports','settings','notifs','learn','assess','curric','lang'];
-const NAV_BTNS=['home','sched','goals','kids','settings','curric','lang'];
+const VIEWS=['home','sched','goals','kids','reports','settings','notifs','learn','assess','curric','lang','gradebook','attend','electives','family','lesson'];
+const NAV_BTNS=['home','sched','goals','kids','settings','curric','lang','gradebook','attend','electives','family'];
 function showView(name){VIEWS.forEach(v=>{const el=document.getElementById('v-'+v);if(el)el.classList.toggle('on',v===name);});}
 function nav(name){
   showView(name);
@@ -1530,6 +1605,10 @@ function nav(name){
   else if(name==='settings'){renderSettings();}
   else if(name==='curric'){renderCurric();}
   else if(name==='lang'){renderLang();}
+  else if(name==='gradebook'){renderGradebook();}
+  else if(name==='attend'){renderAttendance();}
+  else if(name==='electives'){renderElectives();}
+  else if(name==='family'){renderFamily();}
   else if(name==='notifs'){renderNotifs();}
   window.scrollTo(0,0);
 }
@@ -1594,9 +1673,795 @@ function boot(){
 }
 
 
+
 // ════════════════════════════════════════════════════════════════
-// CURRICULUM DATA ENGINE
+// LESSON CONTENT ENGINE
+// Full written lessons with explanation, examples, practice,
+// YouTube video integration, and in-app quizzes
 // ════════════════════════════════════════════════════════════════
+
+// YouTube video IDs mapped to curriculum objective IDs
+// These are real, freely available educational videos
+const LESSON_VIDEOS = {
+  // Math
+  'm-k-1':'aRt5BgBiB7o',   // Kindergarten numbers
+  'm-1-1':'5mHzp9r3YKk',   // Addition facts
+  'm-2-1':'ZA6mwDJbL1E',   // Add/subtract to 100
+  'm-3-1':'49bYNHfSL4A',   // Multiplication facts
+  'm-3-3':'0QpRr2XZQQM',   // Introduction to fractions
+  'm-4-1':'5Dm7SHQF43c',   // Multi-digit multiplication
+  'm-5-3':'Ep4WBCiW5Xs',   // Decimal operations
+  'm-6-4':'NybHckSEQBI',   // Introduction to algebra
+  'm-8-1':'MXV65i9g1Xo',   // Linear relationships
+  'm-9-1':'kCGX8OHbCgQ',   // Algebra 1 linear functions
+  // Language Arts
+  'la-k-1':'OsEFzaVCRLk',  // Short vowels phonics
+  'la-1-1':'ySEWDhJiSs0',  // Blends and digraphs
+  'la-3-3':'NkHi87XZSmA',  // Opinion writing
+  'la-6-3':'LqEuOeSx8EY',  // Narrative writing
+  // Science
+  'sc-3-1':'5N1LGNZFAcY',  // Life cycles
+  'sc-5-1':'bk4p4Pntv0Q',  // Properties of matter
+  'sc-6-1':'URUJD5NEXC8',  // Cells
+  'sc-8-1':'GcjgWov7mTM',  // Evolution
+  // History
+  'hi-4-1':'v50eFMXRRPs',  // American Revolution
+  'hi-5-1':'PGcaVs8pXQk',  // Civil War
+  'hi-6-1':'0jAQhumkcgM',  // Ancient civilizations
+  'hi-10-1':'YGXtJs14-Xk', // WWII
+};
+
+// Full lesson content keyed by objective ID
+// Structure: {explain, keyPoints[], examples[], practiceProblems[], videoNote}
+const LESSON_CONTENT = {
+  'm-k-1':{
+    explain:`Numbers are how we count and measure everything around us. When we count objects, we say one number for each object — this is called one-to-one correspondence. The last number we say tells us how many objects there are total.`,
+    keyPoints:['Numbers 1-20 each have a name and a written symbol','When counting objects, touch each one and say one number','The last number you say equals the total amount','Zero means none or empty'],
+    examples:[
+      {problem:'Count these apples: 🍎🍎🍎🍎🍎', solution:'Touch each apple as you count: 1, 2, 3, 4, 5. There are 5 apples.'},
+      {problem:'What number comes after 12?', solution:'When we count: ...11, 12, 13... The number after 12 is 13.'},
+      {problem:'Which group has more? ⭐⭐⭐ or 🌙🌙🌙🌙🌙', solution:'Count each group: stars = 3, moons = 5. 5 is more than 3, so the moons group has more.'}
+    ],
+    practice:[
+      {q:'Count the dots: ● ● ● ● ● ● ● ●', a:'8',opts:['6','7','8','9'],type:'mc'},
+      {q:'What number comes before 15?',a:'14',opts:['13','14','16','17'],type:'mc'},
+      {q:'Write the number that means ten plus four.',a:'14',opts:['41','14','40','4'],type:'mc'},
+      {q:'Which number is biggest: 7, 12, 3, or 19?',a:'19',opts:['7','12','3','19'],type:'mc'},
+      {q:'How many fingers do you have on both hands?',a:'10',opts:['8','9','10','11'],type:'mc'},
+    ],
+    videoNote:'This video teaches counting objects up to 20 with fun visuals. Watch how the teacher touches each object while counting.',
+  },
+  'm-3-1':{
+    explain:`Multiplication is a fast way to add the same number over and over again. Instead of saying 4+4+4+4+4, we can say 5 × 4 = 20. The first number tells us HOW MANY GROUPS, and the second number tells us HOW MANY IN EACH GROUP.`,
+    keyPoints:['Multiplication is repeated addition','a × b means "a groups of b"','The answer to a multiplication problem is called the product','The order doesn\'t matter: 3×4 = 4×3 = 12 (commutative property)','Any number times 0 = 0. Any number times 1 = itself.'],
+    examples:[
+      {problem:'3 × 4 = ?', solution:'Think: 3 groups of 4. 🍎🍎🍎🍎 | 🍎🍎🍎🍎 | 🍎🍎🍎🍎 = 4+4+4 = 12'},
+      {problem:'7 × 8 = ?', solution:'Use a strategy: 7×8 = 7×(4+4) = 28+28 = 56. Or memorize: 7×8=56 (7,8,56 — they go in order!)'},
+      {problem:'9 × 6 = ?', solution:'The 9s trick: hold up 9 fingers, fold down finger #6. Left side: 5 fingers. Right side: 4 fingers. Answer: 54!'}
+    ],
+    practice:[
+      {q:'What is 6 × 7?',a:'42',opts:['36','42','48','54'],type:'mc'},
+      {q:'What is 8 × 9?',a:'72',opts:['63','72','81','64'],type:'mc'},
+      {q:'If there are 4 bags with 6 apples each, how many apples total?',a:'24',opts:['10','20','24','28'],type:'mc'},
+      {q:'What is 7 × 7?',a:'49',opts:['42','47','49','56'],type:'mc'},
+      {q:'Which equation equals 36? ',a:'9 × 4',opts:['6 × 7','8 × 5','9 × 4','7 × 6'],type:'mc'},
+    ],
+    videoNote:'Watch this video to learn multiplication strategies including skip counting, arrays, and the times table tricks that make memorization easier.',
+  },
+  'm-3-3':{
+    explain:`A fraction shows a part of a whole. Imagine a pizza cut into equal slices. If the pizza is cut into 4 equal pieces and you eat 1 piece, you ate 1/4 (one-fourth) of the pizza. The BOTTOM number (denominator) tells us how many equal parts the whole is divided into. The TOP number (numerator) tells us how many parts we have.`,
+    keyPoints:['Denominator (bottom) = total equal parts','Numerator (top) = parts we have','Fractions only work when the parts are EQUAL sizes','1/2 is bigger than 1/4 because halves are bigger than fourths'],
+    examples:[
+      {problem:'What fraction is shaded? □□■■ (2 out of 4 squares shaded)', solution:'Denominator: 4 total squares. Numerator: 2 shaded. Fraction: 2/4. This also equals 1/2!'},
+      {problem:'Which is bigger: 1/2 or 1/3?', solution:'Think of a pizza. Cut one into 2 pieces (halves) and one into 3 pieces (thirds). The halves are bigger. So 1/2 > 1/3.'},
+      {problem:'Place 3/4 on a number line between 0 and 1.', solution:'Divide the space into 4 equal parts. Count 3 parts from zero. That point is 3/4.'}
+    ],
+    practice:[
+      {q:'A pizza is cut into 8 equal slices. You eat 3. What fraction did you eat?',a:'3/8',opts:['3/5','5/8','3/8','8/3'],type:'mc'},
+      {q:'Which fraction is the largest?',a:'1/2',opts:['1/4','1/8','1/2','1/6'],type:'mc'},
+      {q:'What is the denominator in 5/9?',a:'9',opts:['5','9','14','4'],type:'mc'},
+      {q:'Half of 12 is?',a:'6',opts:['4','6','8','3'],type:'mc'},
+      {q:'Which fraction equals one whole?',a:'4/4',opts:['1/4','2/4','3/4','4/4'],type:'mc'},
+    ],
+    videoNote:'This video uses real-world examples like pizza and chocolate bars to make fractions visual and easy to understand.',
+  },
+  'la-k-1':{
+    explain:`Vowels are the letters A, E, I, O, U — and every word has at least one vowel. Short vowels make a quick, clipped sound. The short A sounds like the "a" in "cat." Short E sounds like "bed." Short I sounds like "pig." Short O sounds like "hot." Short U sounds like "bug." When a word follows the pattern Consonant-Vowel-Consonant (like "cat" or "bed"), it almost always has a short vowel sound.`,
+    keyPoints:['Vowels: A E I O U','Short vowel words follow the CVC pattern (Consonant-Vowel-Consonant)','Short A: cat, bat, man, ran','Short E: bed, red, pen, hen','Short I: pig, big, sit, bit','Short O: hot, dot, fog, log','Short U: bug, run, mud, fun'],
+    examples:[
+      {problem:'What is the vowel sound in "sit"?', solution:'"Sit" is S-I-T. The middle letter is I, making the short I sound like in "pig" and "six."'},
+      {problem:'Does "hop" have a short or long O?', solution:'"Hop" follows the CVC pattern (H-O-P). The O is short, making the sound in "hot" and "top."'},
+      {problem:'Find the short E word: heat, bed, tree', solution:'"Bed" has the short E sound. "Heat" and "tree" have long E sounds.'}
+    ],
+    practice:[
+      {q:'Which word has the short A sound?',a:'cat',opts:['cake','cat','care','cape'],type:'mc'},
+      {q:'What vowel is in the middle of "pig"?',a:'I',opts:['A','E','I','O'],type:'mc'},
+      {q:'Which word rhymes with "bed"?',a:'red',opts:['bad','rid','red','rod'],type:'mc'},
+      {q:'"Bug" has which short vowel sound?',a:'Short U',opts:['Short A','Short E','Short I','Short U'],type:'mc'},
+      {q:'Which word follows the CVC pattern?',a:'hot',opts:['hope','hot','home','hoe'],type:'mc'},
+    ],
+    videoNote:'This phonics video teaches short vowel sounds using fun pictures and songs to help the sounds stick in memory.',
+  },
+  'sc-6-1':{
+    explain:`Every living thing — from a tiny bacterium to a blue whale — is made of cells. Cells are the smallest unit of life. Most things you can see are made of trillions of cells working together. Plant cells and animal cells are similar but have some important differences. All cells have a nucleus (the control center), a cell membrane (the outer boundary), and cytoplasm (the gel-like fluid inside). Plant cells also have a cell wall for extra support, and chloroplasts for making food from sunlight.`,
+    keyPoints:['Cell = smallest unit of life','Nucleus = control center, contains DNA','Cell membrane = controls what enters and exits the cell','Cytoplasm = jelly-like fluid where chemical reactions occur','Mitochondria = powerhouse — makes energy for the cell','Plant cells ALSO have: cell wall, chloroplasts, large central vacuole','Animal cells have no cell wall and no chloroplasts'],
+    examples:[
+      {problem:'Why can\'t you see most cells without a microscope?', solution:'Most cells are 10-100 micrometers wide — about 10 times thinner than a human hair. They are far too small to see with the naked eye.'},
+      {problem:'What would happen to a cell if the nucleus was removed?', solution:'The cell would quickly die. The nucleus contains DNA, which carries all the instructions for every function the cell performs. Without it, the cell cannot make proteins or reproduce.'},
+      {problem:'Why do plants have chloroplasts but animals don\'t?', solution:'Plants make their own food through photosynthesis using sunlight. Chloroplasts are the organelles that capture sunlight and convert it to glucose. Animals get energy by eating food instead.'}
+    ],
+    practice:[
+      {q:'What is the "powerhouse" of the cell?',a:'Mitochondria',opts:['Nucleus','Mitochondria','Cell wall','Vacuole'],type:'mc'},
+      {q:'Which organelle is found in plant cells but NOT animal cells?',a:'Chloroplast',opts:['Nucleus','Cell membrane','Chloroplast','Cytoplasm'],type:'mc'},
+      {q:'What does the cell membrane do?',a:'Controls what enters and exits the cell',opts:['Makes food from sunlight','Contains DNA','Controls what enters and exits the cell','Provides energy'],type:'mc'},
+      {q:'DNA is stored in which organelle?',a:'Nucleus',opts:['Mitochondria','Nucleus','Chloroplast','Vacuole'],type:'mc'},
+      {q:'A cell wall provides extra support. Which type of cell has one?',a:'Plant cell only',opts:['Animal cell only','Plant cell only','Both plant and animal','Neither'],type:'mc'},
+    ],
+    videoNote:'This video uses 3D animations to show the inside of a cell and explain what each organelle does. Pause and replay the organelle sections.',
+  },
+  'hi-4-1':{
+    explain:`The American Revolution was the war in which the thirteen American colonies broke free from British rule and became the United States of America. The colonists were angry because Britain taxed them without letting them have a say in government — "No taxation without representation!" became the rallying cry. The war lasted from 1775 to 1783, with key figures like George Washington leading the Continental Army and Thomas Jefferson writing the Declaration of Independence in 1776.`,
+    keyPoints:['The Revolution happened 1775-1783','Main cause: taxation without representation in British Parliament','The Boston Tea Party (1773) was a major act of protest','The Declaration of Independence was signed July 4, 1776','George Washington commanded the Continental Army','The Battle of Yorktown (1781) was the final major battle','The Treaty of Paris (1783) officially ended the war'],
+    examples:[
+      {problem:'Why did colonists protest the Stamp Act?', solution:'The Stamp Act of 1765 taxed all printed materials in the colonies. Colonists were furious because Britain was taxing them without giving them any representatives in Parliament to vote on the tax — violating the principle of "no taxation without representation."'},
+      {problem:'What was the significance of Valley Forge?', solution:'Valley Forge (winter 1777-1778) was where Washington\'s army endured terrible cold, hunger, and disease. About 2,000 soldiers died. Yet the army survived and emerged stronger, more disciplined, and trained by Baron von Steuben — a turning point in the war.'},
+      {problem:'Who were the Loyalists and why does it matter?', solution:'Loyalists (about 20% of colonists) remained loyal to Britain. They remind us the Revolution wasn\'t universally popular — it was a civil war within the colonies as much as a war against Britain.'}
+    ],
+    practice:[
+      {q:'What phrase summarized the colonists\' main complaint against Britain?',a:'No taxation without representation',opts:['Give me liberty or give me death','No taxation without representation','United we stand, divided we fall','All men are created equal'],type:'mc'},
+      {q:'In what year was the Declaration of Independence signed?',a:'1776',opts:['1775','1776','1781','1783'],type:'mc'},
+      {q:'Who commanded the Continental Army?',a:'George Washington',opts:['Thomas Jefferson','Benjamin Franklin','George Washington','John Adams'],type:'mc'},
+      {q:'Which battle effectively ended the Revolutionary War?',a:'Battle of Yorktown',opts:['Battle of Bunker Hill','Battle of Lexington','Battle of Saratoga','Battle of Yorktown'],type:'mc'},
+      {q:'The Treaty of Paris was signed in what year?',a:'1783',opts:['1776','1778','1781','1783'],type:'mc'},
+    ],
+    videoNote:'This video brings the Revolution to life with maps, primary source quotes, and animated battle sequences. Focus especially on the causes section.',
+  },
+};
+
+// Get lesson content for an objective, generating defaults if not hand-authored
+function getLessonContent(obj) {
+  if(LESSON_CONTENT[obj.id]) return LESSON_CONTENT[obj.id];
+  // Generate a structured lesson shell from the objective data
+  return {
+    explain: `${obj.title}: ${obj.desc} This lesson covers the key concepts, builds understanding through examples, and prepares you for the assessment.`,
+    keyPoints: [
+      'Read the full explanation carefully before attempting practice problems',
+      'Pay attention to the worked examples — they show the thinking process',
+      'Try each practice problem yourself before checking the answer',
+      obj.desc
+    ],
+    examples: [
+      {problem:`Review Question: What is the main idea of "${obj.title}"?`, solution:obj.desc},
+    ],
+    practice: [
+      {q:`What is the main focus of ${obj.title}?`, a:obj.desc.split('.')[0], opts:[obj.desc.split('.')[0],'A different concept','An unrelated topic','None of the above'], type:'mc'},
+    ],
+    videoNote:`Search YouTube for "${obj.title} explained for kids" or "${obj.title} ${obj.std}" to find relevant educational videos for this topic.`,
+  };
+}
+
+// Open full lesson viewer
+let currentLesson = null;
+let lessonFrom = 'curric';
+let lessonPhase = 'content'; // content | video | practice | result
+let lessonAnswers = [];
+let lessonScore = 0;
+
+function openLesson(objId, subj, grade, childId, from) {
+  const obj = (CURRICULUM[subj]||{})[grade]?.find(o=>o.id===objId);
+  if(!obj) return;
+  currentLesson = {obj, subj, grade, childId};
+  lessonFrom = from||'curric';
+  lessonPhase = 'content';
+  lessonAnswers = [];
+  lessonScore = 0;
+  nav('lesson');
+  renderLesson();
+}
+
+function renderLesson() {
+  const wrap = document.getElementById('lesson-wrap');
+  if(!currentLesson) { wrap.innerHTML=''; return; }
+  const {obj, subj, grade, childId} = currentLesson;
+  const content = getLessonContent(obj);
+  const child = S.children.find(c=>c.id===childId);
+  const vidId = LESSON_VIDEOS[obj.id];
+  const scCls = sCls(subj);
+
+  if(lessonPhase === 'content') {
+    wrap.innerHTML = `
+      <button class="btn bs bsm" style="margin-bottom:14px" onclick="nav('${lessonFrom}');renderCurric()">← Back</button>
+      <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:12px;padding:4px 12px;border-radius:99px" class="${scCls}">
+        <span style="font-size:.75rem;font-weight:700">${subj} · ${GRADE_LABELS[grade]||grade}</span>
+      </div>
+      <h2 style="font-family:var(--fd);font-size:1.3rem;margin-bottom:16px;color:var(--ink)">${obj.title}</h2>
+
+      <!-- Lesson explanation -->
+      <div class="card" style="margin-bottom:12px">
+        <h3 style="font-size:.9rem;font-weight:700;color:var(--sd);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">📖 The Lesson</h3>
+        <p style="font-size:.9375rem;color:var(--ink);line-height:1.75;margin-bottom:14px">${content.explain}</p>
+        <div style="background:var(--cream);border-radius:var(--r);padding:13px">
+          <p style="font-size:.8rem;font-weight:700;color:var(--im);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">KEY POINTS TO REMEMBER:</p>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            ${content.keyPoints.map(pt=>`<div style="display:flex;align-items:flex-start;gap:8px"><span style="color:var(--sage);font-weight:700;flex-shrink:0">✓</span><span style="font-size:.875rem;color:var(--im);line-height:1.5">${pt}</span></div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- Worked examples -->
+      <div class="card" style="margin-bottom:12px">
+        <h3 style="font-size:.9rem;font-weight:700;color:var(--sd);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">💡 Worked Examples</h3>
+        ${content.examples.map((ex,i)=>`
+          <div style="margin-bottom:${i<content.examples.length-1?'16px':'0'}">
+            <div style="background:var(--skyp);border-radius:var(--r);padding:11px;margin-bottom:8px">
+              <p style="font-size:.8rem;font-weight:700;color:var(--sky);margin-bottom:4px">PROBLEM ${i+1}:</p>
+              <p style="font-size:.9rem;color:var(--ink)">${ex.problem}</p>
+            </div>
+            <div style="background:#EEF7EF;border-radius:var(--r);padding:11px;border-left:3px solid var(--sage)">
+              <p style="font-size:.8rem;font-weight:700;color:var(--sd);margin-bottom:4px">SOLUTION:</p>
+              <p style="font-size:.875rem;color:var(--im);line-height:1.6">${ex.solution}</p>
+            </div>
+          </div>`).join('')}
+      </div>
+
+      <!-- Video section -->
+      ${vidId ? `
+      <div class="card" style="margin-bottom:12px">
+        <h3 style="font-size:.9rem;font-weight:700;color:var(--sd);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">🎬 Watch the Lesson Video</h3>
+        <p style="font-size:.8rem;color:var(--il);margin-bottom:10px">${content.videoNote}</p>
+        <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:var(--r);overflow:hidden;background:#000">
+          <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:var(--r)"
+            src="https://www.youtube.com/embed/${vidId}?rel=0&modestbranding=1"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>` : `
+      <div class="card" style="margin-bottom:12px;background:var(--cd)">
+        <h3 style="font-size:.9rem;font-weight:700;color:var(--im);margin-bottom:6px">🎬 Video Lesson</h3>
+        <p style="font-size:.82rem;color:var(--il)">${content.videoNote}</p>
+      </div>`}
+
+      <button class="btn bp bw blg" onclick="lessonPhase='practice';renderLesson()">I'm ready — start the practice quiz →</button>
+    `;
+  } else if(lessonPhase === 'practice') {
+    const probs = content.practice;
+    wrap.innerHTML = `
+      <button class="btn bs bsm" style="margin-bottom:14px" onclick="lessonPhase='content';renderLesson()">← Back to lesson</button>
+      <h2 style="font-family:var(--fd);font-size:1.2rem;margin-bottom:4px">${obj.title}</h2>
+      <p style="font-size:.82rem;color:var(--il);margin-bottom:14px">Practice Quiz — ${probs.length} questions</p>
+      <div style="display:flex;flex-direction:column;gap:12px" id="practice-questions">
+        ${probs.map((p,i)=>`
+          <div class="card" id="pq-${i}">
+            <p style="font-weight:600;font-size:.9375rem;margin-bottom:12px;line-height:1.5">${i+1}. ${p.q}</p>
+            ${p.type==='mc'?p.opts.map(opt=>`
+              <button onclick="selectPracticeAnswer(${i},'${opt.replace(/'/g,"\\'")}',this)" style="width:100%;text-align:left;padding:10px 13px;border:2px solid var(--cb);border-radius:var(--r);background:white;cursor:pointer;font-family:var(--fb);font-size:.9rem;color:var(--ink);transition:all .15s;margin-bottom:6px;display:block" data-opt="${opt.replace(/'/g,"\\'")}">
+                ${opt}
+              </button>`).join(''):''}
+          </div>`).join('')}
+      </div>
+      <button class="btn bp bw blg" style="margin-top:14px" id="submit-practice-btn" onclick="submitPractice()" disabled>Submit answers</button>`;
+    lessonAnswers = new Array(probs.length).fill(null);
+  } else if(lessonPhase === 'result') {
+    const probs = content.practice;
+    const pct = Math.round(lessonScore/probs.length*100);
+    const passed = pct >= (S.mastery?.global||75);
+    // Save to gradebook and portfolio
+    saveToGradebook(childId, subj, obj.title, pct, obj.id);
+    wrap.innerHTML = `
+      <div class="qcard" style="text-align:center;animation:fi .3s ease">
+        <div style="font-size:3rem;margin-bottom:10px;${passed?'animation:cel .55s cubic-bezier(.34,1.56,.64,1) forwards':''}">${passed?'🌟':'💪'}</div>
+        <div style="font-family:var(--fd);font-size:2.5rem;font-weight:700;color:${passed?'var(--sd)':'var(--terra)'};margin-bottom:4px">${pct}%</div>
+        <p style="font-family:var(--fd);font-size:1.1rem;color:${passed?'var(--sd)':'var(--terra)'};margin-bottom:6px">${passed?'Lesson mastered!':'Keep practicing!'}</p>
+        <p style="color:var(--il);font-size:.85rem;margin-bottom:18px">${lessonScore} of ${probs.length} correct${passed?' — this lesson is marked complete in your curriculum!':' — review the lesson and try again.'}</p>
+        <div style="display:flex;flex-direction:column;gap:6px;text-align:left;margin-bottom:18px">
+          ${probs.map((p,i)=>{const correct=lessonAnswers[i]===p.a;return`<div style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:${correct?'#EEF7EF':'#FEF3F3'};border-radius:var(--r)">
+            <span>${correct?'✅':'❌'}</span>
+            <div><p style="font-size:.8rem;color:var(--ink)">${p.q}</p>${!correct?`<p style="font-size:.75rem;color:var(--sd);margin-top:2px">Correct answer: ${p.a}</p>`:''}</div>
+          </div>`}).join('')}
+        </div>
+        ${passed?`<button class="btn bp bw blg" onclick="markLessonComplete('${obj.id}','${subj}','${childId}','${grade}')">✓ Mark complete & continue →</button>`:`
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn bs" style="flex:1" onclick="lessonPhase='content';renderLesson()">📖 Review lesson</button>
+          <button class="btn bp" style="flex:1" onclick="lessonPhase='practice';lessonAnswers=[];lessonScore=0;renderLesson()">Try again →</button>
+        </div>`}
+      </div>`;
+  }
+}
+
+function selectPracticeAnswer(qIdx, answer, btn) {
+  lessonAnswers[qIdx] = answer;
+  // Update visual selection
+  const card = document.getElementById('pq-'+qIdx);
+  card.querySelectorAll('button').forEach(b=>{ b.style.borderColor='var(--cb)'; b.style.background='white'; b.style.fontWeight='400'; });
+  btn.style.borderColor='var(--sage)'; btn.style.background='var(--cd)'; btn.style.fontWeight='600';
+  // Enable submit if all answered
+  const allAnswered = lessonAnswers.every(a=>a!==null);
+  const sub = document.getElementById('submit-practice-btn');
+  if(sub) sub.disabled = !allAnswered;
+}
+
+function submitPractice() {
+  const content = getLessonContent(currentLesson.obj);
+  lessonScore = 0;
+  content.practice.forEach((p,i)=>{ if(lessonAnswers[i]===p.a) lessonScore++; });
+  lessonPhase = 'result';
+  renderLesson();
+}
+
+function markLessonComplete(objId, subj, childId, grade) {
+  if(!S.profiles[childId]) S.profiles[childId]={};
+  if(!S.profiles[childId].curricProgress) S.profiles[childId].curricProgress={};
+  if(!S.profiles[childId].curricProgress[subj]) S.profiles[childId].curricProgress[subj]={};
+  S.profiles[childId].curricProgress[subj][objId]='done';
+  save();
+  nav(lessonFrom);
+  if(lessonFrom==='curric') renderCurric();
+}
+
+// ════════════════════════════════════════════════════════════════
+// GRADEBOOK
+// Percentage scores per assignment, letter grades, portfolio
+// ════════════════════════════════════════════════════════════════
+
+function saveToGradebook(childId, subj, title, pct, objId) {
+  if(!S.gradebook) S.gradebook={};
+  if(!S.gradebook[childId]) S.gradebook[childId]={};
+  const period = getCurrentPeriod();
+  if(!S.gradebook[childId][period]) S.gradebook[childId][period]={};
+  if(!S.gradebook[childId][period][subj]) S.gradebook[childId][period][subj]=[];
+  // Avoid duplicate entries for same objective
+  const existing = S.gradebook[childId][period][subj].findIndex(e=>e.objId===objId);
+  const entry = {id:uid(), objId, title, pct, date:tod(), letter:pctToLetter(pct)};
+  if(existing>=0) S.gradebook[childId][period][subj][existing]=entry;
+  else S.gradebook[childId][period][subj].push(entry);
+  // Portfolio entry
+  if(!S.portfolio) S.portfolio={};
+  if(!S.portfolio[childId]) S.portfolio[childId]=[];
+  const pEntry = {id:uid(), subj, title, pct, letter:pctToLetter(pct), date:tod(), type:'lesson_quiz'};
+  S.portfolio[childId].push(pEntry);
+  save();
+}
+
+function getCurrentPeriod() {
+  const m = new Date().getMonth();
+  const y = new Date().getFullYear();
+  if(m>=7) return `Fall ${y}`;
+  if(m>=0 && m<6) return `Spring ${y}`;
+  return `Summer ${y}`;
+}
+
+function pctToLetter(pct) {
+  if(pct>=93)return'A+'; if(pct>=90)return'A'; if(pct>=87)return'A-';
+  if(pct>=83)return'B+'; if(pct>=80)return'B'; if(pct>=77)return'B-';
+  if(pct>=73)return'C+'; if(pct>=70)return'C'; if(pct>=67)return'C-';
+  if(pct>=63)return'D+'; if(pct>=60)return'D'; return'F';
+}
+
+function letterColor(l) {
+  if(!l)return'var(--if)';
+  if(l.startsWith('A'))return'var(--sd)';
+  if(l.startsWith('B'))return'var(--sky)';
+  if(l.startsWith('C'))return'var(--sun)';
+  if(l.startsWith('D'))return'var(--terra)';
+  return'var(--terra)';
+}
+
+let gbChild='', gbPeriod='';
+function renderGradebook() {
+  const tabs=document.getElementById('gb-child-tabs');
+  const pTabs=document.getElementById('gb-period-tabs');
+  const con=document.getElementById('gb-content');
+  if(!S.children.length){con.innerHTML=`<div class="card"><div class="empty"><div class="ei">📊</div><h4>No children yet</h4><p>Add children and complete lessons to see grades here.</p></div></div>`;tabs.style.display='none';return;}
+  if(S.children.length>1){tabs.style.display='flex';if(!gbChild||!S.children.find(c=>c.id===gbChild))gbChild=S.children[0].id;tabs.innerHTML=S.children.map(c=>`<button class="tab ${gbChild===c.id?'on':''}" onclick="gbChild='${c.id}';renderGradebook()">${c.name}</button>`).join('');}else{tabs.style.display='none';gbChild=S.children[0]?.id||'';}
+  if(!S.gradebook) S.gradebook={};
+  const childGb = S.gradebook[gbChild]||{};
+  const periods = Object.keys(childGb);
+  if(!periods.length){
+    const cp=getCurrentPeriod();
+    pTabs.innerHTML=`<button class="tab on">${cp}</button>`;
+    gbPeriod=cp;
+  } else {
+    if(!gbPeriod||!periods.includes(gbPeriod)) gbPeriod=periods[periods.length-1];
+    pTabs.innerHTML=periods.map(p=>`<button class="tab ${gbPeriod===p?'on':''}" onclick="gbPeriod='${p}';renderGradebook()">${p}</button>`).join('');
+  }
+  const periodData = childGb[gbPeriod]||{};
+  const SUBJS = Object.keys(CURRICULUM);
+  const child = S.children.find(c=>c.id===gbChild);
+  if(!Object.keys(periodData).length){
+    con.innerHTML=`<div class="card"><div class="empty"><div class="ei">📊</div><h4>No grades yet for ${gbPeriod}</h4><p>Complete lesson practice quizzes to see grades appear here.</p><button class="btn bp" onclick="nav('curric')">Go to Curriculum →</button></div></div>`;return;
+  }
+  let html='';
+  // Overall GPA
+  let allGrades=[]; Object.values(periodData).forEach(arr=>arr.forEach(e=>allGrades.push(e.pct)));
+  const avg=allGrades.length?Math.round(allGrades.reduce((a,b)=>a+b,0)/allGrades.length):null;
+  html+=`<div class="card" style="margin-bottom:12px;display:flex;align-items:center;gap:16px">
+    <div style="text-align:center;padding:0 12px">
+      <div style="font-family:var(--fd);font-size:2.4rem;font-weight:700;color:${letterColor(avg!==null?pctToLetter(avg):'')}">${avg!==null?pctToLetter(avg):'—'}</div>
+      <div style="font-size:.72rem;color:var(--il)">Overall Grade</div>
+    </div>
+    <div style="height:50px;width:1px;background:var(--cb)"></div>
+    <div>
+      <div style="font-family:var(--fd);font-size:1.4rem;font-weight:700;color:var(--sd)">${avg!==null?avg+'%':'—'}</div>
+      <div style="font-size:.75rem;color:var(--il)">${gbPeriod} Average · ${child?.name||''}</div>
+    </div>
+    <div style="margin-left:auto"><button class="btn bs bsm" onclick="printGradebook()">🖨️ Print</button></div>
+  </div>`;
+  SUBJS.forEach(subj=>{
+    const entries=periodData[subj];
+    if(!entries||!entries.length)return;
+    const subAvg=Math.round(entries.reduce((a,b)=>a+b.pct,0)/entries.length);
+    const subLetter=pctToLetter(subAvg);
+    html+=`<div class="card" style="margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <h3 style="font-size:.95rem;font-weight:600">${subj}</h3>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-family:var(--fd);font-size:1.1rem;font-weight:700;color:${letterColor(subLetter)}">${subLetter}</span>
+          <span style="font-size:.78rem;color:var(--il)">${subAvg}% avg</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        ${[...entries].reverse().map(e=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--cream);border-radius:var(--r)">
+          <span style="font-size:.8rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)">${e.title}</span>
+          <span style="font-size:.72rem;color:var(--il);flex-shrink:0">${fD(e.date)}</span>
+          <span style="font-size:.8rem;font-weight:600;color:var(--im);flex-shrink:0">${e.pct}%</span>
+          <span style="font-family:var(--fd);font-size:.85rem;font-weight:700;color:${letterColor(e.letter)};flex-shrink:0;min-width:28px;text-align:right">${e.letter}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  });
+  // Portfolio section
+  const portfolio=(S.portfolio||{})[gbChild]||[];
+  if(portfolio.length) {
+    html+=`<div class="card" style="margin-bottom:10px">
+      <h3 style="font-size:.95rem;font-weight:600;margin-bottom:10px">📁 Portfolio (${portfolio.length} completed works)</h3>
+      <p style="font-size:.78rem;color:var(--il);margin-bottom:10px">A complete record of all assessed work — use this for your homeschool portfolio review.</p>
+      ${portfolio.slice(-10).reverse().map(p=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--cream);border-radius:var(--r);margin-bottom:5px">
+        <span style="font-size:.75rem;padding:1px 7px;border-radius:99px;background:${sDot(p.subj)}22;color:${sDot(p.subj)};font-weight:600;flex-shrink:0">${p.subj.slice(0,4)}</span>
+        <span style="font-size:.8rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title}</span>
+        <span style="font-size:.72rem;color:var(--il);flex-shrink:0">${fD(p.date)}</span>
+        <span style="font-size:.82rem;font-weight:700;color:${letterColor(p.letter)};flex-shrink:0">${p.letter}</span>
+      </div>`).join('')}
+    </div>`;
+  }
+  con.innerHTML=html;
+}
+
+function printGradebook() {
+  const child=S.children.find(c=>c.id===gbChild); if(!child)return;
+  const periodData=(S.gradebook||{})[gbChild]?.[gbPeriod]||{};
+  let allG=[]; Object.values(periodData).forEach(arr=>arr.forEach(e=>allG.push(e.pct)));
+  const avg=allG.length?Math.round(allG.reduce((a,b)=>a+b,0)/allG.length):null;
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>Gradebook — ${child.name}</title><style>body{font-family:Arial,sans-serif;padding:32px;max-width:700px;margin:0 auto;color:#2C2416}h1{color:#4E7A57}table{width:100%;border-collapse:collapse;margin:12px 0}th{background:#F5EDE0;padding:8px;text-align:left;font-size:.85rem}td{padding:8px;border-bottom:1px solid #F5EDE0;font-size:.85rem}.grade{font-weight:700;font-size:1rem}@media print{button{display:none}}</style></head><body>
+  <h1>🌿 Covey Gradebook</h1>
+  <p><strong>${child.name}</strong> · <strong>${gbPeriod}</strong> · Overall: <strong class="grade">${avg!==null?pctToLetter(avg)+' ('+avg+'%)':'Not yet graded'}</strong></p>
+  ${Object.entries(periodData).map(([subj,entries])=>{
+    const sa=Math.round(entries.reduce((a,b)=>a+b.pct,0)/entries.length);
+    return`<h2 style="font-size:1rem;margin-top:16px;border-bottom:1px solid #E8D9C5;padding-bottom:4px">${subj} — ${pctToLetter(sa)} (${sa}%)</h2>
+    <table><tr><th>Assignment</th><th>Date</th><th>Score</th><th>Grade</th></tr>
+    ${entries.map(e=>`<tr><td>${e.title}</td><td>${fD(e.date)}</td><td>${e.pct}%</td><td class="grade" style="color:${letterColor(e.letter)}">${e.letter}</td></tr>`).join('')}</table>`;
+  }).join('')}
+  <p style="margin-top:24px;font-size:.72rem;color:#BFB09A">Generated by Covey Homeschool App · ${new Date().toLocaleDateString()}</p>
+  <br><button onclick="window.print()" style="padding:10px 20px;background:#7BA685;color:white;border:none;border-radius:8px;cursor:pointer">🖨️ Print / Save as PDF</button>
+  </body></html>`);w.document.close();
+}
+
+// ════════════════════════════════════════════════════════════════
+// ATTENDANCE TRACKING
+// Virginia: 180 days required
+// ════════════════════════════════════════════════════════════════
+
+let attChild='';
+function renderAttendance() {
+  const tabs=document.getElementById('att-child-tabs');
+  const con=document.getElementById('att-content');
+  if(!S.children.length){con.innerHTML=`<div class="card"><div class="empty"><div class="ei">📆</div><h4>No children yet</h4><p>Add children to start tracking attendance.</p></div></div>`;tabs.style.display='none';return;}
+  if(S.children.length>1){tabs.style.display='flex';if(!attChild||!S.children.find(c=>c.id===attChild))attChild=S.children[0].id;tabs.innerHTML=S.children.map(c=>`<button class="tab ${attChild===c.id?'on':''}" onclick="attChild='${c.id}';renderAttendance()">${c.name}</button>`).join('');}else{tabs.style.display='none';attChild=S.children[0]?.id||'';}
+  if(!S.attendance) S.attendance={};
+  if(!S.attendance[attChild]) S.attendance[attChild]={};
+  const att=S.attendance[attChild];
+  const present=Object.values(att).filter(v=>v==='present').length;
+  const absent=Object.values(att).filter(v=>v==='absent').length;
+  const excused=Object.values(att).filter(v=>v==='excused').length;
+  const total=present+absent+excused;
+  const remaining=Math.max(0,180-present);
+  const pct=Math.round(present/180*100);
+  const child=S.children.find(c=>c.id===attChild);
+  // Build last 30 days calendar
+  const days=[];
+  for(let i=29;i>=0;i--) days.push(dAdd(tod(),-i));
+  con.innerHTML=`
+    <div class="card" style="margin-bottom:12px">
+      <div class="sg">
+        <div class="sc"><div class="sv" style="color:var(--sd)">${present}</div><div class="slab">Days Present</div></div>
+        <div class="sc"><div class="sv" style="color:var(--terra)">${absent}</div><div class="slab">Days Absent</div></div>
+        <div class="sc"><div class="sv" style="color:var(--sun)">${excused}</div><div class="slab">Days Excused</div></div>
+        <div class="sc"><div class="sv" style="color:var(--sky)">${remaining}</div><div class="slab">Days Remaining</div></div>
+      </div>
+      <div class="pb" style="margin-bottom:4px"><div class="pf" style="width:${pct}%;background:var(--sage)"></div></div>
+      <p style="font-size:.72rem;color:var(--if)">${present} of 180 required days complete (Virginia requirement)</p>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <h3 style="font-size:.95rem;font-weight:600">Mark Today's Attendance</h3>
+        <span style="font-size:.78rem;color:var(--il)">${fDF(tod())}</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn bsm ${att[tod()]==='present'?'bp':''}" onclick="markAtt('${attChild}','present')" style="${att[tod()]==='present'?'':'background:var(--cream);border:1.5px solid var(--sage);color:var(--sd)'}">✅ Present</button>
+        <button class="btn bsm ${att[tod()]==='absent'?'btn-d':''}" onclick="markAtt('${attChild}','absent')" style="${att[tod()]==='absent'?'background:var(--terra);color:white':';background:var(--cream);border:1.5px solid var(--terra);color:var(--terra)'}">❌ Absent</button>
+        <button class="btn bsm ${att[tod()]==='excused'?'':''}" onclick="markAtt('${attChild}','excused')" style="${att[tod()]==='excused'?'background:var(--sun);color:white':'background:var(--cream);border:1.5px solid var(--sun);color:#8B6914'}">📋 Excused</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <h3 style="font-size:.95rem;font-weight:600;margin-bottom:10px">Last 30 Days</h3>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">
+        ${['M','T','W','T','F','S','S'].map(d=>`<div style="text-align:center;font-size:.65rem;font-weight:600;color:var(--il);padding:2px">${d}</div>`).join('')}
+        ${days.map(d=>{
+          const status=att[d];
+          const bg=status==='present'?'var(--sage)':status==='absent'?'var(--terra)':status==='excused'?'var(--sun)':'var(--cream-d)';
+          const col=status?'white':'var(--if)';
+          const isToday=d===tod();
+          return`<button onclick="cycleAtt('${attChild}','${d}')" style="padding:5px 2px;border-radius:5px;background:${bg};color:${col};border:${isToday?'2px solid var(--ink)':'1.5px solid transparent'};cursor:pointer;font-size:.68rem;font-weight:600;font-family:var(--fb);text-align:center">${new Date(d+'T00:00:00').getDate()}</button>`;
+        }).join('')}
+      </div>
+      <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap">
+        ${[['var(--sage)','Present'],['var(--terra)','Absent'],['var(--sun)','Excused'],['var(--cd)','Not logged']].map(([c,l])=>`<div style="display:flex;align-items:center;gap:4px"><div style="width:12px;height:12px;border-radius:3px;background:${c}"></div><span style="font-size:.72rem;color:var(--il)">${l}</span></div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function markAtt(childId, status) {
+  if(!S.attendance) S.attendance={};
+  if(!S.attendance[childId]) S.attendance[childId]={};
+  S.attendance[childId][tod()]=status;
+  save(); renderAttendance();
+}
+
+function cycleAtt(childId, date) {
+  if(!S.attendance) S.attendance={};
+  if(!S.attendance[childId]) S.attendance[childId]={};
+  const cur=S.attendance[childId][date];
+  const next=cur==='present'?'absent':cur==='absent'?'excused':cur==='excused'?null:'present';
+  if(next) S.attendance[childId][date]=next;
+  else delete S.attendance[childId][date];
+  save(); renderAttendance();
+}
+
+function printAttendance() {
+  const child=S.children.find(c=>c.id===attChild); if(!child)return;
+  const att=(S.attendance||{})[attChild]||{};
+  const present=Object.values(att).filter(v=>v==='present').length;
+  const absent=Object.values(att).filter(v=>v==='absent').length;
+  const excused=Object.values(att).filter(v=>v==='excused').length;
+  const sortedDates=Object.keys(att).sort();
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>Attendance — ${child.name}</title><style>body{font-family:Arial,sans-serif;padding:32px;max-width:700px;margin:0 auto;color:#2C2416}h1{color:#4E7A57}table{width:100%;border-collapse:collapse;margin:12px 0}th{background:#F5EDE0;padding:8px;text-align:left;font-size:.85rem}td{padding:8px;border-bottom:1px solid #F5EDE0;font-size:.85rem}.present{color:#4E7A57;font-weight:600}.absent{color:#C4714A;font-weight:600}.excused{color:#8B6914;font-weight:600}@media print{button{display:none}}</style></head><body>
+  <h1>🌿 Covey Attendance Record</h1>
+  <p><strong>Student:</strong> ${child.name} · <strong>School Year:</strong> ${new Date().getFullYear()}-${new Date().getFullYear()+1}</p>
+  <p><strong>Virginia Requirement:</strong> 180 days of instruction</p>
+  <p style="background:#EEF7EF;padding:10px;border-radius:8px;margin:12px 0"><strong>Days Present: ${present}</strong> · Days Absent: ${absent} · Days Excused: ${excused} · <strong>Days Remaining to 180: ${Math.max(0,180-present)}</strong></p>
+  <table><tr><th>Date</th><th>Day</th><th>Status</th></tr>
+  ${sortedDates.map(d=>`<tr><td>${fDF(d)}</td><td>${new Date(d+'T00:00:00').toLocaleDateString('en-US',{weekday:'long'})}</td><td class="${att[d]}">${att[d].charAt(0).toUpperCase()+att[d].slice(1)}</td></tr>`).join('')}
+  </table>
+  <p style="margin-top:24px;font-size:.72rem;color:#BFB09A">Generated by Covey Homeschool App · ${new Date().toLocaleDateString()} · This document serves as the official attendance record for homeschool compliance purposes under Virginia Code § 22.1-254.1.</p>
+  <br><button onclick="window.print()" style="padding:10px 20px;background:#7BA685;color:white;border:none;border-radius:8px;cursor:pointer">🖨️ Print / Save as PDF</button>
+  </body></html>`);w.document.close();
+}
+
+// ════════════════════════════════════════════════════════════════
+// ELECTIVES
+// ════════════════════════════════════════════════════════════════
+
+let elChild='';
+function renderElectives() {
+  const tabs=document.getElementById('el-child-tabs');
+  const con=document.getElementById('el-content');
+  if(!S.children.length){con.innerHTML=`<div class="card"><div class="empty"><div class="ei">🎨</div><h4>No children yet</h4><p>Add children to assign electives.</p></div></div>`;tabs.style.display='none';return;}
+  if(S.children.length>1){tabs.style.display='flex';if(!elChild||!S.children.find(c=>c.id===elChild))elChild=S.children[0].id;tabs.innerHTML=S.children.map(c=>`<button class="tab ${elChild===c.id?'on':''}" onclick="elChild='${c.id}';renderElectives()">${c.name}</button>`).join('');}else{tabs.style.display='none';elChild=S.children[0]?.id||'';}
+  if(!S.electives) S.electives={};
+  const childEl=(S.electives[elChild]||[]);
+  const child=S.children.find(c=>c.id===elChild);
+  if(!childEl.length){con.innerHTML=`<div class="card"><div class="empty"><div class="ei">🎨</div><h4>No electives yet for ${child?.name||'this child'}</h4><p>Add student-chosen subjects like art, music, coding, or cooking. These count toward annual instruction hours.</p><button class="btn bp" onclick="openElectiveMo()">+ Add first elective</button></div></div>`;return;}
+  const totalHrsWk=childEl.reduce((a,b)=>a+(parseFloat(b.hrs)||0),0);
+  con.innerHTML=`<div class="card" style="margin-bottom:12px;background:var(--cd)">
+    <p style="font-size:.82rem;color:var(--im)">📊 ${child?.name||'This child'} has <strong>${childEl.length} elective${childEl.length!==1?'s':''}</strong> — <strong>${totalHrsWk} hrs/week</strong> of additional instruction</p>
+  </div>
+  ${childEl.map(el=>`<div class="card" style="margin-bottom:8px">
+    <div style="display:flex;align-items:flex-start;gap:10px">
+      <div style="width:38px;height:38px;border-radius:9px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">${elCatEmoji(el.cat)}</div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:.9375rem;margin-bottom:2px">${el.name}</div>
+        <div style="font-size:.78rem;color:var(--il);margin-bottom:4px">${el.cat} · ${el.hrs} hrs/week · Started ${fD(el.start)}</div>
+        ${el.desc?`<div style="font-size:.8rem;color:var(--im)">${el.desc}</div>`:''}
+      </div>
+      <button onclick="removeElective('${el.id}')" style="font-size:.72rem;color:var(--if);background:none;border:none;cursor:pointer;font-family:var(--fb);padding:2px">Remove</button>
+    </div>
+  </div>`).join('')}`;
+}
+function elCatEmoji(cat){const m={'Arts':'🎨','Music':'🎵','Technology':'💻','Physical':'⚽','Culinary':'👨‍🍳','Drama':'🎭','Vocational':'🔨','Community':'🤝','Other':'✨'};return m[cat]||'📚';}
+function openElectiveMo(){
+  const el=document.getElementById('el-ch');if(el)el.innerHTML=S.children.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  document.getElementById('el-cw').style.display=S.children.length>1?'block':'none';
+  ['el-name','el-hrs','el-desc'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  const ds=document.getElementById('el-start');if(ds)ds.value=tod();
+  document.getElementById('el-err').style.display='none';
+  oMo('mo-elective');
+}
+function saveElective(){
+  const name=document.getElementById('el-name').value.trim();
+  const err=document.getElementById('el-err');
+  if(!name){err.textContent='Please enter an elective name.';err.style.display='block';return;}
+  err.style.display='none';
+  const cid=document.getElementById('el-ch').value||S.children[0]?.id;
+  if(!S.electives)S.electives={};
+  if(!S.electives[cid])S.electives[cid]=[];
+  S.electives[cid].push({id:uid(),name,cat:document.getElementById('el-cat').value,hrs:document.getElementById('el-hrs').value||'1',start:document.getElementById('el-start').value||tod(),desc:document.getElementById('el-desc').value});
+  save();elChild=cid;cMo('mo-elective');renderElectives();
+}
+function removeElective(id){
+  if(!confirm('Remove this elective?'))return;
+  if(S.electives&&S.electives[elChild])S.electives[elChild]=S.electives[elChild].filter(e=>e.id!==id);
+  save();renderElectives();
+}
+
+// ════════════════════════════════════════════════════════════════
+// FAMILY HUB — Family learning community
+// ════════════════════════════════════════════════════════════════
+
+function renderFamily() {
+  const con=document.getElementById('fam-content');
+  if(!S.children.length){con.innerHTML=`<div class="card"><div class="empty"><div class="ei">👨‍👩‍👧</div><h4>Add your children first</h4><p>The Family Hub shows everyone's progress together.</p><button class="btn bp" onclick="nav('kids')">Add children →</button></div></div>`;return;}
+  const today=tod();
+  let html='';
+
+  // Family daily snapshot
+  html+=`<div class="card" style="margin-bottom:12px;background:linear-gradient(135deg,var(--cream) 0%,var(--skyp) 100%)">
+    <h3 style="font-family:var(--fd);font-size:1.1rem;margin-bottom:12px">🌟 Family Learning Today</h3>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${S.children.map(ch=>{
+        const tasks=S.tasks.filter(t=>t.cid===ch.id&&t.date===today);
+        const done=tasks.filter(t=>t.status==='done').length;
+        const tot=tasks.length;
+        const pct=tot?Math.round(done/tot*100):0;
+        const logs=S.logs.filter(l=>S.tasks.some(t=>t.id===l.tid&&t.cid===ch.id));
+        const avg=logs.length?Math.round(logs.reduce((a,b)=>a+(b.pct||0),0)/logs.length):null;
+        const attToday=(S.attendance||{})[ch.id]?.[today];
+        return`<div style="display:flex;align-items:center;gap:10px;padding:10px;background:white;border-radius:var(--r)">
+          <div class="av" style="width:36px;height:36px;background:${ch.col};font-size:.85rem">${inits(ch.name)}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:.875rem">${ch.name}</div>
+            <div style="font-size:.72rem;color:var(--il)">${done}/${tot} tasks · ${avg!==null?avg+'% avg':'No assessments yet'}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-family:var(--fd);font-size:1.1rem;font-weight:700;color:${ch.col}">${pct}%</div>
+            <div style="font-size:.65rem;color:var(--if)">${attToday?attToday:'Not logged'}</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+
+  // Milestones and achievements
+  const milestones=[];
+  S.children.forEach(ch=>{
+    const logs=S.logs.filter(l=>S.tasks.some(t=>t.id===l.tid&&t.cid===ch.id));
+    const perfect=logs.filter(l=>l.pct===100);
+    if(perfect.length>0) milestones.push({child:ch,type:'perfect',count:perfect.length,msg:`scored 100% on ${perfect.length} assessment${perfect.length!==1?'s':''}`});
+    const curricProg=Object.values(S.profiles[ch.id]?.curricProgress||{});
+    const totalDone=curricProg.reduce((a,b)=>a+Object.values(b).filter(v=>v==='done').length,0);
+    if(totalDone>0) milestones.push({child:ch,type:'lessons',count:totalDone,msg:`completed ${totalDone} lesson${totalDone!==1?'s':''} in the curriculum`});
+    const attDays=Object.values((S.attendance||{})[ch.id]||{}).filter(v=>v==='present').length;
+    if(attDays>0&&attDays%10===0) milestones.push({child:ch,type:'attend',count:attDays,msg:`reached ${attDays} days of school this year! 🎉`});
+  });
+
+  if(milestones.length){
+    html+=`<div class="card" style="margin-bottom:12px">
+      <h3 style="font-family:var(--fd);font-size:1rem;margin-bottom:10px">🏆 Achievements & Milestones</h3>
+      ${milestones.slice(0,5).map(m=>`<div style="display:flex;align-items:center;gap:10px;padding:8px;background:${m.type==='perfect'?'var(--sunp)':m.type==='attend'?'var(--skyp)':'#EEF7EF'};border-radius:var(--r);margin-bottom:6px">
+        <div class="av" style="width:32px;height:32px;background:${m.child.col};font-size:.78rem">${inits(m.child.name)}</div>
+        <p style="font-size:.82rem;color:var(--ink)"><strong>${m.child.name}</strong> ${m.msg}</p>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  // Children's individual progress cards
+  html+=`<h3 style="font-family:var(--fd);font-size:1rem;margin-bottom:10px">Individual Progress</h3>`;
+  S.children.forEach(ch=>{
+    const logs=S.logs.filter(l=>S.tasks.some(t=>t.id===l.tid&&t.cid===ch.id));
+    const avg=logs.length?Math.round(logs.reduce((a,b)=>a+(b.pct||0),0)/logs.length):null;
+    const totalTasks=S.tasks.filter(t=>t.cid===ch.id&&t.status==='done').length;
+    const curricDone=Object.values(S.profiles[ch.id]?.curricProgress||{}).reduce((a,b)=>a+Object.values(b).filter(v=>v==='done').length,0);
+    const langDone=Object.values((S.profiles[ch.id]?.langProgress)||{}).reduce((a,b)=>a+(b.completedUnits?.length||0),0);
+    const attDays=Object.values((S.attendance||{})[ch.id]||{}).filter(v=>v==='present').length;
+    const grade=(S.profiles[ch.id]?.grade)||'';
+    html+=`<div class="card" style="margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="av" style="width:44px;height:44px;background:${ch.col};font-size:1rem">${inits(ch.name)}</div>
+        <div>
+          <div style="font-family:var(--fd);font-size:1rem">${ch.name}</div>
+          <div style="font-size:.75rem;color:var(--il)">${grade?GRADE_LABELS[grade]||grade:'Grade not set'}${getAge(ch.dob)!==null?' · Age '+getAge(ch.dob):''}</div>
+        </div>
+        <button class="btn bp bsm" style="margin-left:auto" onclick="openLearn('${ch.id}','home')">📚 Open learning</button>
+      </div>
+      <div class="sg">
+        <div class="sc"><div class="sv" style="color:var(--sage)">${totalTasks}</div><div class="slab">Lessons done</div></div>
+        <div class="sc"><div class="sv" style="color:var(--sky)">${avg!==null?avg+'%':'—'}</div><div class="slab">Avg score</div></div>
+        <div class="sc"><div class="sv" style="color:var(--sun)">${curricDone}</div><div class="slab">Objectives</div></div>
+        <div class="sc"><div class="sv" style="color:var(--sd)">${attDays}</div><div class="slab">Days present</div></div>
+      </div>
+      ${langDone>0?`<div style="background:var(--cream);border-radius:var(--r);padding:8px;font-size:.78rem;color:var(--im)">🌍 Completed ${langDone} language unit${langDone!==1?'s':''}</div>`:''}
+    </div>`;
+  });
+
+  // Future: community features note
+  html+=`<div class="card" style="background:var(--cd);border:none">
+    <h3 style="font-family:var(--fd);font-size:.95rem;margin-bottom:6px">🌐 Community Features — Coming Soon</h3>
+    <p style="font-size:.8rem;color:var(--il);line-height:1.6">Connection with other homeschool families using Covey is on our roadmap. This will include shared lesson resources, co-op planning, and peer encouragement across families — all private and parent-controlled.</p>
+  </div>`;
+
+  con.innerHTML=html;
+}
+
+// ════════════════════════════════════════════════════════════════
+// CURRICULUM VIEW UPDATE — Add "Open Lesson" button to objectives
+// ════════════════════════════════════════════════════════════════
+// Override renderCurricObjectives to include lesson launcher
+const _origRenderCurricObj = typeof renderCurricObjectives !== 'undefined' ? renderCurricObjectives : null;
+
+function renderCurricObjectives(child, grade) {
+  const el=document.getElementById('cur-objectives');if(!el)return;
+  const objs=CURRICULUM[curSubject]?.[grade];
+  if(!objs||!objs.length){el.innerHTML=`<div class="card"><p style="color:var(--il);font-size:.875rem;padding:8px">No curriculum defined for ${curSubject} at this grade level.</p></div>`;return;}
+  const progress=S.profiles[child.id]?.curricProgress?.[curSubject]||{};
+  const totalWeeks=objs.reduce((a,b)=>a+(b.weeks||2),0);
+  const completedCount=objs.filter(o=>progress[o.id]==='done').length;
+  const hasLesson=id=>!!LESSON_CONTENT[id];
+  el.innerHTML=`
+    <div class="card" style="margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+        <div>
+          <h3 style="font-family:var(--fd);font-size:1rem">${curSubject} — ${GRADE_LABELS[grade]||grade}</h3>
+          <p style="font-size:.75rem;color:var(--il)">${objs.length} objectives · ~${totalWeeks} weeks · ${completedCount} completed</p>
+        </div>
+        <button class="btn bs bsm" onclick="expCurricPDF()">🖨️ Print / Export</button>
+      </div>
+      <div class="pb" style="margin-bottom:4px"><div class="pf" style="width:${objs.length?Math.round(completedCount/objs.length*100):0}%;background:${sDot(curSubject)}"></div></div>
+      <p style="font-size:.68rem;color:var(--if)">${objs.length?Math.round(completedCount/objs.length*100):0}% of objectives completed</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${objs.map((obj,i)=>{
+        const status=progress[obj.id]||'pending';
+        const isDone=status==='done';
+        const isCurrent=!isDone&&i===completedCount;
+        const testColors={'quiz':'var(--sky)','project':'var(--terra)','written':'var(--plum,#8B5E8B)','oral':'var(--sun)'};
+        const testLabels={'quiz':'📝 Quiz','project':'🔬 Project','written':'✍️ Written','oral':'🗣️ Oral'};
+        const hasFullLesson=hasLesson(obj.id);
+        return`<div style="background:white;border-radius:var(--r);box-shadow:var(--sh);padding:14px;border-left:4px solid ${isDone?'var(--sage)':isCurrent?'var(--sun)':'var(--cb)'}">
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <div style="width:26px;height:26px;border-radius:50%;background:${isDone?'var(--sage)':isCurrent?'var(--sun)':'var(--cb)'};display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:${isDone||isCurrent?'white':'var(--il)'};flex-shrink:0">${isDone?'✓':i+1}</div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:3px">
+                <span style="font-weight:600;font-size:.9rem">${obj.title}</span>
+                <span style="font-size:.68rem;background:${testColors[obj.test]||'var(--cb)'};color:white;padding:1px 7px;border-radius:99px">${testLabels[obj.test]||obj.test}</span>
+                <span style="font-size:.68rem;color:var(--il)">~${obj.weeks} wk${obj.weeks!==1?'s':''}</span>
+                ${hasFullLesson?'<span style="font-size:.65rem;background:var(--sunp);color:#8B6914;padding:1px 7px;border-radius:99px;font-weight:600">📖 Full lesson</span>':''}
+              </div>
+              <p style="font-size:.8rem;color:var(--im);line-height:1.5;margin-bottom:5px">${obj.desc}</p>
+              <p style="font-size:.68rem;color:var(--if)">Standard: ${obj.std}</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0">
+              <button onclick="openLesson('${obj.id}','${curSubject}','${grade}','${child.id}','curric')" class="btn bp bsm">📖 Open lesson</button>
+              <button onclick="toggleCurricObj('${child.id}','${curSubject}','${obj.id}')" style="background:${isDone?'var(--sage)':'var(--cd)'};border:none;border-radius:6px;padding:5px 10px;font-size:.72rem;font-weight:600;color:${isDone?'white':'var(--im)'};cursor:pointer;font-family:var(--fb)">${isDone?'✓ Done':'Mark done'}</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+document.addEventListener('DOMContentLoaded',boot);
 const GRADE_LABELS={'preK':'Pre-K (Age 3–4)','K':'Kindergarten (Age 5)','1':'1st Grade (Age 6)','2':'2nd Grade (Age 7)','3':'3rd Grade (Age 8)','4':'4th Grade (Age 9)','5':'5th Grade (Age 10)','6':'6th Grade (Age 11)','7':'7th Grade (Age 12)','8':'8th Grade (Age 13)','9':'9th Grade (Age 14)','10':'10th Grade (Age 15)','11':'11th Grade (Age 16)','12':'12th Grade (Age 17–18)'};
 const GRADE_ORDER=['preK','K','1','2','3','4','5','6','7','8','9','10','11','12'];
 

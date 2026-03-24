@@ -1,0 +1,21 @@
+{
+  "name": "pulsecore",
+  "version": "8.0.0",
+  "description": "PulseCore \u2014 AI-powered local business marketing engine",
+  "main": "server_index.js",
+  "scripts": {
+    "start": "node server_index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "node-fetch": "^3.3.2",
+    "stripe": "^14.21.0",
+    "pg": "^8.12.0"
+  }
+}
